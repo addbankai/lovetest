@@ -824,13 +824,73 @@ const Inventory = {
     },
     
     /**
-     * Add an item to the inventory (DISABLED)
+     * Add an item to the inventory
      * @param {string} itemId - Item ID
      * @param {number} quantity - Quantity to add
-     * @returns {boolean} Always returns false as feature is disabled
+     * @returns {boolean} True if item was added successfully
      */
     addItem: function(itemId, quantity = 1) {
-        console.error('Add item functionality has been disabled');
+        console.log('Adding item to inventory:', itemId, quantity);
+        
+        const item = Items.getItem(itemId);
+        if (!item) {
+            console.error(`Item not found: ${itemId}`);
+            return false;
+        }
+        
+        // Find empty slot or existing stack
+        let emptySlot = -1;
+        for (let i = 0; i < this.slots.length; i++) {
+            const slot = this.slots[i];
+            
+            // If slot has same item and is stackable
+            if (slot && slot.id === itemId && item.stackable) {
+                slot.quantity = (slot.quantity || 1) + quantity;
+                this.updateInventoryUI();
+                this.saveToLocal(); // This saves and dispatches inventoryChanged event
+                
+                console.log('Item added to existing stack, dispatching inventoryChanged event');
+                
+                // We can keep this event for gameplay purposes
+                document.dispatchEvent(new CustomEvent('itemCollected', {
+                    detail: {
+                        itemId: itemId,
+                        quantity: quantity
+                    }
+                }));
+                
+                return true;
+            }
+            
+            // Remember first empty slot
+            if (emptySlot === -1 && !slot) {
+                emptySlot = i;
+            }
+        }
+        
+        // If we found an empty slot, add item there
+        if (emptySlot !== -1) {
+            this.slots[emptySlot] = {
+                id: itemId,
+                quantity: quantity,
+                ...item
+            };
+            this.updateInventoryUI();
+            this.saveToLocal(); // This saves and dispatches inventoryChanged event
+            
+            console.log('Item added to new slot, dispatching inventoryChanged event');
+            
+            // We can keep this event for gameplay purposes
+            document.dispatchEvent(new CustomEvent('itemCollected', {
+                detail: {
+                    itemId: itemId,
+                    quantity: quantity
+                }
+            }));
+            
+            return true;
+        }
+        
         return false;
     },
     
