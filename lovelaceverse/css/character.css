@@ -1,0 +1,25 @@
+/**
+ * Base character styles for the Cyberpunk MMORPG game
+ */
+
+.character {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.character-base {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.character-sprite {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

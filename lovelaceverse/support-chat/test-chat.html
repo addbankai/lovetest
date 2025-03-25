@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Support Chat Test</title>
+</head>
+<body>
+    <!-- Include chat support modules -->
+    <script src="js/three-avatar.js"></script>
+    <script src="js/knowledge-base.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/message-handler.js"></script>
+    <script src="js/ui-controller.js"></script>
+    <script src="js/support-chat.js"></script>
+    <script>
+        // Initialize the chat support
+        window.addEventListener('load', () => {
+            console.log("Initializing test page for Shelley AI Support Chat...");
+            const supportChat = new SupportChat();
+            supportChat.initialize();
+        });
+    </script>
+</body>
+</html>

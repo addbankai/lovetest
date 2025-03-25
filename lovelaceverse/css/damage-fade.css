@@ -1,0 +1,97 @@
+/* Animation for regular damage text fade */
+@keyframes damage-fade {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0);
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -20px);
+    }
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -40px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -60px);
+    }
+}
+
+/* Animation for critical damage text fade - bigger and flashier */
+@keyframes critical-damage-fade {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.8);
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -20px) scale(1.2);
+    }
+    30% {
+        transform: translate(-50%, -30px) scale(1.4);
+    }
+    50% {
+        transform: translate(-50%, -40px) scale(1.2);
+    }
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -50px) scale(1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -60px) scale(1);
+    }
+}
+
+/* Animation for critical splash effect */
+@keyframes critical-splash {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+    40% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* Damage text classes */
+.damage-text {
+    position: absolute;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    color: #ff0000;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    pointer-events: none;
+    animation: damage-fade 1s forwards;
+    user-select: none;
+}
+
+/* Critical hit styling */
+.damage-text.critical {
+    font-size: 32px;
+    color: #ffff00; /* Yellow color for critical hits */
+    text-shadow: 0 0 8px rgba(255, 128, 0, 0.9), 0 0 12px rgba(255, 0, 0, 0.7);
+    animation: critical-damage-fade 1.2s forwards;
+}
+
+/* Critical splash effect */
+.critical-splash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0) 70%);
+    animation: critical-splash 0.8s forwards;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}

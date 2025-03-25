@@ -1,0 +1,623 @@
+/* Cyberpunk-style Dungeon Selection Modal */
+
+#dungeon-selection-modal {
+    --primary-color: #00f3ff;
+    --secondary-color: #ff00ff;
+    --tertiary-color: #00ff8c;
+    --dark-color: #000d1f;
+    --highlight-color: #ffee00;
+    
+    font-family: 'Share Tech Mono', monospace;
+    color: #ffffff;
+}
+
+#dungeon-selection-modal .modal-content {
+    background: linear-gradient(135deg, rgba(0, 5, 15, 0.95), rgba(10, 10, 30, 0.92));
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.5), 
+                inset 0 0 15px rgba(0, 243, 255, 0.2);
+    max-width: 900px;
+    width: 90%;
+    position: relative;
+    overflow: hidden;
+}
+
+#dungeon-selection-modal .modal-header {
+    position: relative;
+    background: linear-gradient(90deg, rgba(0, 10, 20, 0.8), rgba(0, 20, 40, 0.8));
+    border-bottom: 2px solid var(--secondary-color);
+    padding: 15px;
+}
+
+#dungeon-selection-modal .modal-header h2 {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 24px;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 0 10px var(--primary-color), 
+                0 0 15px rgba(0, 243, 255, 0.5);
+}
+
+#dungeon-selection-modal .modal-body {
+    padding: 20px;
+    position: relative;
+}
+
+/* Scanner line effect */
+.scanner-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--primary-color) 20%, 
+        var(--primary-color) 80%, 
+        transparent 100%);
+    box-shadow: 0 0 8px var(--primary-color),
+                0 0 12px rgba(0, 243, 255, 0.7);
+    opacity: 0.8;
+    z-index: 10;
+    animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+    0% {
+        top: 0%;
+    }
+    100% {
+        top: 100%;
+    }
+}
+
+/* Dungeon container */
+.dungeon-three-container {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    background: rgba(0, 5, 20, 0.5);
+    box-shadow: inset 0 0 20px rgba(0, 0, 20, 0.8);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Holographic HUD elements */
+.cyber-hud {
+    position: absolute;
+    color: var(--primary-color);
+    font-size: 12px;
+    padding: 10px;
+    background: rgba(0, 13, 31, 0.7);
+    border: 1px solid var(--primary-color);
+    border-radius: 3px;
+    text-shadow: 0 0 5px var(--primary-color);
+    z-index: 5;
+    animation: hudFlicker 5s infinite;
+}
+
+.hud-top-left {
+    top: 15px;
+    left: 15px;
+}
+
+.hud-top-right {
+    top: 15px;
+    right: 15px;
+    text-align: right;
+}
+
+.hud-bottom-left {
+    bottom: 15px;
+    left: 15px;
+}
+
+.hud-bottom-right {
+    bottom: 15px;
+    right: 15px;
+    text-align: right;
+}
+
+.hud-coordinates {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.hud-warning {
+    color: var(--tertiary-color);
+    margin-top: 5px;
+}
+
+@keyframes hudFlicker {
+    0%, 100% { opacity: 1; }
+    3% { opacity: 0.8; }
+    6% { opacity: 1; }
+    7% { opacity: 0.9; }
+    8% { opacity: 1; }
+    9% { opacity: 0.8; }
+    10% { opacity: 1; }
+    30% { opacity: 1; }
+    31% { opacity: 0.7; }
+    32% { opacity: 1; }
+    98% { opacity: 1; }
+    99% { opacity: 0.8; }
+}
+
+/* Cyberpunk grid background */
+.dungeon-three-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(var(--dark-color) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, var(--dark-color) 1px, transparent 1px) 0 0 / 20px 20px;
+    border: 1px solid var(--primary-color);
+    box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.2);
+    z-index: -1;
+    opacity: 0.3;
+}
+
+/* Dungeon cards */
+.dungeon-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(20, 20, 40, 0.8), rgba(0, 10, 25, 0.8));
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.dungeon-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 243, 255, 0.5);
+}
+
+.dungeon-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        transparent 40%, 
+        rgba(0, 243, 255, 0.1) 50%, 
+        transparent 60%, 
+        transparent 100%);
+    z-index: 1;
+    animation: cardGlint 4s infinite;
+}
+
+@keyframes cardGlint {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    20% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.dungeon-card .dungeon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.dungeon-card .dungeon-name {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 0 0 8px var(--primary-color);
+}
+
+.dungeon-card .dungeon-level {
+    background: rgba(0, 5, 15, 0.8);
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid var(--secondary-color);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Dungeon card difficulty colors */
+.dungeon-card.easy {
+    border-color: var(--tertiary-color);
+    box-shadow: 0 0 10px rgba(0, 255, 140, 0.3);
+}
+.dungeon-card.easy .dungeon-name {
+    text-shadow: 0 0 8px var(--tertiary-color);
+}
+.dungeon-card.easy:hover {
+    box-shadow: 0 5px 15px rgba(0, 255, 140, 0.5);
+}
+
+.dungeon-card.medium {
+    border-color: var(--primary-color);
+}
+
+.dungeon-card.hard {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+.dungeon-card.hard .dungeon-name {
+    text-shadow: 0 0 8px var(--secondary-color);
+}
+.dungeon-card.hard:hover {
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.5);
+}
+
+.dungeon-card.extreme {
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 10px rgba(255, 238, 0, 0.3);
+}
+.dungeon-card.extreme .dungeon-name {
+    text-shadow: 0 0 8px var(--highlight-color);
+}
+.dungeon-card.extreme:hover {
+    box-shadow: 0 5px 15px rgba(255, 238, 0, 0.5);
+}
+
+/* Dungeon description and stats */
+.dungeon-card .dungeon-details {
+    display: flex;
+    gap: 15px;
+}
+
+.dungeon-card .dungeon-image {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--primary-color);
+    border-radius: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.dungeon-card .dungeon-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dungeon-card .dungeon-info {
+    flex-grow: 1;
+}
+
+.dungeon-card .dungeon-description {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dungeon-card .dungeon-stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.dungeon-card .dungeon-stat {
+    background: rgba(0, 13, 31, 0.8);
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dungeon-card .stat-icon {
+    opacity: 0.8;
+}
+
+/* Dungeon actions */
+.dungeon-card .dungeon-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Enter dungeon button */
+.enter-dungeon-button {
+    padding: 8px 16px;
+    background: linear-gradient(45deg, rgba(0, 60, 30, 0.8), rgba(0, 100, 50, 0.8));
+    color: #fff;
+    border: 1px solid var(--tertiary-color);
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 140, 0.3);
+    text-shadow: 0 0 5px var(--tertiary-color);
+}
+
+.enter-dungeon-button:hover {
+    background: linear-gradient(45deg, rgba(0, 80, 40, 0.8), rgba(0, 120, 60, 0.8));
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 140, 0.5);
+}
+
+.enter-dungeon-button:active {
+    transform: translateY(0);
+    box-shadow: 0 0 5px rgba(0, 255, 140, 0.3);
+}
+
+.enter-dungeon-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+    );
+    transition: all 0.6s ease;
+    z-index: 1;
+}
+
+.enter-dungeon-button:hover::before {
+    left: 100%;
+}
+
+/* Digital distortion effects */
+@keyframes digitalDistortion {
+    0%, 100% { 
+        clip-path: inset(0 0 0 0);
+    }
+    10% {
+        clip-path: inset(10% 0 20% 0);
+    }
+    20% {
+        clip-path: inset(30% 0 10% 0);
+    }
+    30% {
+        clip-path: inset(20% 0 40% 0);
+    }
+    40% {
+        clip-path: inset(5% 0 15% 0);
+    }
+    50% {
+        clip-path: inset(40% 0 30% 0);
+    }
+    60% {
+        clip-path: inset(0% 0 10% 0);
+    }
+    70% {
+        clip-path: inset(25% 0 5% 0);
+    }
+    80% {
+        clip-path: inset(15% 0 35% 0);
+    }
+    90% {
+        clip-path: inset(5% 0 25% 0);
+    }
+}
+
+.dungeon-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 243, 255, 0.1) 20%, 
+        rgba(0, 243, 255, 0.1) 80%, 
+        transparent 100%);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+}
+
+.dungeon-card:hover::after {
+    opacity: 1;
+    animation: digitalDistortion 2s linear infinite;
+}
+
+/* Empty dungeons message */
+.no-dungeons-message {
+    text-align: center;
+    padding: 30px;
+    font-size: 18px;
+    color: var(--primary-color);
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+    background: rgba(0, 13, 31, 0.7);
+    border: 1px dashed var(--primary-color);
+    border-radius: 5px;
+}
+
+/* Dungeon Completion Modal */
+#dungeon-complete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+}
+
+.completion-modal {
+    --glow-color: #00f3ff;
+    --glitch-color: #ff00ff;
+    
+    background: linear-gradient(135deg, rgba(0, 5, 15, 0.97), rgba(10, 10, 30, 0.95));
+    border: 2px solid var(--glow-color);
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.3),
+                inset 0 0 20px rgba(0, 243, 255, 0.2);
+    animation: modalGlitch 0.3s infinite;
+    width: 90%;
+    max-width: 400px; /* Reduced from default size */
+}
+
+.completion-modal h2 {
+    color: var(--glow-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 24px; /* Reduced from 28px */
+    text-transform: uppercase;
+    margin-bottom: 15px; /* Reduced from 20px */
+    text-shadow: 0 0 10px var(--glow-color);
+    position: relative;
+}
+
+.completion-modal h2::before {
+    content: 'DUNGEON COMPLETE';
+    position: absolute;
+    left: 2px;
+    text-shadow: 2px 0 var(--glitch-color);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch 3s infinite linear alternate-reverse;
+}
+
+.completion-modal .reward-text {
+    color: #ffffff;
+    font-size: 16px; /* Reduced from 18px */
+    margin: 15px 0; /* Reduced from 20px */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    line-height: 1.4;
+}
+
+.completion-modal .silver-amount {
+    color: #c0c0c0;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(192, 192, 192, 0.7);
+}
+
+.completion-modal .continue-btn {
+    background: linear-gradient(45deg, #004050, #008f9f);
+    color: #ffffff;
+    border: 1px solid var(--glow-color);
+    padding: 10px 20px; /* Reduced padding */
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px; /* Reduced from 16px */
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px; /* Reduced from 20px */
+    position: relative;
+    overflow: hidden;
+}
+
+.completion-modal .continue-btn:hover {
+    background: linear-gradient(45deg, #005a70, #00a7b9);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.completion-modal .continue-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+}
+
+.completion-modal .continue-btn:hover::before {
+    animation: shine 1.5s infinite;
+}
+
+@keyframes modalGlitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes glitch {
+    0% {
+        clip: rect(31px, 9999px, 94px, 0);
+        transform: skew(0.6deg);
+    }
+    5% {
+        clip: rect(55px, 9999px, 30px, 0);
+        transform: skew(0.84deg);
+    }
+    10% {
+        clip: rect(55px, 9999px, 98px, 0);
+        transform: skew(0.49deg);
+    }
+    15% {
+        clip: rect(74px, 9999px, 67px, 0);
+        transform: skew(0.05deg);
+    }
+    20% {
+        clip: rect(90px, 9999px, 80px, 0);
+        transform: skew(0.66deg);
+    }
+    25% {
+        clip: rect(0, 9999px, 0, 0);
+        transform: skew(0.43deg);
+    }
+    100% {
+        clip: rect(0, 9999px, 0, 0);
+        transform: skew(0.43deg);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .completion-modal {
+        width: 85%;
+        padding: 20px;
+    }
+
+    .completion-modal h2 {
+        font-size: 20px;
+    }
+
+    .completion-modal .reward-text {
+        font-size: 14px;
+    }
+
+    .completion-modal .continue-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LovelaceVerse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <!-- <link rel="stylesheet" href="css/character.css"> -->
+    <link rel="stylesheet" href="css/character-enhanced.css">
+    <link rel="stylesheet" href="css/character-panel.css">
+    <link rel="stylesheet" href="css/gacha.css">
+    <link rel="stylesheet" href="css/chatbox.css">
+    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/dungeon-modal.css">
+    <link rel="stylesheet" href="css/cyberpunk-dungeon-modal.css">
+    <link rel="stylesheet" href="css/cyberpunk-buttons-css.css">
+    <link rel="stylesheet" href="css/projectile-effects.css">
+    <link rel="stylesheet" href="css/audio-controls.css">
+    <link rel="stylesheet" href="css/damage-fade.css">
+    <link rel="stylesheet" href="css/auth-ui.css">
+    <link rel="stylesheet" href="css/profile-dashboard.css">
+    <link rel="stylesheet" href="css/loading-screen.css">
+    <link rel="stylesheet" href="css/standby-page.css">
+    <link rel="stylesheet" href="css/cyberpunk-logout.css">
+    <link rel="stylesheet" href="css/crafting.css">
+    <link rel="stylesheet" href="css/mission-ui.css">
+    <link rel="stylesheet" href="css/mission.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+</head>
+<body>
+    <!-- Standby Overlay (Hidden when logged in) -->
+    <div id="standby-overlay" class="standby-overlay">
+        <div class="standby-container">
+            <div class="standby-logo">
+                <h1>LovelaceVerse</h1>
+            </div>
+            <h2 class="standby-title">Welcome, Runner</h2>
+            <p class="standby-subtitle">You must authenticate to enter the LovelaceVerse network</p>
+            
+            <div class="standby-actions">
+                <button id="standby-guest-login" class="standby-button">Enter as Guest</button>
+                <div class="standby-separator">OR</div>
+                <button id="standby-wallet-login" class="standby-button">Connect Wallet</button>
+            </div>
+            
+            <div id="standby-status" class="standby-status"></div>
+        </div>
+    </div>
+    <div id="game-container">
+        <div id="game-ui">
+            <div id="currency-display">
+                <div class="currency copper">
+                    <span class="currency-icon">₵</span>
+                    <span id="copper-amount">0</span>
+                </div>
+                <div class="currency silver">
+                    <span class="currency-icon">Ⓢ</span>
+                    <span id="silver-amount">0</span>
+                </div>
+                <div class="currency gold">
+                    <span class="currency-icon">Ⓖ</span>
+                    <span id="gold-amount">0</span>
+                </div>
+                <div class="currency diamond">
+                    <span class="currency-icon">◈</span>
+                    <span id="diamond-amount">0</span>
+                </div>
+            </div>
+            
+            <!-- Game menu buttons -->
+            <div id="menu-buttons">
+                <button id="character-list-button" class="menu-button" data-tooltip="Character Roster">👥</button>
+                <button id="inventory-button" class="menu-button" data-tooltip="Inventory Storage">🎒</button>
+                <button id="crafting-button" class="menu-button" data-tooltip="Crafting Station">⚒️</button>
+                <button id="gacha-button" class="menu-button" data-tooltip="DNA Lab">🧬</button>
+                <button id="dungeon-button" class="menu-button" data-tooltip="Dungeons">🗺️</button>
+                <button id="market-button" class="menu-button" data-tooltip="Black Market">💰</button>
+                <button id="war-button" class="menu-button" data-tooltip="Faction War">⚔️</button>
+                <button id="pvp-button" class="menu-button" data-tooltip="PvP Arena">🏆</button>
+                <button id="adamons-button" class="menu-button" data-tooltip="Adamons">🐾</button>
+            </div>
+
+            <!-- Remove the separate dashboard-buttons div since we integrated the profile button above -->
+
+            <!-- Add this new container -->
+            <div id="mission-container" class="mission-container"></div>
+        </div>
+        
+<div id="game-world">
+    <div id="character-panel">
+        <!-- Character thumbnails will be displayed here -->
+    </div>
+    <div id="map-container">
+        <div id="map-background"></div>
+        <div id="characters-container"></div>  <!-- This is where characters should appear -->
+        <div id="monsters-container"></div>
+        <div id="items-container"></div>
+    </div>
+    <div id="distance-tracker">
+        Distance: <span id="current-distance">0</span>/100,000
+    </div>
+</div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="inventory-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Inventory</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="inventory-tabs">
+                    <button class="inventory-tab active" data-tab="all">All Items</button>
+                    <button class="inventory-tab" data-tab="usables">Usables</button>
+                    <button class="inventory-tab" data-tab="weapons">Weapons</button>
+                    <button class="inventory-tab" data-tab="armor">Armor</button>
+                    <button class="inventory-tab" data-tab="accessory">Accessories</button>
+                    <button class="inventory-tab" data-tab="utility">Utility</button>
+                </div>
+                <div id="inventory-tab-all" class="inventory-tab-content active">
+                    <div id="inventory-grid"></div>
+                </div>
+                <div id="inventory-tab-usables" class="inventory-tab-content">
+                    <div id="inventory-usables-grid" class="inventory-grid"></div>
+                </div>
+                <div id="inventory-tab-weapons" class="inventory-tab-content">
+                    <div id="inventory-weapons-grid" class="inventory-grid"></div>
+                </div>
+                <div id="inventory-tab-armor" class="inventory-tab-content">
+                    <div id="inventory-armor-grid" class="inventory-grid"></div>
+                </div>
+                <div id="inventory-tab-accessory" class="inventory-tab-content">
+                    <div id="inventory-accessory-grid" class="inventory-grid"></div>
+                </div>
+                <div id="inventory-tab-utility" class="inventory-tab-content">
+                    <div id="inventory-utility-grid" class="inventory-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="character-list-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Characters</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="character-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Removed marketplace modal -->
+    
+    <div id="gacha-modal" class="modal">
+        <div class="modal-content cyberpunk-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">NEO-DNA SYNTHESIS</h2>
+                <div class="modal-header-controls">
+                    <span class="close-modal">&times;</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="gacha-options">
+                    <div class="gacha-option cyberpunk-panel" data-type="mortal">
+                        <div class="gacha-image-container">
+                            <img class="gacha-image" src="img/gacha/mortal.png" alt="Mortal DNA">
+                        </div>
+                        <div class="gacha-info">
+                            <h3 class="gacha-name">MORTAL DNA</h3>
+                            <p class="gacha-description">Basic human units with standard capabilities</p>
+                            <div class="gacha-rates">
+                                <div class="rate-item"><span class="rarity-common">Common</span><span>70.0%</span></div>
+                                <div class="rate-item"><span class="rarity-uncommon">Uncommon</span><span>25.0%</span></div>
+                                <div class="rate-item"><span class="rarity-rare">Rare</span><span>4.0%</span></div>
+                                <div class="rate-item"><span class="rarity-legendary">Legendary</span><span>1.0%</span></div>
+                            </div>
+                            <div class="gacha-cost">
+                                <span class="gacha-cost-icon">₵</span>
+                                <span class="gacha-cost-value">50</span>
+                            </div>
+                            <button class="gacha-pull-button" data-type="mortal">EXTRACT</button>
+                            <div class="pull-counter">PULLS: 0/20</div>
+                        </div>
+                    </div>
+                    <div class="gacha-option cyberpunk-panel" data-type="synthetic">
+                        <div class="gacha-image-container">
+                            <img class="gacha-image" src="img/gacha/synthetic.png" alt="Synthetic DNA">
+                        </div>
+                        <div class="gacha-info">
+                            <h3 class="gacha-name">SYNTHETIC DNA</h3>
+                            <p class="gacha-description">Enhanced hybrid units with superior capabilities</p>
+                            <div class="gacha-rates">
+                                <div class="rate-item"><span class="rarity-common">Common</span><span>40.0%</span></div>
+                                <div class="rate-item"><span class="rarity-uncommon">Uncommon</span><span>40.0%</span></div>
+                                <div class="rate-item"><span class="rarity-rare">Rare</span><span>15.0%</span></div>
+                                <div class="rate-item"><span class="rarity-epic">Epic</span><span>4.0%</span></div>
+                                <div class="rate-item"><span class="rarity-legendary">Legendary</span><span>1.0%</span></div>
+                            </div>
+                            <div class="gacha-cost">
+                                <span class="gacha-cost-icon">Ⓢ</span>
+                                <span class="gacha-cost-value">50</span>
+                            </div>
+                            <button class="gacha-pull-button" data-type="synthetic">EXTRACT</button>
+                            <div class="pull-counter">PULLS: 0/20</div>
+                        </div>
+                    </div>
+                    <div class="gacha-option cyberpunk-panel" data-type="divine">
+                        <div class="gacha-image-container">
+                            <img class="gacha-image" src="img/gacha/divine.png" alt="Divine DNA">
+                        </div>
+                        <div class="gacha-info">
+                            <h3 class="gacha-name">DIVINE DNA</h3>
+                            <p class="gacha-description">Transcendent entities with otherworldly capabilities</p>
+                            <div class="gacha-rates">
+                                <div class="rate-item"><span class="rarity-common">Common</span><span>10.0%</span></div>
+                                <div class="rate-item"><span class="rarity-uncommon">Uncommon</span><span>30.0%</span></div>
+                                <div class="rate-item"><span class="rarity-rare">Rare</span><span>40.0%</span></div>
+                                <div class="rate-item"><span class="rarity-epic">Epic</span><span>15.0%</span></div>
+                                <div class="rate-item"><span class="rarity-legendary">Legendary</span><span>5.0%</span></div>
+                            </div>
+                            <div class="gacha-cost">
+                                <span class="gacha-cost-icon">Ⓖ</span>
+                                <span class="gacha-cost-value">10</span>
+                            </div>
+                            <button class="gacha-pull-button" data-type="divine">EXTRACT</button>
+                            <div class="pull-counter">PULLS: 0/20</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Empty div for spacing -->
+                    <div style="height: 10px;"></div>
+                </div>
+                
+                <div id="gacha-result" style="display: none;">
+                    <div id="gacha-character-result" class="cyberpunk-character-result">
+                        <!-- Character result will be inserted here -->
+                    </div>
+                </div>
+                
+                <!-- 3D animation container -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="crafting-modal" class="modal">
+        <div class="modal-content cyberpunk-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">CRAFTING STATION</h2>
+                <div class="modal-header-controls">
+                    <span class="close-modal">&times;</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="crafting-tabs">
+                    <button class="tab-button active" data-category="cybernetics">Cybernetics</button>
+                    <button class="tab-button" data-category="equipment">Equipment</button>
+                    <button class="tab-button" data-category="consumables">Consumables</button>
+                    <button class="tab-button" data-category="characters">Characters</button>
+                </div>
+                <div id="crafting-sorting"></div>
+                <div id="crafting-recipes" class="crafting-recipes-container">
+                    <!-- Recipe cards will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Core Libraries -->
+    <!-- Temporary CDN links for testing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js"></script>
+    <script src="js/character-panel-effects.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <!-- Your other scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/config-new.js"></script>
+    <script src="js/authentication.js"></script>
+    <script src="js/game-sync.js"></script>
+    <script src="js/authentication-integration.js"></script>
+    <script src="js/auth-setup.js"></script>
+  
+  <!-- Loading Screen (Controls game initialization flow) -->
+  <script src="js/loading-screen.js"></script>
+    
+    <!-- Standby Page System (Controls authentication flow) -->
+    <script src="js/standby-page.js"></script>
+    
+    <!-- UI Enhancement Scripts -->
+    <script src="js/webgl-context-manager.js"></script>
+    <script src="js/cyberpunk-buttons.js"></script>
+    <script src="js/equipment-modal-enhancer.js"></script>
+    
+    <!-- Game Systems -->
+    <script src="js/currency.js"></script>
+    <script src="js/items.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/abilities.js"></script>
+    <script src="js/projectile-effects.js"></script>
+    <script src="js/character.js"></script>
+    <script src="js/attackMonster.js"></script>
+    <script src="js/monster.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/buff.js"></script>
+    <!-- Make sure p5.js is loaded before menu-effects.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="js/menu-effects.js"></script>
+    <script src="js/gacha-three.js"></script>
+	<script src="js/crafting.js"></script>
+    <!-- Removed marketplace-three.js -->
+    <script src="js/dungeon-three.js"></script>
+    <script src="js/gacha.js"></script>
+    <script src="js/shards.js"></script>
+    <script src="js/dungeons.js"></script>
+    <script src="js/placeholders.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/mission-panel-effects.js"></script>
+
+    <script src="js/profile-dashboard.js"></script>
+
+    <!-- Mission System -->
+    <script src="js/mission-system.js"></script>
+    <script src="js/mission-ui.js"></script>
+    <script>
+        // Initialize MissionUI when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            MissionUI.init();
+        });
+    </script>
+    
+    <!-- Main Game Controller (Loaded Last) -->
+    <script src="js/main.js"></script>
+    
+    <!-- Support Chat Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="support-chat/js/three-avatar.js"></script>
+    <script src="support-chat/js/knowledge-base.js"></script>
+    <script src="support-chat/js/ai-service.js"></script>
+    <script src="support-chat/js/message-handler.js"></script>
+    <script src="support-chat/js/ui-controller.js"></script>
+    <script src="support-chat/js/support-chat.js"></script>
+    
+  <script>
+    // Once the loading screen is complete, perform any final setup
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize game after DOM is ready
+    if (typeof Game !== 'undefined') {
+        Game.init();
+    }
+});
+
+    
+    // Set up Supabase tables in background - now controlled by loading screen sequence
+    if (typeof AuthSetup !== 'undefined' && typeof AuthenticationSystem.offlineMode === 'undefined') {
+        console.log('Initializing database tables as fallback...');
+        AuthSetup.init().catch(err => {
+            console.error('Error initializing database tables:', err);
+        });
+    }
+
+    
+    // This is a fallback for direct DOMContentLoaded initialization
+    // in case the loading screen fails to initialize properly
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM loaded, checking if game needs to be initialized...');
+      
+	 
+      // If after 5 seconds the game hasn't started, initialize directly
+      setTimeout(function() {
+        if (typeof Game !== 'undefined' && !Game.hasInitialized) {
+          console.warn('Game not initialized after timeout, starting manually...');
+          Game.init();
+        }
+      }, 5000);
+      
+      // Set up Supabase tables in background - now controlled by loading screen sequence
+      if (typeof AuthSetup !== 'undefined' && typeof AuthenticationSystem.offlineMode === 'undefined') {
+        console.log('Initializing database tables as fallback...');
+        AuthSetup.init().catch(err => {
+          console.error('Error initializing database tables:', err);
+        });
+      }
+    });
+  </script>
+  
+    <!-- Support Chat (Added as an overlay) -->
+  <script src="support-chat/js/three-avatar.js"></script>
+  <script src="support-chat/js/knowledge-base.js"></script>
+  <script src="support-chat/js/ai-service.js"></script>
+  <script src="support-chat/js/message-handler.js"></script>
+  <script src="support-chat/js/ui-controller.js"></script>
+  <script src="support-chat/js/support-chat.js"></script>
+  
+  <!-- Wallet API and Database Fixes -->
+  <script src="js/wallet-balance-fix.js"></script>
+  <script src="js/character-death.js"></script>
+  
+</body>
+</html>

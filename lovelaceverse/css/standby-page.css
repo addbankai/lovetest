@@ -1,0 +1,120 @@
+/* Standby Page Styles */
+.standby-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #00f7ff;
+    font-family: 'Orbitron', sans-serif;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.standby-container {
+    background: linear-gradient(to bottom, #1a1a2e, #0d0d1a);
+    border: 2px solid #00f7ff;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.standby-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(0, 247, 255, 0.7);
+}
+
+.standby-subtitle {
+    font-size: 18px;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.standby-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.standby-button {
+    background: linear-gradient(90deg, #003c5f, #0077b6);
+    color: #00f7ff;
+    border: 1px solid #00f7ff;
+    padding: 12px 20px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+}
+
+.standby-button:hover {
+    background: linear-gradient(90deg, #0077b6, #00a8e8);
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+}
+
+.standby-separator {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    color: #00f7ff;
+    opacity: 0.6;
+}
+
+.standby-separator::before,
+.standby-separator::after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background-color: #00f7ff;
+    margin: 0 10px;
+}
+
+.standby-status {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Cyberpunk pulsing animation */
+@keyframes neonPulse {
+    0% { box-shadow: 0 0 5px rgba(0, 247, 255, 0.6); }
+    50% { box-shadow: 0 0 20px rgba(0, 247, 255, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(0, 247, 255, 0.6); }
+}
+
+.standby-container {
+    animation: neonPulse 3s infinite;
+}
+
+/* Logo area */
+.standby-logo {
+    margin-bottom: 30px;
+}
+
+.standby-logo img {
+    max-width: 150px;
+    height: auto;
+}
+
+#game-container {
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+    pointer-events: auto;
+}

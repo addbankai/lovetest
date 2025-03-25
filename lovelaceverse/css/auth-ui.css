@@ -1,0 +1,198 @@
+/* Authentication UI styles */
+
+#auth-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#auth-modal .modal-content {
+    background-color: #121212;
+    border: 2px solid #00ffff;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    animation: glow 2s infinite alternate;
+}
+
+#auth-modal .modal-header {
+    background-color: #000;
+    padding: 15px;
+    border-bottom: 2px solid #00ffff;
+}
+
+#auth-modal .modal-header h2 {
+    margin: 0;
+    color: #00ffff;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#auth-modal .modal-body {
+    padding: 20px;
+}
+
+#auth-modal .auth-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+#auth-modal .cyberpunk-btn {
+    background-color: #000;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    padding: 12px 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#auth-modal .cyberpunk-btn:hover {
+    background-color: #00ffff;
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+#auth-modal .cyberpunk-btn:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.4), transparent);
+    transition: all 0.5s ease;
+}
+
+#auth-modal .cyberpunk-btn:hover:before {
+    left: 100%;
+}
+
+#auth-modal .login-status {
+    min-height: 20px;
+    text-align: center;
+    color: #ff00ff;
+    margin-top: 10px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#auth-modal .error-message {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0066;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 10px 0;
+    color: #ff00ff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#auth-modal .error-message p {
+    margin: 5px 0;
+}
+
+#auth-modal .error-message a {
+    color: #00ffff;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+#auth-modal .error-message a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+#fallback-guest-btn {
+    margin-top: 15px;
+    background-color: #333 !important;
+    border-color: #00ffff !important;
+}
+
+/* Authentication status in game UI */
+#auth-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ffff;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#auth-info .auth-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#auth-info span {
+    color: #00ffff;
+}
+
+#auth-info .small-btn {
+    background-color: transparent;
+    color: #ff00ff;
+    border: 1px solid #ff00ff;
+    padding: 3px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+#auth-info .small-btn:hover {
+    background-color: #ff00ff;
+    color: #000;
+}
+
+/* Animations */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    #auth-modal .modal-content {
+        width: 95%;
+    }
+    
+    #auth-info {
+        font-size: 12px;
+    }
+    
+    #auth-info .small-btn {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}

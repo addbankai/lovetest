@@ -1,0 +1,10 @@
+This file is a placeholder for the rumblearena.png image that would be used in the PVP system's Rumble Royal AI mode.
+
+To create a simple rumble arena image:
+1. Create a PNG file with dimensions 800x600 pixels
+2. Fill it with a dark purple background (#2a0845)
+3. Add a grid pattern of light lines for reference
+4. Add a border in purple (#9932CC)
+5. Add text labeling it as "Rumble Royal Arena"
+
+Alternatively, use the create-arena-images.html tool that generates this image.

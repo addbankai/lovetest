@@ -1,0 +1,512 @@
+/* Cyberpunk Dungeon Selection Modal Styles */
+
+/* Enhanced dungeon selection modal with Three.js integration */
+#dungeon-selection-modal .modal-content {
+    background: linear-gradient(135deg, rgba(0, 15, 30, 0.95), rgba(5, 25, 45, 0.95));
+    border: 1px solid #00f7ff;
+    box-shadow: 0 0 40px rgba(0, 247, 255, 0.3), inset 0 0 20px rgba(0, 40, 60, 0.3);
+    max-width: 1200px;
+    min-height: min-content; /* Changed from fixed height */
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#dungeon-selection-modal .modal-header {
+    border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+    padding: 15px 20px;
+    background: rgba(0, 10, 20, 0.8);
+}
+
+#dungeon-selection-modal .modal-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 24px;
+    color: #00f7ff;
+    text-shadow: 0 0 8px rgba(0, 247, 255, 0.6);
+    letter-spacing: 2px;
+    position: relative;
+    display: inline-block;
+}
+
+#dungeon-selection-modal .modal-title::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background-color: #ff00ff;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+}
+
+#dungeon-selection-modal .modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Three.js container for dungeon visualization */
+.dungeon-three-container {
+    flex: 0.4;
+    min-height: 280px;
+    max-height: 280px;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: relative;
+    border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+}
+
+/* Scanline effect for cyberpunk aesthetic */
+.dungeon-three-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 247, 255, 0.02) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.3;
+}
+
+/* CRT screen flicker effect */
+.dungeon-three-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    opacity: 0.05;
+    pointer-events: none;
+    animation: screen-flicker 10s infinite;
+}
+
+@keyframes screen-flicker {
+    0% { opacity: 0.05; }
+    5% { opacity: 0.1; }
+    10% { opacity: 0.05; }
+    15% { opacity: 0.06; }
+    20% { opacity: 0.05; }
+    70% { opacity: 0.05; }
+    72% { opacity: 0.15; }
+    74% { opacity: 0.05; }
+    100% { opacity: 0.05; }
+}
+
+/* Dungeon info panel */
+.dungeon-info-panel {
+    padding: 15px;
+    background: rgba(0, 10, 20, 0.6);
+    color: #d0eaff;
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(90vh - 400px); /* Account for Three.js container */
+    overflow-y: auto; /* Changed from hidden */
+}
+
+/* Selected dungeon information */
+.dungeon-selected-info {
+    background: rgba(0, 30, 50, 0.6);
+    border: 1px solid rgba(0, 247, 255, 0.3);
+    padding: 15px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.dungeon-selected-info::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #00f7ff, transparent);
+}
+
+/* Default info message */
+.info-message {
+    text-align: center;
+    color: #00f7ff;
+    font-size: 18px;
+    letter-spacing: 1px;
+    padding: 20px;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+}
+
+/* Dungeon navigation controls */
+.dungeon-navigation {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 15, 30, 0.6);
+    border: 1px solid rgba(0, 247, 255, 0.3);
+    border-radius: 5px;
+}
+
+.dungeon-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.dungeon-selector label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: #00f7ff;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+    letter-spacing: 1px;
+}
+
+.cyberpunk-select {
+    flex: 1;
+    max-width: 70%;
+    padding: 8px 12px;
+    background: rgba(0, 20, 40, 0.8);
+    border: 1px solid rgba(0, 247, 255, 0.6);
+    border-radius: 4px;
+    color: #ffffff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
+    position: relative;
+    margin-left: 15px;
+}
+
+.cyberpunk-select:hover {
+    background: rgba(0, 30, 50, 0.8);
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.4);
+}
+
+.cyberpunk-select:focus {
+    border-color: #00f7ff;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+}
+
+.cyberpunk-select option {
+    background: rgba(0, 20, 40, 0.95);
+    color: #ffffff;
+    padding: 8px;
+}
+
+.dungeon-navigation-hint {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    text-align: right;
+    margin-top: 5px;
+}
+
+/* Dungeon list view styles */
+.dungeon-list-view {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 15, 30, 0.5);
+    border: 1px solid rgba(0, 247, 255, 0.2);
+    border-radius: 5px;
+}
+
+.dungeon-list-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: #00f7ff;
+    text-shadow: 0 0 8px rgba(0, 247, 255, 0.5);
+    letter-spacing: 1px;
+    margin: 0 0 8px 0;
+    text-align: center;
+    position: relative;
+}
+
+.dungeon-list-title::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00f7ff, transparent);
+}
+
+.dungeon-quick-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+}
+
+.dungeon-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(0, 20, 40, 0.7);
+    border: 1px solid rgba(0, 247, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    height: 34px; /* Fixed height for consistent sizing */
+}
+
+.dungeon-list-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: rgba(0, 247, 255, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dungeon-list-item:hover {
+    background: rgba(0, 30, 50, 0.8);
+    border-color: rgba(0, 247, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dungeon-list-item:hover::before {
+    opacity: 1;
+}
+
+.dungeon-list-item.active {
+    background: rgba(0, 40, 70, 0.9);
+    border: 1px solid rgba(0, 247, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+}
+
+.dungeon-list-item.active::before {
+    background: rgba(0, 247, 255, 0.8);
+    opacity: 1;
+}
+
+.dungeon-difficulty-indicator {
+    display: flex;
+    gap: 2px;
+    font-size: 10px;
+    margin-right: 10px;
+}
+
+.dungeon-list-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+    flex-grow: 1;
+}
+
+.dungeon-list-item.active .dungeon-list-name {
+    color: #00f7ff;
+    font-weight: bold;
+}
+
+.dungeon-level-req {
+    font-size: 12px;
+    color: #aaaaaa;
+    padding: 2px 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+/* Item hover highlight effect */
+.dungeon-list-item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0, 247, 255, 0.1),
+        transparent
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.dungeon-list-item:hover::after {
+    transform: translateX(100%);
+}
+
+@media (max-width: 768px) {
+    .dungeon-quick-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dungeon detail header */
+.dungeon-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.dungeon-detail-name {
+    font-size: 22px;
+    color: #00f7ff;
+    text-shadow: 0 0 8px rgba(0, 247, 255, 0.6);
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.dungeon-difficulty {
+    display: flex;
+    gap: 4px;
+}
+
+.difficulty-level {
+    font-size: 14px;
+    color: #ff00ff;
+    letter-spacing: 1px;
+}
+
+/* Dungeon stats grid */
+.dungeon-detail-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-block {
+    background: rgba(0, 20, 40, 0.5);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 247, 255, 0.2);
+}
+
+.stat-block-title {
+    font-size: 14px;
+    color: #00f7ff;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.stat-block-value {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* Dungeon description */
+.dungeon-description {
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #c0eaff;
+    font-size: 15px;
+}
+
+/* Enter dungeon button */
+.enter-dungeon-button {
+    align-self: stretch;
+    padding: 15px 25px;
+    background: linear-gradient(45deg, #004050, #008f9f);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0, 108, 135, 0.9);
+    text-shadow: 0 0 8px rgba(0, 247, 255, 0.9);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 247, 255, 0.5);
+    z-index: 10; /* Ensure button is always on top */
+}
+
+.enter-dungeon-button::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0)
+    );
+    transform: rotate(45deg);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 10;
+}
+
+.enter-dungeon-button:hover {
+    background: linear-gradient(45deg, #005a70, #00a7b9);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 108, 135, 0.8);
+}
+
+.enter-dungeon-button:hover::before {
+    animation: shine 1.5s infinite;
+}
+
+@keyframes shine {
+    0% { left: -100%; top: -100%; }
+    100% { left: 100%; top: 100%; }
+}
+
+.enter-dungeon-button:active {
+    transform: translateY(0);
+    box-shadow: 0 0 10px rgba(0, 108, 135, 0.7);
+}
+
+.enter-dungeon-button:disabled {
+    background: linear-gradient(45deg, #2a3740, #3a4750);
+    color: #777;
+    cursor: not-allowed;
+    box-shadow: none;
+    border: 1px solid rgba(150, 150, 150, 0.3);
+}
+
+.enter-dungeon-button:disabled::before {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #dungeon-selection-modal .modal-content {
+        width: 95%;
+        margin: 15px auto; /* Reduced margin for mobile */
+    }
+    
+    .dungeon-info-panel {
+        max-height: calc(90vh - 350px); /* Adjusted for mobile */
+    }
+    
+    .dungeon-three-container {
+        min-height: 200px; /* Reduced for mobile */
+        max-height: 200px;
+    }
+}

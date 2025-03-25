@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /.env
+Disallow: /.git/
+Disallow: /.htaccess
+Disallow: /config/

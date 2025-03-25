@@ -1,0 +1,175 @@
+/**
+ * Audio controls styling for Cyberpunk MMORPG game
+ */
+
+.audio-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+.audio-controls:hover {
+    opacity: 1;
+}
+
+.audio-controls-panel {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+.audio-controls-panel.expanded {
+    border-radius: 12px;
+    padding: 8px 12px;
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.95),
+        rgba(0, 20, 40, 0.95)
+    );
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+.audio-button {
+    width: 35px;
+    height: 35px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00ffff;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.audio-button:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.audio-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+    opacity: 0;
+    animation: glitch 1.5s infinite alternate; /* Subtle glitch effect */
+}
+
+@keyframes glitch {
+    0% {
+        opacity: 0;
+        transform: translate(0);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translate(-2px, 2px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(2px, -2px);
+    }
+}
+
+.audio-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.audio-icon.unmuted::before {
+    content: "🔊";
+    font-size: 18px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.audio-icon.muted::before {
+    content: "🔇";
+    font-size: 18px;
+    text-shadow: 0 0 10px rgba(255, 50, 50, 0.5);
+}
+
+.volume-dropdown-container {
+    display: none;
+    margin-left: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.audio-controls-panel.expanded .volume-dropdown-container {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.volume-dropdown {
+    width: 90px;
+    background-color: rgba(0, 10, 20, 0.9);
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.volume-dropdown:hover {
+    background-color: rgba(0, 20, 40, 0.95);
+    border-color: rgba(0, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.volume-dropdown option {
+    background-color: rgba(0, 10, 20, 0.95);
+    color: #00ffff;
+    padding: 8px;
+}
+
+/* Glowing effect on hover */
+.audio-controls-panel:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+    .audio-controls {
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .volume-dropdown {
+        width: 80px;
+        font-size: 12px;
+    }
+}

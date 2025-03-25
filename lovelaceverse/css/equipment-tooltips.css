@@ -1,0 +1,408 @@
+/* 
+ * Enhanced styling for equipment modals and item tooltips
+ * Cyberpunk RPG Game
+ */
+
+/* =============== EQUIPMENT MODAL STYLING =============== */
+#character-equipment-modal {
+    --modal-width: 700px;
+    --modal-padding: 20px;
+}
+
+#character-equipment-modal .modal-content {
+    background: linear-gradient(to bottom, #1a1a2e, #0d0d1a);
+    border: 2px solid #00f7ff;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.3), 0 0 40px rgba(0, 0, 0, 0.7);
+    max-width: var(--modal-width);
+    width: 95%;
+}
+
+#character-equipment-modal .modal-header {
+    background: linear-gradient(to right, #00111a, #002233);
+    border-bottom: 2px solid #00f7ff;
+    padding: 15px var(--modal-padding);
+}
+
+#character-equipment-modal .modal-body {
+    padding: var(--modal-padding);
+}
+
+#character-equipment-modal .modal-title {
+    color: #00f7ff;
+    font-size: 24px;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+    margin: 0;
+}
+
+/* Portrait and character info section */
+#equipment-character-portrait {
+    width: 128px;
+    height: 128px;
+    border: 3px solid #00f7ff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.5);
+    margin: 0 auto 15px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#equipment-character-name {
+    color: #00f7ff;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+#equipment-character-level {
+    color: #ffcc00;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 15px;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+}
+
+/* Stats display */
+#equipment-character-stats {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.character-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 3px 5px;
+    border-radius: 3px;
+}
+
+.character-stat:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-name {
+    color: #aaa;
+}
+
+.stat-value {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Equipment slots styling */
+.equipment-slots-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.equipment-slot {
+    position: relative;
+    background: linear-gradient(to bottom, #1a1a2e, #0d0d1a);
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.equipment-slot:hover {
+    border-color: #00f7ff;
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.slot-label {
+    color: #00f7ff;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(0, 247, 255, 0.5);
+}
+
+.slot-item {
+    width: 64px;
+    height: 64px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px dashed #555;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    transition: all 0.2s ease;
+}
+
+.slot-item img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: all 0.2s ease;
+}
+
+.equipment-slot:hover .slot-item {
+    border-color: #00f7ff;
+    background-color: rgba(0, 20, 30, 0.5);
+}
+
+.dual-wield-ref {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.dual-wield-label {
+    font-size: 12px;
+    color: #aaa;
+    font-style: italic;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.unequip-button {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: none;
+}
+
+.unequip-button:hover {
+    background-color: rgba(255, 0, 0, 0.8);
+}
+
+.equipment-slot:hover .unequip-button {
+    display: block;
+}
+
+/* =============== ITEM TOOLTIP STYLING =============== */
+.item-tooltip {
+    position: absolute;
+    z-index: 9999;
+    background: linear-gradient(to bottom, #1a1a2e, #0d0d1a);
+    border: 2px solid #00f7ff;
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 250px;
+    max-width: 350px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 247, 255, 0.3);
+    color: #fff;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 1; /* Changed from 0 to ensure tooltips are always visible when shown */
+    transition: opacity 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.item-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(0, 247, 255, 0.1), transparent 70%);
+    pointer-events: none;
+    border-radius: 6px;
+}
+
+/* Item name in tooltip */
+.item-tooltip h4 {
+    font-size: 18px;
+    margin: 0 0 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    text-shadow: 0 0 5px currentColor;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+/* Item image in tooltip */
+.item-tooltip-image {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
+}
+
+/* Item type/equip type indicator */
+.item-type {
+    color: #aaa;
+    font-size: 12px;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+/* Item description */
+.item-tooltip p {
+    margin: 5px 0;
+    color: #ccc;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Required level */
+.item-level {
+    font-size: 12px;
+    color: #ffcc00;
+    margin-top: 5px;
+}
+
+/* Item stats section */
+.item-stats {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.item-stats div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    font-size: 13px;
+}
+
+.item-stats div:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+/* Item effects section */
+.item-effects {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.item-effects div {
+    color: #00f7ff;
+    font-size: 13px;
+    margin-bottom: 3px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.item-effects div::before {
+    content: '•';
+    position: absolute;
+    left: 5px;
+    color: #00f7ff;
+}
+
+/* Stat colors */
+.stat-buff {
+    color: #33ff99 !important;
+}
+
+.stat-debuff {
+    color: #ff3366 !important;
+}
+
+/* Rarity colors */
+.item-tooltip.common h4 {
+    color: #aaaaaa;
+}
+
+.item-tooltip.uncommon h4 {
+    color: #00ff66; 
+}
+
+.item-tooltip.rare h4 {
+    color: #00f3ff;
+}
+
+.item-tooltip.epic h4 {
+    color: #ff00ff;
+}
+
+.item-tooltip.legendary h4 {
+    color: #f7ff00;
+}
+
+/* Equipment Selection Modal */
+#equipment-selection-modal .modal-content {
+    background: linear-gradient(to bottom, #1a1a2e, #0d0d1a);
+    border: 2px solid #00f7ff;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.3), 0 0 40px rgba(0, 0, 0, 0.7);
+    max-width: 800px;
+    width: 95%;
+}
+
+#equipment-selection-modal .modal-header {
+    background: linear-gradient(to right, #00111a, #002233);
+    border-bottom: 2px solid #00f7ff;
+    padding: 15px 20px;
+}
+
+#equipment-selection-modal .modal-title {
+    color: #00f7ff;
+    font-size: 24px;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+    margin: 0;
+}
+
+.equipment-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 15px;
+    padding: 15px;
+    justify-items: center;
+}
+
+.equipment-item {
+    width: 80px;
+    height: 110px;
+    background: linear-gradient(to bottom, #1a1a2e, #0d0d1a);
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.equipment-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+}
+
+.equipment-item-name {
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 8px;
+    color: #fff;
+}

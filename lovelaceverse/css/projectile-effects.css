@@ -1,0 +1,44 @@
+/* Projectile Effects CSS */
+
+/* Projectile elements */
+.projectile {
+    position: absolute;
+    z-index: 100; /* Make sure projectiles appear above other elements */
+    pointer-events: none; /* Allow clicks to pass through projectiles */
+}
+
+/* Arrow projectile specific styles */
+.projectile.arrow {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+}
+
+/* Fireball projectile specific styles */
+.projectile.fireball {
+    filter: drop-shadow(0 0 5px rgba(255, 100, 0, 0.8));
+}
+
+/* Impact effects */
+.impact-effect {
+    position: absolute;
+    z-index: 110; /* Higher than projectiles to appear on top */
+    pointer-events: none;
+}
+
+/* Arrow impact effect */
+@keyframes arrow-impact {
+    0% { transform: scale(0.3); opacity: 1; background-color: rgba(255, 255, 255, 0.9); }
+    100% { transform: scale(1.0); opacity: 0; background-color: rgba(255, 255, 255, 0.1); }
+}
+
+/* Fireball explosion effect */
+@keyframes fireball-explosion {
+    0% { transform: scale(0.5); opacity: 1; background-color: rgba(255, 255, 255, 0.9); }
+    50% { transform: scale(1.5); opacity: 0.8; background-color: rgba(255, 100, 0, 0.8); }
+    100% { transform: scale(2.5); opacity: 0; background-color: rgba(255, 50, 0, 0.1); }
+}
+
+/* Projectile frame animation */
+@keyframes projectile-animation {
+    from { background-position: 0 0; }
+    to { background-position: -100% 0; }
+}

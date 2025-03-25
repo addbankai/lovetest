@@ -1,0 +1,29 @@
+# Set document root to lovelaceverse directory
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/lovelaceverse/
+RewriteRule ^(.*)$ lovelaceverse/$1 [L]
+
+# Block access to sensitive files
+<FilesMatch "^(\.env|\.gitignore|package\.json|package-lock\.json|webpack\.config\.js)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block access to dot files and directories
+RedirectMatch 404 /\..*$
+
+# Block direct access to node_modules
+RedirectMatch 404 /node_modules/.*$
+
+# Prevent directory listing
+Options -Indexes
+
+# Additional security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header always unset X-Powered-By
+</IfModule>
+
+

@@ -1,0 +1,244 @@
+/* 
+ * Loading Screen Styles
+ * Cyberpunk-themed loading screen for the game
+ */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: 'Share Tech Mono', monospace;
+    color: #fff;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Add overlay to ensure text readability */
+.loading-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+}
+
+.loading-screen.fade-out {
+    opacity: 0;
+}
+
+.loading-content {
+    position: relative;
+    z-index: 1;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    padding: 2rem;
+    background: rgba(15, 15, 20, 0.8);
+    border: 1px solid #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.loading-content::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: 
+        linear-gradient(90deg, transparent 50%, rgba(0, 255, 255, 0.02) 50%),
+        linear-gradient(rgba(0, 255, 255, 0.01) 50%, transparent 50%);
+    background-size: 20px 20px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.loading-content::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, transparent, #00ffff, transparent);
+    animation: scan-line 2s linear infinite;
+}
+
+.loading-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    letter-spacing: 2px;
+    position: relative;
+    display: inline-block;
+}
+
+.loading-title span {
+    color: #ff00ff;
+    font-style: italic;
+}
+
+.loading-subtitle {
+    color: #aaa;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.loading-progress-container {
+    height: 12px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #666;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.loading-progress-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+    animation: progress-highlight 1.5s ease-out infinite;
+    pointer-events: none;
+}
+
+.loading-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #00ccff, #00ffcc);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+    transition: width 0.3s ease-out;
+}
+
+.loading-message {
+    color: #00ffff;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    font-family: 'Share Tech Mono', monospace;
+    height: 1.5rem;
+    position: relative;
+}
+
+.loading-message::before {
+    content: '> ';
+    color: #ff00ff;
+}
+
+.loading-error {
+    color: #ff3333;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border: 1px solid #ff3333;
+    background: rgba(255, 0, 0, 0.1);
+    border-radius: 4px;
+    display: none;
+}
+
+.loading-error.warning {
+    color: #ffcc00;
+    border-color: #ffcc00;
+    background: rgba(255, 204, 0, 0.1);
+}
+
+.loading-tips {
+    margin-top: 2rem;
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes scan-line {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes progress-highlight {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .loading-content {
+        width: 90%;
+        padding: 1.5rem;
+    }
+    
+    .loading-title {
+        font-size: 2rem;
+    }
+    
+    .loading-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Animated flicker effect */
+.loading-title {
+    animation: text-flicker 5s linear infinite;
+}
+
+@keyframes text-flicker {
+    0% {
+        opacity: 1;
+    }
+    3% {
+        opacity: 0.8;
+    }
+    6% {
+        opacity: 1;
+    }
+    9% {
+        opacity: 0.8;
+    }
+    11% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    52% {
+        opacity: 0.8;
+    }
+    54% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
