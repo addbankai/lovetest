@@ -70,6 +70,15 @@ const GachaSystem = {
         divine: false
     },
     
+    // Free Mortal DNA extracts tracking
+    freeMortalPulls: {
+        remaining: 2,
+        lastResetTime: null
+    },
+    
+    // Free pull cooldown period in milliseconds (24 hours)
+    freePullCooldown: 24 * 60 * 60 * 1000,
+    
     // Gacha images
     gachaImages: {
         mortal: 'img/gacha/mortal.png',
@@ -94,6 +103,12 @@ const GachaSystem = {
             divine: false
         };
         
+        // Initialize free pulls
+        this.freeMortalPulls = {
+            remaining: 2,
+            lastResetTime: null
+        };
+        
         // Load saved data if available
         if (savedData) {
             this.pullCounter = savedData.pullCounter || this.pullCounter;
@@ -105,7 +120,19 @@ const GachaSystem = {
                 }
             }
             
+            // Load free pull data
+            if (savedData.freeMortalPulls) {
+                this.freeMortalPulls = savedData.freeMortalPulls;
+                
+                // Check if we need to reset free pulls (24 hours passed)
+                this.checkAndResetFreePulls();
+            }
+            
             console.log('Super DNA availability:', this.superDnaAvailable);
+            console.log('Free Mortal Pulls remaining:', this.freeMortalPulls.remaining);
+        } else {
+            // If no saved data, set lastResetTime to now
+            this.freeMortalPulls.lastResetTime = Date.now();
         }
         
         // Set up event listeners
@@ -688,9 +715,56 @@ const GachaSystem = {
     },
     
     /**
+     * Check if 24 hours have passed since the last free pull reset and reset if needed
+     */
+    checkAndResetFreePulls: function() {
+        const now = Date.now();
+        
+        // If last reset time exists and 24 hours have passed
+        if (this.freeMortalPulls.lastResetTime && 
+            now - this.freeMortalPulls.lastResetTime >= this.freePullCooldown) {
+            
+            // Reset free pulls
+            this.freeMortalPulls.remaining = 2;
+            this.freeMortalPulls.lastResetTime = now;
+            
+            console.log('Free Mortal DNA pulls have been reset!');
+            
+            // Save to storage
+            this.saveData();
+        }
+    },
+    
+    /**
+     * Calculate time remaining until next free pull reset
+     */
+    getTimeUntilNextReset: function() {
+        if (!this.freeMortalPulls.lastResetTime) {
+            return '0h 0m';
+        }
+        
+        const now = Date.now();
+        const nextResetTime = this.freeMortalPulls.lastResetTime + this.freePullCooldown;
+        
+        if (now >= nextResetTime) {
+            return '0h 0m';
+        }
+        
+        // Calculate hours and minutes remaining
+        const millisecondsRemaining = nextResetTime - now;
+        const hoursRemaining = Math.floor(millisecondsRemaining / (60 * 60 * 1000));
+        const minutesRemaining = Math.floor((millisecondsRemaining % (60 * 60 * 1000)) / (60 * 1000));
+        
+        return `${hoursRemaining}h ${minutesRemaining}m`;
+    },
+    
+    /**
      * Update the gacha UI
      */
     updateGachaUI: function() {
+        // Check if free pulls need to be reset
+        this.checkAndResetFreePulls();
+        
         // Update Super DNA counters
         for (const type in this.pullCounter) {
             // Find or update the counter element
@@ -756,18 +830,66 @@ const GachaSystem = {
             }
         }
         
-        // Update currency amounts
+        // Update currency amounts and show free pulls for mortal type
         for (const type in this.gachaTypes) {
             const costElement = document.querySelector(`.gacha-option[data-type="${type}"] .gacha-cost-value`);
+            
             if (costElement) {
                 const cost = this.gachaTypes[type].cost;
-                costElement.textContent = `${cost.amount}`;
                 
-                // Check if player has enough currency
-                const hasEnough = Currency.hasEnough(cost.currency, cost.amount);
-                const pullButton = document.querySelector(`.gacha-pull-button[data-type="${type}"]`);
-                if (pullButton) {
-                    pullButton.disabled = !hasEnough;
+                // For mortal type, add free pull info
+                if (type === 'mortal') {
+                    // Update or create free pull display
+                    let freePullDisplay = document.querySelector('.free-mortal-pulls');
+                    if (!freePullDisplay) {
+                        freePullDisplay = document.createElement('div');
+                        freePullDisplay.className = 'free-mortal-pulls';
+                        costElement.parentElement.appendChild(freePullDisplay);
+                    }
+                    
+                    // Update timer display
+                    let timerDisplay = document.querySelector('.free-pull-timer');
+                    if (!timerDisplay) {
+                        timerDisplay = document.createElement('div');
+                        timerDisplay.className = 'free-pull-timer';
+                        costElement.parentElement.appendChild(timerDisplay);
+                    }
+                    
+                    // Display remaining free pulls
+                    freePullDisplay.textContent = `FREE PULLS: ${this.freeMortalPulls.remaining}/2`;
+                    
+                    // Display timer if no free pulls remain
+                    if (this.freeMortalPulls.remaining === 0) {
+                        const timeRemaining = this.getTimeUntilNextReset();
+                        timerDisplay.textContent = `NEXT FREE PULLS: ${timeRemaining}`;
+                        timerDisplay.style.display = 'block';
+                    } else {
+                        timerDisplay.style.display = 'none';
+                    }
+                    
+                    // Update cost display to show actual cost or FREE
+                    if (this.freeMortalPulls.remaining > 0) {
+                        costElement.innerHTML = '<span class="free-label">FREE</span>';
+                    } else {
+                        costElement.textContent = `${cost.amount}`;
+                    }
+                    
+                    // Check if player has enough currency or has free pulls
+                    const hasEnough = this.freeMortalPulls.remaining > 0 || Currency.hasEnough(cost.currency, cost.amount);
+                    const pullButton = document.querySelector(`.gacha-pull-button[data-type="${type}"]`);
+                    if (pullButton) {
+                        pullButton.disabled = !hasEnough;
+                    }
+                } else {
+                    // For other types, show regular cost
+                    costElement.textContent = `${cost.amount}`;
+                    
+                    // Check if player has enough currency
+                    const hasEnough = Currency.hasEnough(cost.currency, cost.amount);
+                    const pullButton = document.querySelector(`.gacha-pull-button[data-type="${type}"]`);
+                    if (pullButton) {
+                        pullButton.disabled = !hasEnough;
+                    }
                 }
             }
         }
@@ -783,15 +905,31 @@ const GachaSystem = {
             return null;
         }
         
-        // Check if player has enough currency
-        const cost = this.gachaTypes[type].cost;
-        if (!Currency.hasEnough(cost.currency, cost.amount)) {
-            console.error(`Not enough ${cost.currency} to pull ${type} gacha`);
-            return null;
-        }
+        let usedFreePull = false;
         
-        // Spend currency
-        Currency.spend(cost.currency, cost.amount);
+        // Check for free mortal pulls if this is a mortal pull
+        if (type === 'mortal' && !isSuper && this.freeMortalPulls.remaining > 0) {
+            // Use a free pull
+            this.freeMortalPulls.remaining--;
+            usedFreePull = true;
+            
+            // If this is the first use, set the last reset time
+            if (this.freeMortalPulls.lastResetTime === null) {
+                this.freeMortalPulls.lastResetTime = Date.now();
+            }
+            
+            console.log(`Used a free Mortal DNA pull. Remaining: ${this.freeMortalPulls.remaining}`);
+        } else {
+            // Not using a free pull, check if player has enough currency
+            const cost = this.gachaTypes[type].cost;
+            if (!Currency.hasEnough(cost.currency, cost.amount)) {
+                console.error(`Not enough ${cost.currency} to pull ${type} gacha`);
+                return null;
+            }
+            
+            // Spend currency
+            Currency.spend(cost.currency, cost.amount);
+        }
         
         // Increment pull counter if not using Super DNA
         if (!isSuper) {
@@ -1165,7 +1303,7 @@ const GachaSystem = {
                 intelligence: 10,
                 luck: 10
             },
-            specialAbility: 'multi_shot'
+            specialAbility: 'precision_shot'
         },
         {
             id: 'chrome',
@@ -1554,7 +1692,8 @@ const GachaSystem = {
         Utils.saveToStorage('gacha', {
             pullCounter: this.pullCounter,
             superDnaAvailable: this.superDnaAvailable,
-            skipAnimation: this.skipAnimation
+            skipAnimation: this.skipAnimation,
+            freeMortalPulls: this.freeMortalPulls
         });
     },
     
