@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoChainWars - Item Database</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    </head>
+<body>
+    <div id="background-animation"></div>
+    <audio id="click-sound" src="sounds/click.wav" preload="auto"></audio>
+
+    <header>
+        <div class="logo">CryptoChainWars</div>
+        <div class="clock" id="clock">00:00:00</div>
+    </header>
+
+    <main>
+        <section id="database-section">
+            <h1>Item Database</h1>
+            <p>Browse the vast arsenal of gear available in Neo-Veridia.</p>
+
+            <div class="controls-container">
+                <div class="sort-controls">
+                    <label for="sortSelect">Sort by:</label>
+                    <select id="sortSelect">
+                        <option value="categoryTypeRarity">Default</option>
+                        <option value="nameAsc">Name (A-Z)</option>
+                        <option value="nameDesc">Name (Z-A)</option>
+                        <option value="category">Category</option>
+                        <option value="equipmentType">Type</option>
+                        <option value="rarity">Rarity</option>
+                    </select>
+                </div>
+                <div class="search-controls">
+                    <input type="text" id="searchInput" placeholder="Search items...">
+                </div>
+            </div>
+
+            
+                        <!-- Removed duplicate item-database div and misplaced button -->
+            
+                        <div id="item-database" class="database-grid">
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year"></span> CryptoChainWars. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link">Privacy Policy</a></li>
+                <li><a href="#" class="nav-link">Terms of Service</a></li>
+                <li><a href="items.html" cla
+ss="nav-link">Item Database</a></li>
+            </ul>
+        </nav>
+    </footer>
+
+    <script src="main.js"></script>
+    <script src="items-main.js"></script>
+</body>
+</html>

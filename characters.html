@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lovelace Games - Character Database</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+    <div class="grid-background"></div>
+    <div class="container">
+
+        <header class="glitch-container">
+            <h1 data-text="// CHARACTER_DATABASE //"><span>// CHARACTER_DATABASE //</span></h1>
+            <p class="subtitle">// Unit Specifications & Profiles //</p>
+        </header>
+
+        <main>
+            <section id="character-list" class="terminal-section">
+                <h2 class="section-title">// REGISTERED_UNITS ///</h2>
+
+                <div class="sort-controls">
+                    <button id="sort-by-rarity" class="clickable sort-button" data-sort-order="asc">
+                        Sort by Rarity <span class="sort-indicator">▲</span> </button>
+                    </div>
+
+                <div id="character-grid">
+
+                    <div class="character-entry rarity-rare" data-rarity="rare">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/devin.png" alt="Devin Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Devin <span class="rarity">(Rare)</span></h3>
+                            <p class="description">A skilled hacker with time manipulation abilities.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 3</li><li>AGI: 10</li><li>VIT: 4</li>
+                                <li>DEX: 6</li><li>INT: 8</li><li>LCK: 4</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-common" data-rarity="common">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/chad.png" alt="Chad Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Chad <span class="rarity">(Common)</span></h3>
+                            <p class="description">A cybernetic soldier with enhanced combat capabilities.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 8</li><li>AGI: 6</li><li>VIT: 7</li>
+                                <li>DEX: 9</li><li>INT: 5</li><li>LCK: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-common" data-rarity="common">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/gowdie.png" alt="Gowdie Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Gowdie <span class="rarity">(Common)</span></h3>
+                            <p class="description">A time manipulation hacker with advanced temporal skills.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 3</li><li>AGI: 5</li><li>VIT: 4</li>
+                                <li>DEX: 6</li><li>INT: 8</li><li>LCK: 4</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-epic" data-rarity="epic">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/voltaire.png" alt="Voltaire Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Voltaire <span class="rarity">(Epic)</span></h3>
+                            <p class="description">A reality-bending AI with unprecedented control over digital space.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 6</li><li>AGI: 7</li><li>VIT: 6</li>
+                                <li>DEX: 8</li><li>INT: 10</li><li>LCK: 8</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-rare" data-rarity="rare">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/alonzo.png" alt="Alonzo Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Alonzo <span class="rarity">(Rare)</span></h3>
+                            <p class="description">A street medic equipped with cutting-edge healing technology.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 3</li><li>AGI: 5</li><li>VIT: 7</li>
+                                <li>DEX: 4</li><li>INT: 8</li><li>LCK: 5</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-common" data-rarity="common">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/lovelace.png" alt="Lovelace Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Lovelace <span class="rarity">(Common)</span></h3>
+                            <p class="description">A stealth operative specialized in covert operations.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 5</li><li>AGI: 7</li><li>VIT: 4</li>
+                                <li>DEX: 8</li><li>INT: 10</li><li>LCK: 7</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                     <div class="character-entry rarity-epic" data-rarity="epic">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/titan.png" alt="Titan Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Titan <span class="rarity">(Epic)</span></h3>
+                            <p class="description">An augmented enforcer with overwhelming strength.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 10</li><li>AGI: 3</li><li>VIT: 10</li>
+                                <li>DEX: 4</li><li>INT: 5</li><li>LCK: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                     <div class="character-entry rarity-uncommon" data-rarity="uncommon">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/sneak.png" alt="Sneak Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Sneak <span class="rarity">(Uncommon)</span></h3>
+                            <p class="description">An expert in sonic manipulation and sound-based attacks.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 3</li><li>AGI: 6</li><li>VIT: 4</li>
+                                <li>DEX: 5</li><li>INT: 7</li><li>LCK: 4</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-uncommon" data-rarity="uncommon">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/beemo.png" alt="Beemo Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Beemo <span class="rarity">(Uncommon)</span></h3>
+                            <p class="description">A quantum computing seer with predictive capabilities.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 4</li><li>AGI: 6</li><li>VIT: 5</li>
+                                <li>DEX: 7</li><li>INT: 10</li><li>LCK: 10</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-common" data-rarity="common">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/chrome.png" alt="Chrome Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Chrome <span class="rarity">(Common)</span></h3>
+                            <p class="description">A combat android built for battlefield supremacy.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 6</li><li>AGI: 5</li><li>VIT: 6</li>
+                                <li>DEX: 5</li><li>INT: 4</li><li>LCK: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-rare" data-rarity="rare">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/ether.png" alt="Ether Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Ether <span class="rarity">(Rare)</span></h3>
+                            <p class="description">A gravity manipulator with control over spatial forces.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 5</li><li>AGI: 4</li><li>VIT: 5</li>
+                                <li>DEX: 6</li><li>INT: 9</li><li>LCK: 5</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-legendary" data-rarity="legendary">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/phantom.png" alt="Phantom Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Phantom <span class="rarity">(Legendary)</span></h3>
+                            <p class="description">A digital consciousness with unlimited virtual potential.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 4</li><li>AGI: 11</li><li>VIT: 4</li>
+                                <li>DEX: 7</li><li>INT: 9</li><li>LCK: 7</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                     <div class="character-entry rarity-common" data-rarity="common">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/chang.png" alt="Chang Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Chang <span class="rarity">(Common)</span></h3>
+                            <p class="description">A neural-enhanced data courier with exceptional speed.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 4</li><li>AGI: 7</li><li>VIT: 4</li>
+                                <li>DEX: 6</li><li>INT: 6</li><li>LCK: 5</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-legendary" data-rarity="legendary">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/tap.png" alt="Tap Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Tap <span class="rarity">(Legendary)</span></h3>
+                            <p class="description">A digital network hub entity with vast connectivity.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 5</li><li>AGI: 5</li><li>VIT: 11</li>
+                                <li>DEX: 7</li><li>INT: 10</li><li>LCK: 9</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="character-entry rarity-common" data-rarity="common">
+                        <div class="character-thumbnail">
+                             <img src="img/thumbnail/byron.png" alt="Byron Thumbnail">
+                        </div>
+                        <div class="character-details">
+                            <h3>Byron <span class="rarity">(Common)</span></h3>
+                            <p class="description">An energy manipulator with elemental control.</p>
+                            <h4>Base Stats:</h4>
+                            <ul class="stats-list">
+                                <li>STR: 6</li><li>AGI: 5</li><li>VIT: 5</li>
+                                <li>DEX: 5</li><li>INT: 5</li><li>LCK: 4</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div> </section>
+        </main>
+
+        <footer>
+            <p><a href="index.html" class="clickable footer-link">[RETURN_TO_HUB]</a></p>
+            <p>&copy; 2025 Lovelace Games. All rights reserved // Neural Interface Active //</p>
+            <p id="current-datetime">Fetching Server Time (UTC)...</p>
+        </footer>
+
+    </div>
+
+    <audio id="click-sound" src="click.wav" preload="auto"></audio>
+    <script src="char-main.js"></script>
+</body>
+</html>

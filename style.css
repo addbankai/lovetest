@@ -1,0 +1,812 @@
+/* --- Configuration --- */
+:root {
+    --color-background: #050a0f; /* Dark blue/black */
+    --color-foreground: #0f0;   /* Neon Green */
+    --color-secondary: #0ff;   /* Neon Cyan/Blue */
+    --color-tertiary: #f0f;   /* Neon Purple */
+    --color-accent: #ff0;     /* Neon Yellow */
+    --color-down: #f00;       /* Neon Red */
+    --color-warning: #f90;    /* Neon Orange for warnings */
+    --color-common: #ccc;     /* Light Grey/White for Common */
+    --color-uncommon: var(--color-secondary); /* Cyan for Uncommon */
+    --color-rare: var(--color-accent);     /* Yellow for Rare */
+    --color-epic: var(--color-tertiary);   /* Purple for Epic */
+    --color-legendary: var(--color-warning); /* Orange for Legendary */
+
+
+    --font-primary: 'Consolas', 'Menlo', 'Courier New', monospace;
+    /* Optional Pixel Font: */
+    /* --font-primary: 'Press Start 2P', cursive, 'Consolas', 'Menlo', 'Courier New', monospace; */
+
+    --glow-intensity-low: 3px;
+    --glow-intensity-med: 5px;
+    --glow-intensity-high: 8px;
+
+    --scanline-opacity: 0.08;
+    --noise-opacity: 0.05;
+    --grid-opacity: 0.1;
+    --grid-color: var(--color-secondary);
+}
+
+/* --- Base & Reset --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-primary);
+    font-size: 16px; /* Adjust as needed */
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    padding: 20px;
+    position: relative; /* Needed for pseudo-elements */
+}
+
+/* --- Background Effects --- */
+.grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image:
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+    background-size: 40px 40px; /* Size of grid squares */
+    opacity: var(--grid-opacity);
+    z-index: -3;
+    animation: moveGrid 20s linear infinite;
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px; /* Scanline thickness */
+    opacity: var(--scanline-opacity);
+    z-index: -2;
+    pointer-events: none; /* Allow clicks through */
+    animation: flicker 0.15s infinite;
+}
+
+.noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgbnVtT2N0YXZlcz0iMyIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjxmZUNvbG9yTWF0cml4IHR5cGU9InNhdHVyYXRlIiB2YWx1ZXM9IjAiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIi8+PC9zdmc+'); /* Simple SVG noise */
+    opacity: var(--noise-opacity);
+    z-index: -1;
+    pointer-events: none;
+    animation: grain 0.5s steps(1) infinite;
+}
+
+
+/* --- Layout --- */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid var(--color-secondary);
+    box-shadow: 0 0 15px var(--color-secondary), inset 0 0 10px var(--color-background);
+    background-color: rgba(5, 10, 15, 0.85); /* Semi-transparent background */
+    position: relative; /* Ensure container is above background effects */
+    z-index: 1;
+}
+
+header, footer {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 10px;
+    border-bottom: 1px dashed var(--color-tertiary);
+}
+
+footer {
+    margin-top: 40px;
+    border-top: 1px dashed var(--color-tertiary);
+    border-bottom: none;
+    font-size: 0.8em;
+    color: var(--color-secondary);
+}
+/* Style for footer link */
+footer .footer-link {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1em; /* Make it slightly larger */
+}
+
+
+#current-datetime {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: var(--color-foreground);
+    opacity: 0.7;
+}
+
+/* --- Typography & Effects --- */
+h1, h2, .section-title {
+    color: var(--color-secondary);
+    text-shadow: 0 0 var(--glow-intensity-med) var(--color-secondary);
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: var(--color-accent);
+    text-shadow: 0 0 var(--glow-intensity-high) var(--color-accent), 0 0 15px var(--color-accent);
+    position: relative; /* For glitch effect */
+}
+
+.subtitle {
+    color: var(--color-tertiary);
+    font-size: 1.1em;
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-tertiary);
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-accent);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+a:hover, a:focus {
+    color: #fff;
+    text-shadow: 0 0 var(--glow-intensity-med) #fff, 0 0 var(--glow-intensity-high) var(--color-accent);
+    outline: none;
+}
+
+button {
+    background-color: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    padding: 8px 15px;
+    font-family: var(--font-primary);
+    font-size: 1em;
+    cursor: pointer;
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-accent);
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    margin-right: 10px;
+}
+
+button:hover, button:focus {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+    box-shadow: 0 0 var(--glow-intensity-med) var(--color-accent);
+    outline: none;
+}
+
+button:disabled {
+    border-color: #555;
+    color: #555;
+    cursor: not-allowed;
+    text-shadow: none;
+    background-color: transparent;
+}
+
+
+/* --- Sections --- */
+.terminal-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px dashed var(--color-foreground);
+    background: rgba(10, 20, 15, 0.3); /* Slightly different background */
+}
+
+.terminal-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.terminal-section li:not(.stats-list li) { /* Avoid applying to stats list */
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted rgba(0, 255, 255, 0.2);
+}
+.terminal-section li:not(.stats-list li):last-child {
+    border-bottom: none;
+}
+
+/* --- CryptoChainWars Section --- */
+#cryptochainwars .section-content p {
+    color: var(--color-foreground);
+    opacity: 0.9;
+    margin-bottom: 1em;
+}
+#cryptochainwars .highlight {
+    color: var(--color-secondary);
+}
+#cryptochainwars .warning {
+    color: var(--color-warning);
+    text-shadow: 0 0 var(--glow-intensity-med) var(--color-warning);
+    font-weight: bold;
+}
+#cryptochainwars .balance-term {
+    color: var(--color-accent);
+    font-style: italic;
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-accent);
+}
+
+
+/* --- Blockchain Wars --- */
+#blockchain-wars li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#blockchain-wars .status-up {
+    color: var(--color-foreground);
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-foreground);
+}
+#blockchain-wars .status-down {
+    color: var(--color-down);
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-down);
+}
+
+/* --- Upcoming Games --- */
+#upcoming-games li {
+    position: relative;
+    padding-right: 140px;
+}
+#upcoming-games .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+}
+#upcoming-games .game-title {
+    color: var(--color-secondary);
+    font-size: 1.1em;
+    margin-right: 15px;
+}
+#upcoming-games .status {
+    color: var(--color-accent);
+    font-size: 0.9em;
+    font-style: italic;
+}
+#upcoming-games .game-details {
+    margin-left: 10px;
+}
+#upcoming-games .release {
+    display: block;
+    color: var(--color-tertiary);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+#upcoming-games .description {
+    color: var(--color-foreground);
+    opacity: 0.8;
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+#upcoming-games li a.clickable {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+
+/* --- Live Feed --- */
+pre {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-tertiary);
+    padding: 15px;
+    font-family: var(--font-primary);
+    color: var(--color-foreground);
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-secondary) var(--color-background);
+}
+
+pre::-webkit-scrollbar {
+  width: 8px;
+}
+pre::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+pre::-webkit-scrollbar-thumb {
+  background-color: var(--color-secondary);
+  border-radius: 4px;
+  border: 1px solid var(--color-background);
+}
+
+/* --- Wallet --- */
+#wallet-status {
+    margin-left: 10px;
+    font-size: 0.9em;
+}
+#wallet-status.status-up {
+    color: var(--color-foreground);
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-foreground);
+}
+#wallet-status.status-down {
+     color: var(--color-down);
+     text-shadow: 0 0 var(--glow-intensity-low) var(--color-down);
+}
+#wallet-status.status-connecting {
+    color: var(--color-accent);
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-accent);
+    animation: blinkCursor 1s steps(1) infinite;
+}
+
+
+/* --- Glitch Effect --- */
+.glitch-container {
+  position: relative;
+}
+
+[data-text]::before,
+[data-text]::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  overflow: hidden;
+  clip-path: inset(50% 50% 50% 50%);
+}
+
+[data-text]::before {
+  left: -2px;
+  text-shadow: -2px 0 var(--color-tertiary);
+  animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+}
+
+[data-text]::after {
+  left: 2px;
+  text-shadow: 2px 0 var(--color-secondary);
+  animation: glitch-anim-2 2s infinite linear alternate-reverse;
+}
+
+/* --- Animations --- */
+/* ... (Keep all existing animations: moveGrid, flicker, grain, blinkCursor, glitch-anim-1, glitch-anim-2) ... */
+@keyframes moveGrid {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: var(--scanline-opacity); }
+  50% { opacity: calc(var(--scanline-opacity) * 0.7); }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(1%, 1%); }
+  30% { transform: translate(-2%, 2%); }
+  40% { transform: translate(2%, -2%); }
+  50% { transform: translate(-1%, 1%); }
+  60% { transform: translate(1%, -1%); }
+  70% { transform: translate(-2%, -2%); }
+  80% { transform: translate(2%, 2%); }
+  90% { transform: translate(-1%, 2%); }
+}
+
+@keyframes blinkCursor {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(3% 0 94% 0); }
+  5% { clip-path: inset(45% 0 40% 0); }
+  10% { clip-path: inset(9% 0 81% 0); }
+  15% { clip-path: inset(91% 0 4% 0); }
+  20% { clip-path: inset(38% 0 52% 0); }
+  25% { clip-path: inset(47% 0 7% 0); }
+  30% { clip-path: inset(81% 0 1% 0); }
+  35% { clip-path: inset(21% 0 71% 0); }
+  40% { clip-path: inset(34% 0 56% 0); }
+  45% { clip-path: inset(11% 0 5% 0); }
+  50% { clip-path: inset(61% 0 28% 0); }
+  55% { clip-path: inset(91% 0 4% 0); }
+  60% { clip-path: inset(73% 0 11% 0); }
+  65% { clip-path: inset(21% 0 79% 0); }
+  70% { clip-path: inset(77% 0 11% 0); }
+  75% { clip-path: inset(17% 0 78% 0); }
+  80% { clip-path: inset(40% 0 41% 0); }
+  85% { clip-path: inset(92% 0 3% 0); }
+  90% { clip-path: inset(57% 0 36% 0); }
+  95% { clip-path: inset(23% 0 19% 0); }
+  100% { clip-path: inset(4% 0 87% 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(79% 0 1% 0); }
+  5% { clip-path: inset(1% 0 93% 0); }
+  10% { clip-path: inset(72% 0 5% 0); }
+  15% { clip-path: inset(6% 0 86% 0); }
+  20% { clip-path: inset(84% 0 10% 0); }
+  25% { clip-path: inset(49% 0 46% 0); }
+  30% { clip-path: inset(7% 0 73% 0); }
+  35% { clip-path: inset(51% 0 44% 0); }
+  40% { clip-path: inset(91% 0 1% 0); }
+  45% { clip-path: inset(2% 0 95% 0); }
+  50% { clip-path: inset(69% 0 29% 0); }
+  55% { clip-path: inset(44% 0 50% 0); }
+  60% { clip-path: inset(12% 0 85% 0); }
+  65% { clip-path: inset(77% 0 4% 0); }
+  70% { clip-path: inset(29% 0 66% 0); }
+  75% { clip-path: inset(5% 0 88% 0); }
+  80% { clip-path: inset(87% 0 6% 0); }
+  85% { clip-path: inset(31% 0 63% 0); }
+  90% { clip-path: inset(68% 0 25% 0); }
+  95% { clip-path: inset(4% 0 90% 0); }
+  100% { clip-path: inset(76% 0 10% 0); }
+}
+
+/* --- NEW: Character Database Styles --- */
+.character-entry {
+    display: flex;
+    gap: 20px; /* Space between thumbnail and details */
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 0, 0.3); /* Faint green border */
+    background-color: rgba(0, 15, 10, 0.4); /* Slightly darker background */
+    border-radius: 4px;
+}
+
+.character-thumbnail img {
+    display: block;
+    max-width: 100px; /* Adjust size as needed */
+    height: auto;
+    border: 2px solid var(--color-secondary);
+    background-color: #000; /* Add black background in case of transparency */
+    box-shadow: 0 0 8px var(--color-secondary);
+}
+
+.character-details {
+    flex: 1; /* Allow details to take remaining space */
+}
+
+.character-details h3 {
+    color: var(--color-foreground); /* Main name color */
+    text-shadow: 0 0 var(--glow-intensity-low) var(--color-foreground);
+    margin-bottom: 5px;
+    font-size: 1.4em;
+}
+
+.character-details h4 {
+    color: var(--color-secondary);
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 1em;
+    text-transform: uppercase;
+}
+
+.character-details .description {
+    color: var(--color-foreground);
+    opacity: 0.85;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    display: grid; /* Use grid for aligned stats */
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Responsive columns */
+    gap: 5px 15px; /* Row and column gap */
+    font-size: 0.9em;
+}
+
+.stats-list li {
+    color: var(--color-secondary);
+    border-bottom: none; /* Override general li border */
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* Rarity Specific Styles */
+.character-details .rarity {
+    font-size: 0.8em;
+    margin-left: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.rarity-common .rarity { color: var(--color-common); text-shadow: 0 0 var(--glow-intensity-low) var(--color-common); }
+.rarity-uncommon .rarity { color: var(--color-uncommon); text-shadow: 0 0 var(--glow-intensity-low) var(--color-uncommon); }
+.rarity-rare .rarity { color: var(--color-rare); text-shadow: 0 0 var(--glow-intensity-low) var(--color-rare); }
+.rarity-epic .rarity { color: var(--color-epic); text-shadow: 0 0 var(--glow-intensity-low) var(--color-epic); }
+.rarity-legendary .rarity { color: var(--color-legendary); text-shadow: 0 0 var(--glow-intensity-low) var(--color-legendary); }
+
+/* Add a subtle border based on rarity */
+.character-entry.rarity-common { border-left: 5px solid var(--color-common); }
+.character-entry.rarity-uncommon { border-left: 5px solid var(--color-uncommon); }
+.character-entry.rarity-rare { border-left: 5px solid var(--color-rare); }
+.character-entry.rarity-epic { border-left: 5px solid var(--color-epic); }
+.character-entry.rarity-legendary { border-left: 5px solid var(--color-legendary); }
+
+/* Add these styles to your existing style.css file */
+
+/* --- Item Database Specific Styles --- */
+#database-section {
+    padding: 60px 20px;
+    text-align: center;
+    background: rgba(10, 10, 25, 0.8); /* Dark semi-transparent background */
+    border-radius: 8px;
+    margin: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+#database-section h1 {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    text-shadow: 0 0 10px var(--accent-color);
+}
+
+#database-section p {
+    color: var(--text-color-light);
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.database-grid {
+    display: grid;
+    /* Adjust grid columns based on desired layout */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 25px; /* Space between grid items */
+    padding: 20px;
+    justify-content: center;
+}
+
+/* --- Search and Sort Controls --- */
+.controls-container {
+    display: flex;
+    justify-content: space-between; /* Pushes sort and search apart */
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 10px;
+    border-bottom: 1px dashed var(--color-tertiary);
+}
+
+.sort-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between label and select */
+}
+
+.sort-controls label { /* Style the label */
+    margin-right: 5px;
+    color: var(--color-secondary);
+}
+
+#sortSelect { /* Style the dropdown */
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-secondary);
+    color: var(--color-foreground);
+    padding: 7px 10px; /* Adjust padding */
+    font-family: var(--font-primary);
+    font-size: 0.95em;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 150px; /* Give it some base width */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#sortSelect:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 8px var(--color-accent);
+}
+
+/* Optional: Style dropdown options (limited browser support) */
+#sortSelect option {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+}
+
+.search-controls {
+    /* Takes remaining space if needed, but allows shrinking */
+    flex-grow: 1;
+    min-width: 200px; /* Minimum width before wrapping */
+    max-width: 350px; /* Optional: Limit max width */
+}
+
+#searchInput {
+    width: 100%; /* Fill the search-controls container */
+    padding: 8px 12px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-secondary);
+    color: var(--color-foreground);
+    font-family: var(--font-primary);
+    font-size: 0.95em;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#searchInput::placeholder {
+    color: rgba(0, 255, 0, 0.4); /* Dim green placeholder */
+    opacity: 1; /* Ensure placeholder is visible */
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4), 0 0 8px var(--color-accent);
+}
+
+.loading-placeholder {
+    color: var(--text-color-light);
+    font-size: 1.2em;
+    grid-column: 1 / -1; /* Span full width */
+    text-align: center;
+    padding: 40px;
+}
+
+.item-entry {
+    background: rgba(30, 30, 55, 0.85); /* Slightly lighter card background */
+    border: 1px solid var(--border-color-dark);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex; /* Use flexbox for icon and details alignment */
+    align-items: flex-start; /* Align items to the top */
+    gap: 15px; /* Space between icon and details */
+    overflow: hidden; /* Prevent content overflow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.item-entry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4), 0 0 10px var(--accent-color-hover);
+    border-color: var(--accent-color-hover);
+}
+
+.item-icon {
+    width: 64px; /* Standard icon size */
+    height: 64px;
+    object-fit: contain; /* Ensure icon aspect ratio is maintained */
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.3); /* Dark bg for icons */
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.item-details {
+    flex-grow: 1; /* Allow details to take remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between elements inside details */
+    min-width: 0; /* Prevents flex item overflow issues */
+}
+
+.item-name {
+    margin: 0 0 5px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    /* Color is set dynamically by JS */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.item-meta {
+    font-size: 0.85em;
+    color: var(--text-color-medium);
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.item-meta span { /* Style the rarity text specifically */
+     font-weight: bold;
+     /* Color is set dynamically by JS */
+}
+
+.item-stats,
+.item-effects {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: var(--text-color-light);
+}
+
+.item-stats li,
+.item-effects li {
+    margin-bottom: 3px;
+    line-height: 1.4;
+}
+
+.item-effects strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color-medium);
+    font-size: 0.95em;
+}
+.item-effects li {
+    color: #87ceeb; /* Light sky blue for effects */
+}
+
+
+.item-description {
+    font-size: 0.9em;
+    color: var(--text-color-medium);
+    margin: 5px 0;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* --- Rarity Border Colors (Optional but nice) --- */
+/* You can add subtle borders based on rarity */
+.item-entry.rarity-common { border-left: 4px solid #aaaaaa; }
+.item-entry.rarity-uncommon { border-left: 4px solid #00ff66; }
+.item-entry.rarity-rare { border-left: 4px solid #00f3ff; }
+.item-entry.rarity-epic { border-left: 4px solid #ff00ff; }
+.item-entry.rarity-legendary { border-left: 4px solid #f7ff00; }
+
+/* Adjust footer styles if needed to accommodate the new link */
+footer nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+footer nav li a {
+    color: var(--text-color-medium);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer nav li a:hover {
+    color: var(--accent-color-hover);
+}
+
+/* --- Additions to CryptoChainWars Tab in index.html --- */
+#tab-cryptochainwars h3 {
+    color: var(--accent-color);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+#tab-cryptochainwars ul {
+    list-style: disc;
+    margin-left: 25px;
+    margin-bottom: 15px;
+}
+
+#tab-cryptochainwars li {
+    margin-bottom: 8px;
+    color: var(--text-color-light);
+}
