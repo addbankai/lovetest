@@ -1,9 +1,39 @@
 /**
- * Utility functions for the game
+ * Utility functions for the Cyberpunk MMORPG game
  */
+
 const Utils = {
     /**
-     * Generate a random integer between min and max (inclusive)
+     * Format a number with commas for thousands
+     * @param {number} num - Number to format
+     * @returns {string} Formatted number
+     */
+    formatNumber: function(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    
+    /**
+     * Initialize utilities
+     */
+    init: function() {
+        // Set default map background to love_city.png
+        this.setMapBackground('img/love_city.png');
+        
+        // Create fallback map background (only used if image fails to load)
+        this.createMapBackground();
+    },
+    
+    /**
+     * Generate a unique ID
+     * @returns {string} Unique ID
+     */
+    generateId: function() {
+        return Math.random().toString(36).substring(2, 15) + 
+               Math.random().toString(36).substring(2, 15);
+    },
+    
+    /**
+     * Get a random integer between min and max (inclusive)
      * @param {number} min - Minimum value
      * @param {number} max - Maximum value
      * @returns {number} Random integer
@@ -19,26 +49,100 @@ const Utils = {
      * @returns {number} Distance
      */
     distance: function(point1, point2) {
-        return Math.sqrt(
-            Math.pow(point2.x - point1.x, 2) + 
-            Math.pow(point2.y - point1.y, 2)
-        );
+        const dx = point2.x - point1.x;
+        const dy = point2.y - point1.y;
+        return Math.sqrt(dx * dx + dy * dy);
     },
     
     /**
      * Check if two objects overlap
      * @param {Object} obj1 - First object {x, y, width, height}
      * @param {Object} obj2 - Second object {x, y, width, height}
-     * @param {number} threshold - Overlap threshold in pixels
+     * @param {number} threshold - Minimum overlap in pixels
      * @returns {boolean} True if objects overlap
      */
     checkOverlap: function(obj1, obj2, threshold = 0) {
         return (
             obj1.x < obj2.x + obj2.width - threshold &&
-            obj1.x + obj1.width - threshold > obj2.x &&
+            obj1.x + obj1.width > obj2.x + threshold &&
             obj1.y < obj2.y + obj2.height - threshold &&
-            obj1.y + obj1.height - threshold > obj2.y
+            obj1.y + obj1.height > obj2.y + threshold
         );
+    },
+    
+    /**
+     * Calculate level based on experience
+     * @param {number} experience - Experience points
+     * @returns {number} Level
+     */
+    calculateLevel: function(experience) {
+        // Simple level calculation: level = sqrt(experience / 100) + 1
+        return Math.floor(Math.sqrt(experience / 100)) + 1;
+    },
+    
+    /**
+     * Create a damage text element
+     * @param {number} x - X position
+     * @param {number} y - Y position
+     * @param {string|number} text - Text to display
+     * @param {string} color - Text color
+     */
+    createDamageText: function(x, y, text, color = '#ff0000') {
+        const gameContainer = document.getElementById('game-container');
+        if (!gameContainer) return;
+        
+        // Create element
+        const element = document.createElement('div');
+        element.className = 'damage-text';
+        element.textContent = text;
+        element.style.left = `${x}px`;
+        element.style.top = `${y}px`;
+        element.style.color = color;
+        
+        // Add to container
+        gameContainer.appendChild(element);
+        
+        // Animate
+        let opacity = 1;
+        let posY = y;
+        
+        const animate = () => {
+            opacity -= 0.02;
+            posY -= 1;
+            
+            element.style.opacity = opacity;
+            element.style.top = `${posY}px`;
+            
+            if (opacity > 0) {
+                requestAnimationFrame(animate);
+            } else {
+                element.remove();
+            }
+        };
+        
+        requestAnimationFrame(animate);
+    },
+    
+    /**
+     * Show a modal
+     * @param {string} modalId - Modal ID
+     */
+    showModal: function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    },
+    
+    /**
+     * Hide a modal
+     * @param {string} modalId - Modal ID
+     */
+    hideModal: function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'none';
+        }
     },
     
     /**
@@ -49,8 +153,8 @@ const Utils = {
     saveToStorage: function(key, data) {
         try {
             localStorage.setItem(key, JSON.stringify(data));
-        } catch (e) {
-            console.error('Error saving to localStorage:', e);
+        } catch (error) {
+            console.error(`Error saving to localStorage: ${error}`);
         }
     },
     
@@ -63,343 +167,214 @@ const Utils = {
         try {
             const data = localStorage.getItem(key);
             return data ? JSON.parse(data) : null;
-        } catch (e) {
-            console.error('Error loading from localStorage:', e);
+        } catch (error) {
+            console.error(`Error loading from localStorage: ${error}`);
             return null;
         }
     },
     
     /**
-     * Clear data from localStorage
-     * @param {string} key - Storage key
-     */
-    clearStorage: function(key) {
-        try {
-            localStorage.removeItem(key);
-        } catch (e) {
-            console.error('Error clearing localStorage:', e);
-        }
-    },
-    
-    /**
-     * Remove data from localStorage (alias for clearStorage)
-     * @param {string} key - Storage key
+     * Remove data from localStorage
+     * @param {string} key - Storage key to remove
      */
     removeFromStorage: function(key) {
-        this.clearStorage(key);
+        try {
+            localStorage.removeItem(key);
+        } catch (error) {
+            console.error(`Error removing from localStorage: ${error}`);
+        }
     },
     
     /**
-     * Generate a unique ID
-     * @returns {string} Unique ID
+     * Create a map background image
      */
-    generateId: function() {
-        return Date.now().toString(36) + Math.random().toString(36).substring(2);
+    createMapBackground: function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+        
+        // Draw sky gradient
+        const skyGradient = ctx.createLinearGradient(0, 0, 0, 400);
+        skyGradient.addColorStop(0, '#000033');
+        skyGradient.addColorStop(1, '#0066cc');
+        ctx.fillStyle = skyGradient;
+        ctx.fillRect(0, 0, canvas.width, 400);
+        
+        // Draw ground
+        const groundGradient = ctx.createLinearGradient(0, 400, 0, canvas.height);
+        groundGradient.addColorStop(0, '#333333');
+        groundGradient.addColorStop(1, '#111111');
+        ctx.fillStyle = groundGradient;
+        ctx.fillRect(0, 400, canvas.width, 200);
+        
+        // Draw stars
+        ctx.fillStyle = '#ffffff';
+        for (let i = 0; i < 100; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * 300;
+            const size = Math.random() * 2;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw distant buildings
+        ctx.fillStyle = '#222222';
+        for (let i = 0; i < 20; i++) {
+            const x = i * 60;
+            const height = 100 + Math.random() * 150;
+            const width = 40 + Math.random() * 30;
+            ctx.fillRect(x, 400 - height, width, height);
+        }
+        
+        // Draw neon lights
+        const neonColors = ['#ff00ff', '#00ffff', '#ffff00', '#ff6600'];
+        for (let i = 0; i < 30; i++) {
+            const x = Math.random() * canvas.width;
+            const y = 250 + Math.random() * 150;
+            const width = 5 + Math.random() * 20;
+            const height = 2 + Math.random() * 5;
+            ctx.fillStyle = neonColors[Math.floor(Math.random() * neonColors.length)];
+            ctx.fillRect(x, y, width, height);
+        }
+        
+        // Create image element
+        const img = new Image();
+        img.src = canvas.toDataURL();
+        
+        // Save to localStorage for reuse
+        localStorage.setItem('map_background', img.src);
     },
     
     /**
-     * Create a damage text animation
-     * @param {number} x - X position
-     * @param {number} y - Y position
-     * @param {string|number} text - Text to display
-     * @param {string} color - Text color (default: #ff0000)
-     * @param {boolean} isCritical - Whether this is a critical hit
+     * Get the map background image URL
+     * @returns {string} Image URL
      */
-    createDamageText: function(x, y, text, color = "#ff0000", isCritical = false) {
-        // Get or create the damage text container
-        let container = document.getElementById('damage-text-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'damage-text-container';
-            container.style.position = 'absolute';
-            container.style.top = '0';
-            container.style.left = '0';
-            container.style.width = '100%';
-            container.style.height = '100%';
-            container.style.pointerEvents = 'none';
-            container.style.zIndex = '1000';
-            document.body.appendChild(container);
+    getMapBackground: function() {
+        // First check if a custom dungeon background is set
+        const customBackground = localStorage.getItem('current_map_background');
+        if (customBackground) {
+            return customBackground;
         }
-        
-        // Create the damage text element
-        const damageText = document.createElement('div');
-        damageText.className = isCritical ? 'damage-text critical' : 'damage-text';
-        damageText.textContent = text;
-        damageText.style.position = 'absolute';
-        damageText.style.left = `${x}px`;
-        damageText.style.top = `${y}px`;
-        damageText.style.color = color;
-        damageText.style.transform = 'translate(-50%, 0)';
-        damageText.style.animation = isCritical ? 'critical-damage-fade 1.2s forwards' : 'damage-fade 1s forwards';
-        
-        // Add a splash effect for critical hits
-        if (isCritical) {
-            const splash = document.createElement('div');
-            splash.className = 'critical-splash';
-            splash.style.position = 'absolute';
-            splash.style.top = '50%';
-            splash.style.left = '50%';
-            splash.style.width = '120px';
-            splash.style.height = '120px';
-            splash.style.borderRadius = '50%';
-            splash.style.background = 'radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0) 70%)';
-            splash.style.animation = 'critical-splash 0.8s forwards';
-            splash.style.transform = 'translate(-50%, -50%)';
-            splash.style.zIndex = '-1';
-            damageText.appendChild(splash);
-        }
-        
-        // Add to container
-        container.appendChild(damageText);
-        
-        // Remove after animation completes
-        setTimeout(() => {
-            if (damageText.parentNode) {
-                damageText.remove();
-            }
-        }, isCritical ? 1200 : 1000);
+        // Fall back to the default generated background
+        return localStorage.getItem('map_background');
+    },
+    
+    /**
+     * Set the current map background image
+     * @param {string} backgroundImage - Path to the background image
+     */
+    setMapBackground: function(backgroundImage) {
+        localStorage.setItem('current_map_background', backgroundImage);
     },
     
     /**
      * Show a notification message
-     * @param {string} message - Message to display
-     * @param {string} type - Notification type (default, success, warning, error)
+     * @param {string} title - Notification title
+     * @param {string} message - Notification message
      * @param {number} duration - Duration in milliseconds
      */
-    showNotification: function(message, type = 'default', duration = 3000) {
-        // Get or create notifications container
-        let container = document.getElementById('notifications-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'notifications-container';
-            container.style.position = 'fixed';
-            container.style.top = '20px';
-            container.style.right = '20px';
-            container.style.maxWidth = '300px';
-            container.style.zIndex = '9999';
-            document.body.appendChild(container);
+    showNotification: function(title, message, duration = 3000) {
+        // Create notification container if it doesn't exist
+        let notificationContainer = document.getElementById('notification-container');
+        if (!notificationContainer) {
+            notificationContainer = document.createElement('div');
+            notificationContainer.id = 'notification-container';
+            notificationContainer.style.position = 'fixed';
+            notificationContainer.style.top = '20px';
+            notificationContainer.style.left = '50%';
+            notificationContainer.style.transform = 'translateX(-50%)';
+            notificationContainer.style.zIndex = '1000';
+            notificationContainer.style.width = '300px';
+            notificationContainer.style.pointerEvents = 'none';
+            document.body.appendChild(notificationContainer);
         }
         
         // Create notification element
         const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-        notification.style.marginBottom = '10px';
-        notification.style.padding = '10px 15px';
+        notification.className = 'game-notification';
+        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        notification.style.color = '#fff';
         notification.style.borderRadius = '5px';
-        notification.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.3)';
+        notification.style.padding = '15px';
+        notification.style.marginBottom = '10px';
+        notification.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+        notification.style.transform = 'translateY(-20px)';
         notification.style.opacity = '0';
-        notification.style.transform = 'translateX(50px)';
-        notification.style.transition = 'opacity 0.3s, transform 0.3s';
+        notification.style.transition = 'transform 0.3s, opacity 0.3s';
         
-        // Set background color based on type
-        switch (type) {
-            case 'success':
-                notification.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
-                notification.style.color = 'white';
-                break;
-            case 'warning':
-                notification.style.backgroundColor = 'rgba(255, 152, 0, 0.9)';
-                notification.style.color = 'white';
-                break;
-            case 'error':
-                notification.style.backgroundColor = 'rgba(244, 67, 54, 0.9)';
-                notification.style.color = 'white';
-                break;
-            case 'loot':
-                notification.style.backgroundColor = 'rgba(156, 39, 176, 0.9)';
-                notification.style.color = 'white';
-                break;
-            default:
-                notification.style.backgroundColor = 'rgba(33, 33, 33, 0.9)';
-                notification.style.color = 'white';
-        }
+        // Add title
+        const titleElement = document.createElement('div');
+        titleElement.className = 'notification-title';
+        titleElement.textContent = title;
+        titleElement.style.fontSize = '18px';
+        titleElement.style.fontWeight = 'bold';
+        titleElement.style.marginBottom = '5px';
+        titleElement.style.color = '#ffcc00';
+        notification.appendChild(titleElement);
         
-        // Add close button
-        const closeButton = document.createElement('span');
-        closeButton.textContent = '×';
-        closeButton.style.position = 'absolute';
-        closeButton.style.top = '5px';
-        closeButton.style.right = '10px';
-        closeButton.style.cursor = 'pointer';
-        closeButton.style.fontSize = '16px';
-        closeButton.style.fontWeight = 'bold';
-        closeButton.addEventListener('click', () => {
-            closeNotification();
-        });
-        notification.appendChild(closeButton);
+        // Add message
+        const messageElement = document.createElement('div');
+        messageElement.className = 'notification-message';
+        messageElement.textContent = message;
+        messageElement.style.fontSize = '14px';
+        notification.appendChild(messageElement);
         
         // Add to container
-        container.appendChild(notification);
+        notificationContainer.appendChild(notification);
         
-        // Trigger animation after a short delay
+        // Animate in
         setTimeout(() => {
+            notification.style.transform = 'translateY(0)';
             notification.style.opacity = '1';
-            notification.style.transform = 'translateX(0)';
         }, 10);
         
-        // Close the notification
-        const closeNotification = () => {
+        // Remove after duration
+        setTimeout(() => {
+            notification.style.transform = 'translateY(-20px)';
             notification.style.opacity = '0';
-            notification.style.transform = 'translateX(50px)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 300);
-        };
-        
-        // Auto-close after duration
-        if (duration > 0) {
-            setTimeout(() => {
-                closeNotification();
-            }, duration);
-        }
-    },
-    
-    /**
-     * Show a modal dialog
-     * @param {string} modalId - Modal element ID
-     */
-    showModal: function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (!modal) return;
-        
-        modal.style.display = 'block';
-        
-        // Add fade-in animation
-        setTimeout(() => {
-            modal.style.opacity = '1';
-        }, 10);
-        
-        // Set focus trap
-        this.trapFocusInModal(modal);
-    },
-    
-    /**
-     * Hide a modal dialog
-     * @param {string} modalId - Modal element ID
-     */
-    hideModal: function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (!modal) return;
-        
-        // Add fade-out animation
-        modal.style.opacity = '0';
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 300);
-        
-        // Release focus trap
-        this.releaseFocusTrap();
-    },
-    
-    /**
-     * Trap focus within a modal
-     * @param {HTMLElement} modal - Modal element
-     */
-    trapFocusInModal: function(modal) {
-        // Get all focusable elements
-        const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        if (focusableElements.length === 0) return;
-        
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-        
-        // Set initial focus
-        firstElement.focus();
-        
-        // Add keydown event listener
-        this.focusTrapListener = function(e) {
-            // Check for Tab key
-            if (e.key === 'Tab') {
-                // Shift + Tab
-                if (e.shiftKey) {
-                    if (document.activeElement === firstElement) {
-                        e.preventDefault();
-                        lastElement.focus();
-                    }
-                } 
-                // Tab
-                else {
-                    if (document.activeElement === lastElement) {
-                        e.preventDefault();
-                        firstElement.focus();
-                    }
-                }
-            }
             
-            // Close on Escape
-            if (e.key === 'Escape') {
-                // Find the active modal
-                const activeModal = document.querySelector('.modal[style*="display: block"]');
-                if (activeModal) {
-                    const modalId = activeModal.id;
-                    Utils.hideModal(modalId);
-                }
-            }
-        };
+            // Remove element after animation completes
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, duration);
+    },
+    
+    /**
+     * Show a confirmation dialog
+     * @param {Object} options - Dialog options
+     */
+    showConfirmDialog: function(options) {
+        const modal = document.createElement('div');
+        modal.className = 'modal cyberpunk-modal confirmation-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>${options.title}</h2>
+                </div>
+                <div class="modal-body">
+                    <p>${options.message.replace(/\n/g, '<br>')}</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="confirm-button">${options.confirmText || 'Confirm'}</button>
+                    <button class="cancel-button">${options.cancelText || 'Cancel'}</button>
+                </div>
+            </div>
+        `;
         
-        document.addEventListener('keydown', this.focusTrapListener);
-    },
-    
-    /**
-     * Release focus trap
-     */
-    releaseFocusTrap: function() {
-        if (this.focusTrapListener) {
-            document.removeEventListener('keydown', this.focusTrapListener);
-            this.focusTrapListener = null;
-        }
-    },
-    
-    /**
-     * Calculate level based on experience
-     * @param {number} experience - Total experience
-     * @returns {number} Character level
-     */
-    calculateLevel: function(experience) {
-        if (experience < 0) return 1;
+        document.body.appendChild(modal);
         
-        // Simple level formula: level = 1 + floor(experience / 1000)
-        // This gives one level per 1000 experience
-        return 1 + Math.floor(experience / 1000);
-    },
-    
-    /**
-     * Format a number with commas as thousands separators
-     * @param {number} number - Number to format
-     * @returns {string} Formatted number string
-     */
-    formatNumber: function(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    
-    /**
-     * Get the appropriate map background based on dungeon or context
-     * @returns {string} Path to background image
-     */
-    getMapBackground: function() {
-        // Check if we have a stored background
-        if (this._currentBackground) {
-            return this._currentBackground;
-        }
+        // Add event listeners
+        modal.querySelector('.confirm-button').addEventListener('click', () => {
+            modal.remove();
+            if (options.onConfirm) options.onConfirm();
+        });
         
-        // Check if DungeonSystem is available and has a current dungeon
-        if (typeof DungeonSystem !== 'undefined' && DungeonSystem.currentDungeon) {
-            return DungeonSystem.currentDungeon.backgroundImage || 'img/mainmap1.png';
-        }
-        
-        // Default background if no dungeon system or current dungeon
-        return 'img/mainmap1.png';
-    },
-    
-    /**
-     * Set the current map background
-     * @param {string} backgroundPath - Path to the background image
-     */
-    setMapBackground: function(backgroundPath) {
-        if (!backgroundPath) return;
-        this._currentBackground = backgroundPath;
+        modal.querySelector('.cancel-button').addEventListener('click', () => {
+            modal.remove();
+            if (options.onCancel) options.onCancel();
+        });
     }
 };

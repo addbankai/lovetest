@@ -418,7 +418,7 @@ const MapSystem = {
         
         if (this.allowedMonsterTypes && this.allowedMonsterTypes.length > 0) {
             if (progressPercent > 0.8 && Math.random() < 0.2) {
-                monsterType = 'Bitzee';
+                monsterType = 'dragon';
             } else {
                 const randomIndex = Math.floor(Math.random() * this.allowedMonsterTypes.length);
                 monsterType = this.allowedMonsterTypes[randomIndex];

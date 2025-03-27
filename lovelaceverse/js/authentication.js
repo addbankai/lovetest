@@ -93,7 +93,7 @@ const AuthenticationSystem = {
             }
             
             // Set up auto-save
-            this.setupAutoSave(3000); // Auto-save every 30 seconds
+            this.setupAutoSave(30000); // Auto-save every 30 seconds
 
             // Listen for inventory changes and save them
             document.addEventListener('inventoryChanged', () => {
@@ -302,9 +302,17 @@ const AuthenticationSystem = {
     
                     console.log('Restored guest session:', guestId);
     
-                    // Load user data from Supabase (non-blocking)
-                    this.loadUserProgress(guestId).catch(error => {
-                        console.warn('Error loading guest progress, continuing anyway:', error);
+                    // Load user data from Supabase and dispatch event
+                    this.loadUserProgress(guestId).then(loaded => {
+                         if(loaded) {
+                             console.log("Dispatching progressLoaded after guest session restore.");
+                             document.dispatchEvent(new CustomEvent('progressLoaded')); // Dispatch event
+                         }
+                    }).catch(error => {
+                        console.warn('Error loading guest progress during restore, continuing anyway:', error);
+                        // Still dispatch event even if loading fails, so UI can proceed
+                        console.log("Dispatching progressLoaded after guest session restore error.");
+                        document.dispatchEvent(new CustomEvent('progressLoaded'));
                     });
                     
                     // Trigger UI update immediately without waiting for progress
@@ -319,6 +327,11 @@ const AuthenticationSystem = {
                     window.dispatchEvent(new CustomEvent('authStateChanged', {
                         detail: { isAuthenticated: true, authMode: 'guest' }
                     }));
+
+                    // Update tutorial arrow state after loading progress
+                    // if (typeof UIManager !== 'undefined') {
+                    //     UIManager.updateGachaTutorialArrow();
+                    // }
                     
                     return true;
                 }
@@ -368,9 +381,17 @@ const AuthenticationSystem = {
                     // Update UI immediately
                     this.updateAuthUI();
                     
-                    // We'll verify wallet in background, so the game can start loading
-                    this.loadUserProgress(walletAddress).catch(error => {
-                        console.warn('Error loading wallet progress, continuing anyway:', error);
+                    // Load progress and dispatch event
+                    this.loadUserProgress(walletAddress).then(loaded => {
+                         if(loaded) {
+                             console.log("Dispatching progressLoaded after wallet session restore.");
+                             document.dispatchEvent(new CustomEvent('progressLoaded')); // Dispatch event
+                         }
+                    }).catch(error => {
+                        console.warn('Error loading wallet progress during restore, continuing anyway:', error);
+                         // Still dispatch event even if loading fails
+                         console.log("Dispatching progressLoaded after wallet session restore error.");
+                         document.dispatchEvent(new CustomEvent('progressLoaded'));
                     });
                     
                     // Dispatch authentication events immediately to prevent login screen flicker
@@ -381,6 +402,11 @@ const AuthenticationSystem = {
                     window.dispatchEvent(new CustomEvent('authStateChanged', {
                         detail: { isAuthenticated: true, authMode: 'wallet' }
                     }));
+
+                    // Update tutorial arrow state after loading progress
+                    // if (typeof UIManager !== 'undefined') {
+                    //     UIManager.updateGachaTutorialArrow();
+                    // }
                     
                     // Start wallet verification in background with retry mechanism
                     this.verifyWalletSessionWithRetry(walletAddress, 3);
@@ -820,10 +846,19 @@ const AuthenticationSystem = {
             this.isAuthenticated = true;
 
             // Load any existing progress for this guest
-            await this.loadUserProgress(guestId);
+            const progressLoaded = await this.loadUserProgress(guestId);
+            if (progressLoaded) {
+                 console.log("Dispatching progressLoaded after guest login.");
+                 document.dispatchEvent(new CustomEvent('progressLoaded')); // Dispatch event for guest
+            }
 
             // Update UI
             this.updateAuthUI();
+
+            // Update tutorial arrow state after loading progress
+            if (typeof UIManager !== 'undefined') {
+                UIManager.updateGachaTutorialArrow();
+            }
 
             console.log('Logged in as guest:', guestId);
 
@@ -1116,6 +1151,13 @@ const AuthenticationSystem = {
                 detail: { userId: walletAddress, authMode: 'wallet' }
             });
             document.dispatchEvent(loginEvent);
+
+            // Dispatch progress loaded event after successful wallet login and progress load attempt
+            if (progressLoaded) {
+                 console.log("Dispatching progressLoaded after wallet connect.");
+                 document.dispatchEvent(new CustomEvent('progressLoaded'));
+            }
+
 
             return true;
         } catch (error) {

@@ -190,22 +190,10 @@ const DungeonSystem = {
         // Show the modal
         Utils.showModal('dungeon-selection-modal');
         
-        // Initialize the Three.js environment after the modal is shown
-        setTimeout(() => {
-            if (typeof DungeonThreeEnvironment !== 'undefined' && DungeonThreeEnvironment.init) {
-                // Initialize the environment if not already initialized
-                if (!DungeonThreeEnvironment.scene) {
-                    DungeonThreeEnvironment.init('dungeon-three-container');
-                }
-                
-                // Update the info panel with current dungeon details
-                this.updateSelectedDungeonInfo();
-            } else {
-                console.error('DungeonThreeEnvironment not available');
-                // Fallback to traditional dungeon list if Three.js not available
-                this.updateDungeonList(dungeonModal);
-            }
-        }, 100);
+        // Update the info panel with current dungeon details
+        this.updateSelectedDungeonInfo();
+        
+        // Note: Removed Three.js initialization logic here
     },
     
     /**
@@ -241,8 +229,6 @@ const DungeonSystem = {
         
         // Update with current dungeon info
         dungeonInfoPanel.innerHTML = `
-            <button class="enter-dungeon-button" id="enter-selected-dungeon">ENTER DUNGEON</button>
-            
             <div class="dungeon-navigation">
                 <div class="dungeon-selector">
                     <label for="dungeon-select">SELECT DUNGEON:</label>
@@ -269,6 +255,9 @@ const DungeonSystem = {
                     `).join('')}
                 </div>
             </div>
+
+            <!-- Moved Enter Dungeon button here -->
+            <button class="enter-dungeon-button" id="enter-selected-dungeon">ENTER DUNGEON</button>
             
             <div class="dungeon-detail-header">
                 <div class="dungeon-detail-name">${this.currentDungeon.name}</div>
@@ -408,10 +397,7 @@ const DungeonSystem = {
                     <span class="close-modal" onclick="Utils.hideModal('dungeon-selection-modal')">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <!-- Three.js container for dungeon visualization -->
-                    <div id="dungeon-three-container" class="dungeon-three-container"></div>
-                    
-                    <!-- Text information about the selected dungeon -->
+                    <!-- Container for dungeon selection UI -->
                     <div class="dungeon-info-panel">
                         <div class="dungeon-selected-info" id="dungeon-selected-info">
                             <div class="info-message">Interact with the holographic displays to select a dungeon</div>

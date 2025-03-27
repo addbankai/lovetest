@@ -137,7 +137,7 @@ const StandbyPage = {
                     document.dispatchEvent(guestLoginEvent);
                     
                     // Set a failsafe to ensure overlay is hidden
-                    setTimeout(() => this.forceHideOverlay(), 2000);
+                    setTimeout(() => this.forceHideOverlay(), 10000); // Increased failsafe timeout
                 })
                 .catch(error => {
                     this.showStatus('Guest login failed: ' + error.message, 'error');
@@ -453,7 +453,7 @@ const StandbyPage = {
                         console.warn('Failsafe: Force hiding standby overlay after timeout');
                         this.forceHideOverlay();
                     }
-                }, 2000); // Longer timeout for failsafe
+                }, 10000); // Increased failsafe timeout
             } catch (e) {
                 // If any error occurs, force hide immediately
                 console.error('Error during overlay transition, force hiding:', e);

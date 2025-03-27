@@ -203,64 +203,185 @@
     text-shadow: 0 0 5px rgba(255, 255, 0, 0.8);
 }
 
-/* Menu buttons common styles */
+/* Menu buttons common styles - Hacker Vibe */
 .menu-button {
-    width: 50px;
-    height: 50px;
+    width: 55px; /* Slightly larger */
+    height: 55px;
     margin: 5px;
-    border: 2px solid rgba(0, 247, 255, 0.5);
-    background: linear-gradient(135deg, rgba(0, 20, 40, 0.95), rgba(0, 40, 80, 0.95));
-    color: #00f7ff;
+    border: 1px solid rgba(0, 255, 255, 0.4); /* Cyan border */
+    background: linear-gradient(145deg, rgba(0, 10, 20, 0.9), rgba(0, 20, 40, 0.9)); /* Dark cyan/blue gradient */
+    color: #00ffff; /* Cyan text */
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease-out; /* Faster transition */
     position: relative;
-    overflow: hidden;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 247, 255, 0.2),
-                inset 0 0 5px rgba(0, 247, 255, 0.1);
+    overflow: hidden; /* Keep hidden for effects */
+    border-radius: 3px; /* Sharper corners */
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.2),
+                inset 0 0 4px rgba(0, 255, 255, 0.1); /* Cyan box shadow */
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0;
+    font-size: 24px; /* Slightly larger icon */
+    text-shadow: 0 0 6px rgba(0, 255, 255, 0.7); /* Cyan text shadow */
 }
 
 .menu-button-symbol {
     user-select: none;
     pointer-events: none;
+    position: relative; /* Needed for glitch */
+    z-index: 2;
 }
 
+/* Glitch effect on hover */
+.menu-button:hover .menu-button-symbol::before,
+.menu-button:hover .menu-button-symbol::after {
+    content: attr(data-text); /* Use emoji/symbol from HTML if possible, else fallback */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit; /* Match button background */
+    overflow: hidden;
+}
+.menu-button:hover .menu-button-symbol::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00ff; /* Magenta glitch */
+    animation: glitch-anim-1 2s infinite linear alternate-reverse;
+}
+.menu-button:hover .menu-button-symbol::after {
+    left: -2px;
+    text-shadow: -1px 0 #00ffff; /* Cyan glitch */
+    animation: glitch-anim-2 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+    0% { clip-path: inset(30% 0 40% 0); } 20% { clip-path: inset(10% 0 85% 0); }
+    40% { clip-path: inset(55% 0 20% 0); } 60% { clip-path: inset(20% 0 70% 0); }
+    80% { clip-path: inset(80% 0 5% 0); } 100% { clip-path: inset(45% 0 35% 0); }
+}
+@keyframes glitch-anim-2 {
+    0% { clip-path: inset(60% 0 15% 0); } 20% { clip-path: inset(80% 0 5% 0); }
+    40% { clip-path: inset(25% 0 50% 0); } 60% { clip-path: inset(40% 0 30% 0); }
+    80% { clip-path: inset(5% 0 90% 0); } 100% { clip-path: inset(70% 0 10% 0); }
+}
+
+
+/* Hover state */
 .menu-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(0, 247, 255, 0.4),
-                inset 0 0 10px rgba(0, 247, 255, 0.2);
-    background: linear-gradient(135deg, rgba(0, 30, 60, 0.95), rgba(0, 50, 100, 0.95));
+    transform: translateY(-1px); /* Less lift */
+    border-color: #ff00ff; /* Magenta border */
+    box-shadow: 0 0 12px rgba(255, 0, 255, 0.5),
+                inset 0 0 8px rgba(255, 0, 255, 0.2); /* Magenta box shadow */
+    background: linear-gradient(145deg, rgba(20, 0, 30, 0.9), rgba(40, 0, 50, 0.9)); /* Dark magenta/purple gradient */
+    color: #fff; /* Brighten text on hover */
+    text-shadow: 0 0 10px #ff00ff; /* Magenta text shadow */
 }
 
+/* Active state */
 .menu-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 0 5px rgba(0, 247, 255, 0.2),
-                inset 0 0 3px rgba(0, 247, 255, 0.1);
+    transform: translateY(0px) scale(0.97); /* Slight press down */
+    box-shadow: 0 0 5px rgba(255, 0, 255, 0.3),
+                inset 0 0 6px rgba(255, 0, 255, 0.2); /* Magenta box shadow */
+    color: #fcc; /* Lighter magenta/pink color shift on press */
 }
 
-/* Glowing border effect */
-.menu-button::before {
+/* Remove old border/scanline effects */
+.menu-button::before,
+.menu-button::after {
+   display: none; /* Disable old pseudo-elements */
+}
+
+
+/* Tooltip - keep as is or adjust if needed */
+.menu-button[data-tooltip]::after { /* Target only buttons with tooltip */
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 5, 10, 0.95); /* Darker tooltip */
+    padding: 5px 10px;
+    margin-bottom: 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    border: 1px solid rgba(0, 255, 255, 0.4); /* Cyan border */
+    color: #00ffff; /* Cyan text */
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
+}
+.menu-button[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* Keep other button styles (.cyberpunk-button, .gacha-pull-button etc.) */
+.cyberpunk-button,
+.gacha-pull-button,
+.buff-button,
+.inventory-tab,
+.enter-dungeon-button {
+    /* These styles remain as they were */
+    position: relative;
+    padding: 8px 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.8);
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(0, 20, 40, 0.9), rgba(0, 40, 80, 0.9));
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.4),
+                inset 0 0 5px rgba(0, 247, 255, 0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Before element for shine effect */
+.cyberpunk-button::before,
+/* .menu-button::before, */ /* Handled above */
+.gacha-pull-button::before,
+.buff-button::before,
+.inventory-tab::before,
+.enter-dungeon-button::before {
     content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, 
-        rgba(0, 255, 255, 0.1),
-        rgba(0, 255, 255, 0.3),
-        rgba(0, 255, 255, 0.1)
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
     );
+    transition: all 0.6s ease;
     z-index: -1;
-    animation: borderGlow 2s linear infinite;
 }
 
-/* Scanline effect */
-.menu-button::after {
+/* After element for border effect */
+.cyberpunk-button::after,
+/* .menu-button::after, */ /* Handled above */
+.gacha-pull-button::after,
+.buff-button::after,
+.inventory-tab::after,
+.enter-dungeon-button::after {
     content: '';
     position: absolute;
     top: 0;
@@ -269,43 +390,146 @@
     height: 100%;
     background: linear-gradient(
         to bottom,
-        transparent 50%,
-        rgba(0, 255, 255, 0.1) 50%,
-        transparent 52%
+        rgba(0, 247, 255, 0.5) 0%,
+        transparent 5%,
+        transparent 95%,
+        rgba(0, 247, 255, 0.5) 100%
     );
-    background-size: 100% 4px;
     opacity: 0;
-    animation: scanline 4s linear infinite;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
 }
 
 /* Hover effects */
-.menu-button:hover {
+.cyberpunk-button:hover,
+/* .menu-button:hover, */ /* Handled above */
+.gacha-pull-button:hover,
+.buff-button:hover,
+.inventory-tab:hover,
+.enter-dungeon-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(0, 247, 255, 0.4),
-                inset 0 0 10px rgba(0, 247, 255, 0.2);
-    background: linear-gradient(135deg, rgba(0, 30, 60, 0.95), rgba(0, 50, 100, 0.95));
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.6),
+                inset 0 0 10px rgba(0, 247, 255, 0.4);
+    background: linear-gradient(135deg, rgba(0, 30, 60, 0.9), rgba(0, 50, 100, 0.9));
+    text-shadow: 0 0 8px rgba(0, 247, 255, 1);
 }
 
-.menu-button:active {
-    transform: translateY(1px) scale(0.98);
+.cyberpunk-button:hover::before,
+/* .menu-button:hover::before, */ /* Handled above */
+.gacha-pull-button:hover::before,
+.buff-button:hover::before,
+.inventory-tab:hover::before,
+.enter-dungeon-button:hover::before {
+    left: 100%;
 }
 
-@keyframes borderGlow {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
+.cyberpunk-button:hover::after,
+/* .menu-button:hover::after, */ /* Handled above */
+.gacha-pull-button:hover::after,
+.buff-button:hover::after,
+.inventory-tab:hover::after,
+.enter-dungeon-button:hover::after {
+    opacity: 1;
 }
 
-@keyframes scanline {
-    0% { 
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-    50% { opacity: 0.5; }
-    100% { 
-        opacity: 0;
-        transform: translateY(100%);
-    }
+/* Active/pressed state */
+.cyberpunk-button:active,
+/* .menu-button:active, */ /* Handled above */
+.gacha-pull-button:active,
+.buff-button:active,
+.inventory-tab:active,
+.enter-dungeon-button:active {
+    transform: translateY(0);
+    box-shadow: 0 0 5px rgba(0, 247, 255, 0.4),
+                inset 0 0 5px rgba(0, 247, 255, 0.2);
 }
+
+/* Disabled state */
+.cyberpunk-button:disabled,
+/* .menu-button:disabled, */ /* Handled above */
+.gacha-pull-button:disabled,
+.buff-button:disabled,
+.inventory-tab:disabled,
+.enter-dungeon-button:disabled {
+    opacity: 0.7;
+    background: linear-gradient(135deg, rgba(40, 40, 50, 0.9), rgba(30, 30, 40, 0.9));
+    box-shadow: 0 0 5px rgba(100, 100, 100, 0.3);
+    text-shadow: none;
+    cursor: not-allowed;
+    transform: translateY(0);
+}
+
+.cyberpunk-button:disabled::before,
+/* .menu-button:disabled::before, */ /* Handled above */
+.gacha-pull-button:disabled::before,
+.buff-button:disabled::before,
+.inventory-tab:disabled::before,
+.enter-dungeon-button:disabled::before,
+.cyberpunk-button:disabled::after,
+/* .menu-button:disabled::after, */ /* Handled above */
+.gacha-pull-button:disabled::after,
+.buff-button:disabled::after,
+.inventory-tab:disabled::after,
+.enter-dungeon-button:disabled::after {
+    display: none;
+}
+
+
+/* Keep specific button styles below */
+
+/* Buff button specific styles */
+.buff-button {
+    background: linear-gradient(135deg, rgba(0, 40, 20, 0.9), rgba(0, 80, 40, 0.9));
+    box-shadow: 0 0 10px rgba(0, 255, 128, 0.4),
+                inset 0 0 5px rgba(0, 255, 128, 0.2);
+    text-shadow: 0 0 5px rgba(0, 255, 128, 0.8);
+}
+
+.buff-button:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 128, 0.6),
+                inset 0 0 10px rgba(0, 255, 128, 0.4);
+    background: linear-gradient(135deg, rgba(0, 60, 30, 0.9), rgba(0, 100, 50, 0.9));
+    text-shadow: 0 0 8px rgba(0, 255, 128, 1);
+}
+
+/* Specific buff button types */
+#damage-buff {
+    background: linear-gradient(135deg, rgba(40, 0, 0, 0.9), rgba(80, 20, 0, 0.9));
+    box-shadow: 0 0 10px rgba(255, 50, 50, 0.4),
+                inset 0 0 5px rgba(255, 50, 50, 0.2);
+    text-shadow: 0 0 5px rgba(255, 50, 50, 0.8);
+}
+
+#damage-buff:hover {
+    box-shadow: 0 0 15px rgba(255, 50, 50, 0.6),
+                inset 0 0 10px rgba(255, 50, 50, 0.4);
+    background: linear-gradient(135deg, rgba(60, 0, 0, 0.9), rgba(100, 30, 0, 0.9));
+    text-shadow: 0 0 8px rgba(255, 50, 50, 1);
+}
+
+#speed-buff {
+    background: linear-gradient(135deg, rgba(0, 40, 40, 0.9), rgba(0, 80, 80, 0.9));
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4),
+                inset 0 0 5px rgba(0, 255, 255, 0.2);
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
+}
+
+#speed-buff:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6),
+                inset 0 0 10px rgba(0, 255, 255, 0.4);
+    background: linear-gradient(135deg, rgba(0, 60, 60, 0.9), rgba(0, 100, 100, 0.9));
+    text-shadow: 0 0 8px rgba(0, 255, 255, 1);
+}
+
+/* Max stack buff buttons */
+.buff-button.max-stack {
+    background: linear-gradient(135deg, rgba(60, 60, 0, 0.9), rgba(100, 100, 0, 0.9));
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.4),
+                inset 0 0 5px rgba(255, 255, 0, 0.2);
+    text-shadow: 0 0 5px rgba(255, 255, 0, 0.8);
+}
+
 
 /* Menu Buttons Container */
 #menu-buttons {
@@ -318,61 +542,6 @@
     width: 100%;
 }
 
-/* Menu button base style */
-.menu-button {
-    position: relative;
-    width: 50px;
-    height: 50px;
-    padding: 0;
-    background: linear-gradient(
-        135deg,
-        rgba(0, 12, 24, 0.95) 0%,
-        rgba(0, 24, 48, 0.95) 100%
-    );
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: #ffffff;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 22px;
-    cursor: pointer;
-    overflow: visible;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-}
-
-/* Button hover tooltip */
-.menu-button::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%; /* Position above the button */
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 12, 24, 0.95);
-    padding: 6px 8px;
-    margin-bottom: 5px; /* Gap between button and tooltip */
-    border-radius: 4px;
-    font-size: 11px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    text-transform: uppercase;
-    pointer-events: none;
-    z-index: 1000;
-    box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
-    letter-spacing: 0.5px;
-    min-width: max-content;
-    text-align: center;
-}
-
-/* Show tooltip on hover */
-.menu-button:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
 
 /* Profile button specific styles (if needed) */
 #profile-button {
@@ -394,7 +563,7 @@
     #profile-button {
         font-size: 18px; /* Smaller font size for mobile */
     }
-    
+
     #dashboard-button::before,
     #profile-button::before {
         content: none; /* Remove the symbol on mobile */

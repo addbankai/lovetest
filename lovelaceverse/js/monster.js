@@ -775,24 +775,39 @@ const MonsterSystem = {
         element.style.backgroundImage = `url(${monster.sprite})`;
         element.style.backgroundPosition = '0 0';
         element.style.backgroundRepeat = 'no-repeat';
-        
-        // Add level indicator
-        levelIndicator = document.createElement('div');
+
+        // Create container for Name, Level, and HP Bar
+        const overheadInfo = document.createElement('div');
+        overheadInfo.className = 'monster-overhead-info';
+
+        // Add Name and Level Indicator (inline)
+        const nameLevelContainer = document.createElement('div');
+        nameLevelContainer.className = 'monster-name-level';
+
+        const namePlate = document.createElement('span'); // Use span for inline display
+        namePlate.className = 'monster-name';
+        namePlate.textContent = monster.type.charAt(0).toUpperCase() + monster.type.slice(1); // Capitalize name
+
+        levelIndicator = document.createElement('span'); // Use span for inline display
         levelIndicator.className = 'monster-level-indicator';
         levelIndicator.textContent = `Lv.${monster.level}`;
-        element.appendChild(levelIndicator);
-        
-        // Add health bar
+
+        nameLevelContainer.appendChild(namePlate);
+        nameLevelContainer.appendChild(levelIndicator);
+        overheadInfo.appendChild(nameLevelContainer);
+
+        // Add HP Bar Container
         const healthBarContainer = document.createElement('div');
         healthBarContainer.className = 'monster-health-bar-container';
-        
         const healthBarFill = document.createElement('div');
-        healthBarFill.className = 'monster-health-bar';
-        healthBarFill.style.width = '100%'; // Full health initially
-        
+        healthBarFill.className = 'monster-health-bar-fill';
+        healthBarFill.style.width = '100%'; // Start full
         healthBarContainer.appendChild(healthBarFill);
-        element.appendChild(healthBarContainer);
-        
+        overheadInfo.appendChild(healthBarContainer); // Add HP bar to the overhead container
+
+        // Append the whole overhead info container to the monster element
+        element.appendChild(overheadInfo);
+
         // Add monster element to the map
         const mapContainer = document.getElementById('map-container');
         if (mapContainer) {
@@ -828,17 +843,6 @@ const MonsterSystem = {
         levelIndicator.className = 'monster-level-indicator';
         levelIndicator.textContent = `Lv.${monster.level}`;
         element.appendChild(levelIndicator);
-        
-        // Add health bar
-        const healthBarContainer = document.createElement('div');
-        healthBarContainer.className = 'monster-health-bar-container';
-        
-        const healthBarFill = document.createElement('div');
-        healthBarFill.className = 'monster-health-bar';
-        healthBarFill.style.width = '100%'; // Full health initially
-        
-        healthBarContainer.appendChild(healthBarFill);
-        element.appendChild(healthBarContainer);
         
         // Add monster to the map
         const mapContainer = document.getElementById('map-container');
@@ -994,13 +998,14 @@ const MonsterSystem = {
                 }
             }
             
-            // Update element position - revert to traditional positioning for compatibility
+            // Update element position and z-index
             if (monster.element) {
-                // Go back to using left/top instead of transform to ensure compatibility
                 monster.element.style.left = `${monster.x}px`;
                 monster.element.style.top = `${monster.y}px`;
+                // Set z-index based on y-coordinate (higher y = higher z-index)
+                monster.element.style.zIndex = Math.round(monster.y);
             }
-            
+
             // Update status effects less frequently
             if (now % 4 === 0) {
                 this.updateMonsterEffects(monster, deltaTime);
@@ -1057,20 +1062,35 @@ const MonsterSystem = {
         
         // Calculate damage based on monster's attack and character's defense
         
-        damage = Math.max(1, monster.attack - (character.stats.defense || 0));
-        
-        // Apply damage to character
-        if (character.stats.currentHp) {
-            character.stats.currentHp = Math.max(0, character.stats.currentHp - damage);
-            
+        // Calculate base damage
+        const baseDamage = monster.attack;
+
+        // Calculate final damage using CombatMechanics
+        // Note: Monsters might need 'critChance' and 'evasion' stats added to their definition for this to be fully effective.
+        // Assuming default 0 for now if they don't exist.
+        const combatResult = CombatMechanics.calculateDamage(monster, character, baseDamage);
+
+        // Display the result (damage number or MISS)
+        CombatMechanics.displayDamageNumber(character, combatResult.damage, combatResult.isCrit, combatResult.isMiss);
+
+        // Apply damage only if it wasn't a miss
+        if (!combatResult.isMiss && character.stats.currentHp) {
+            character.stats.currentHp = Math.max(0, character.stats.currentHp - combatResult.damage);
+
             // Update UI if necessary
             if (window.UIManager && UIManager.updateCharacterHpBar) {
                 UIManager.updateCharacterHpBar(character);
             }
-            
-            // Show damage text
-            Utils.createDamageText(character.x + character.width / 2, character.y, damage, "#ff0000");
-            
+
+            // Check for character death (might need a dedicated function in CharacterSystem)
+            if (character.stats.currentHp <= 0) {
+                 console.log(`${character.name} has been defeated by ${monster.type}!`);
+                 // TODO: Implement proper character death handling in CharacterSystem
+                 if (typeof CharacterDeath !== 'undefined' && CharacterDeath.handleDeath) {
+                     CharacterDeath.handleDeath(character);
+                 }
+            }
+
             // Add attack animation class
             if (monster.element) {
                 monster.element.classList.add('attacking');
@@ -1101,10 +1121,9 @@ const MonsterSystem = {
      * @param {string} monsterId - Monster ID
      * @param {number} damage - Damage amount
      * @param {Object} source - Damage source (character)
-     * @param {boolean} isCritical - Whether this is a critical hit
      * @returns {boolean} True if monster was hit
      */
-    damageMonster: function(monsterId, damage, source, isCritical = false) {
+    damageMonster: function(monsterId, damage, source) {
         const monster = this.getMonsterById(monsterId);
         if (!monster) return false;
         
@@ -1116,21 +1135,28 @@ const MonsterSystem = {
         
         // Update health bar
         if (monster.element) {
-            const healthBar = monster.element.querySelector('.monster-health-bar');
-            if (healthBar) {
+            const healthBarFill = monster.element.querySelector('.monster-health-bar-fill'); // Correct selector
+            if (healthBarFill) {
                 const healthPercent = (monster.health / monster.maxHealth) * 100;
-                healthBar.style.width = `${Math.max(0, healthPercent)}%`;
-                
+                healthBarFill.style.width = `${Math.max(0, healthPercent)}%`;
+
                 // Change color based on health
-                if (healthPercent < 25) {
-                    healthBar.style.background = '#ff0000';
+                if (healthPercent <= 0) {
+                     healthBarFill.style.opacity = '0'; // Hide bar when dead
+                } else if (healthPercent < 25) {
+                    healthBarFill.style.background = '#ff0000'; // Red
+                    healthBarFill.style.opacity = '1';
                 } else if (healthPercent < 50) {
-                    healthBar.style.background = '#ff6600';
+                    healthBarFill.style.background = '#ff6600'; // Orange
+                    healthBarFill.style.opacity = '1';
+                } else {
+                     healthBarFill.style.background = '#00ff00'; // Green (Default)
+                     healthBarFill.style.opacity = '1';
                 }
             }
             
             // Add damage gauge - visual effect showing damage amount
-            this.showDamageGauge(monster, actualDamage, isCritical);
+            // this.showDamageGauge(monster, actualDamage); // Commented out to remove duplicate red damage numbers
             
             // Visual feedback for getting hit
             monster.element.style.filter = 'brightness(2) contrast(1.5)';
@@ -1145,27 +1171,9 @@ const MonsterSystem = {
         monster.isHit = true;
         monster.hitTime = Date.now();
         
-        // Show damage text 
-        // Use UIManager if available, fall back to Utils
-        if (window.UIManager && typeof UIManager.showFloatingNumber === 'function') {
-            const posX = monster.x + monster.width / 2;
-            const posY = monster.y;
-            UIManager.showFloatingNumber(posX, posY, actualDamage, isCritical ? 'critical' : 'damage');
-        } else {
-            // For critical hits, use yellow color and larger text
-            if (isCritical) {
-                Utils.createDamageText(
-                    monster.x + monster.width / 2, 
-                    monster.y, 
-                    actualDamage, 
-                    "#ffff00", // Yellow color for critical hits
-                    true // Add splash effect for critical hits
-                );
-            } else {
-                Utils.createDamageText(monster.x + monster.width / 2, monster.y, actualDamage);
-            }
-        }
-        
+        // Show damage text - This is now handled by CombatMechanics.displayDamageNumber called from CharacterSystem.attackMonster
+        // The call was removed previously, ensuring it's gone now.
+
         // Check if monster is dead
         if (monster.health <= 0) {
             this.killMonster(monster, source);
@@ -1173,70 +1181,9 @@ const MonsterSystem = {
         
         return true;
     },
-    
-    /**
-     * Show damage gauge on monster - simplified for performance
-     * @param {Object} monster - Monster to show damage gauge on
-     * @param {number} damage - Amount of damage dealt
-     * @param {boolean} isCritical - Whether this is a critical hit
-     */
-    showDamageGauge: function(monster, damage, isCritical = false) {
-        if (!monster.element) return;
-        
-        // Create damage gauge with CSS animations instead of JS animations
-        const gauge = document.createElement('div');
-        gauge.className = isCritical ? 'damage-gauge critical' : 'damage-gauge';
-        gauge.style.position = 'absolute';
-        gauge.style.top = '0';
-        gauge.style.left = '0';
-        gauge.style.width = '100%';
-        gauge.style.height = '100%';
-        gauge.style.display = 'flex';
-        gauge.style.justifyContent = 'center';
-        gauge.style.alignItems = 'center';
-        gauge.style.fontWeight = 'bold';
-        gauge.style.pointerEvents = 'none';
-        
-        // Different styling for critical hits
-        if (isCritical) {
-            gauge.style.fontSize = '32px'; // Larger font for critical hits
-            gauge.style.color = '#ffff00'; // Yellow for critical hits
-            gauge.style.textShadow = '0 0 8px #ff8800'; // Stronger glow for critical hits
-            gauge.style.animation = 'critical-damage-fade 1.2s forwards';
-            
-            // Add splash effect for critical hits
-            const splash = document.createElement('div');
-            splash.className = 'critical-splash';
-            splash.style.position = 'absolute';
-            splash.style.top = '50%';
-            splash.style.left = '50%';
-            splash.style.transform = 'translate(-50%, -50%)';
-            splash.style.width = '120%';
-            splash.style.height = '120%';
-            splash.style.borderRadius = '50%';
-            splash.style.background = 'radial-gradient(circle, rgba(255,255,0,0.4) 0%, rgba(255,255,0,0) 70%)';
-            splash.style.animation = 'critical-splash 0.8s forwards';
-            gauge.appendChild(splash);
-        } else {
-            gauge.style.fontSize = '24px';
-            gauge.style.color = '#ff0000';
-            gauge.style.textShadow = '0 0 5px #000';
-            gauge.style.animation = 'damage-fade 1s forwards';
-        }
-        
-        gauge.textContent = `-${damage}`;
-        
-        // Add to monster element
-        monster.element.appendChild(gauge);
-        
-        // Remove after animation completes
-        setTimeout(() => {
-            if (gauge.parentNode) {
-                gauge.remove();
-            }
-        }, isCritical ? 1200 : 1000); // Critical animations take a bit longer
-    },
-    
+
+    // Removed showDamageGauge function entirely to prevent duplicate red damage numbers
+
     /**
      * Kill a monster and handle rewards
      * @param {Object} monster - Monster to kill

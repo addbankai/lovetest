@@ -479,15 +479,10 @@ const ShardSystem = {
         Utils.saveToStorage('character_shards', data);
         
         // Trigger save event for database sync
-        const event = new CustomEvent('character_shards_changed', {
+        const event = new CustomEvent('shardsChanged', {
             detail: data
         });
         document.dispatchEvent(event);
-        
-        // If GameSync exists, try to save the data using partial sync
-        if (window.GameSync && typeof GameSync.savePartialGameData === 'function') {
-            GameSync.savePartialGameData('character_shards', data);
-        }
         
         return data; // Return data for external use
     },

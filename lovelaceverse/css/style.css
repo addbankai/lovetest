@@ -1385,3 +1385,124 @@ h1, h2, h3, h4, h5, h6 {
     75% { transform: translateX(1px); }
     100% { transform: translateX(0); }
 }
+
+/* Container for Monster Overhead Info (Name, Level, HP) */
+.monster .monster-overhead-info {
+    position: absolute;
+    top: -40px; /* Adjust as needed to position above sprite */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px; /* Give it a fixed width */
+    z-index: 6; /* Ensure it's above the monster sprite */
+}
+
+/* Container for Name and Level (inline) */
+.monster .monster-name-level {
+    display: flex; /* Use flexbox for inline layout */
+    justify-content: center; /* Center items */
+    align-items: center; /* Align items vertically */
+    gap: 5px; /* Space between name and level */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px; /* Space between name/level and HP bar */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+/* Monster Name Style (now a span) */
+.monster .monster-name {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000;
+}
+
+/* Monster Level Indicator Style (now a span) */
+.monster .monster-level-indicator {
+    /* Remove absolute positioning */
+    color: #ddd; /* Slightly dimmer than name */
+    font-size: 11px;
+    font-weight: normal;
+    /* background-color, padding, border-radius are handled by parent */
+}
+
+/* Monster HP Bar Styles - Repositioned */
+.monster .monster-health-bar-container { /* Make selector more specific */
+    /* Remove absolute positioning, it's now part of the flex layout */
+    position: relative; /* Change to relative */
+    /* top: -18px; Remove top positioning */
+    left: 10%; /* Indent slightly from the edges */
+    width: 80%; /* Make it slightly narrower than the sprite */
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+    border: 1px solid #333;
+    border-radius: 3px;
+    overflow: hidden;
+    z-index: 5; /* Keep z-index relative to its container */
+}
+
+.monster .monster-health-bar-fill { /* Make selector more specific */
+    height: 100%;
+    background-color: #00ff00; /* Default green */
+    border-radius: 2px; /* Slightly smaller radius than container */
+    transition: width 0.3s ease-out, background-color 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transitions, added opacity */
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+    opacity: 1; /* Ensure visible by default */
+}
+
+/* Character Nameplate Styles */
+.character-wrapper .character-name-plate { /* Target nameplate within the wrapper */
+    position: absolute;
+    top: -20px; /* Position above the character sprite */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 100, 150, 0.7); /* Blueish background */
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 6; /* Above character sprite */
+    text-shadow: 1px 1px 1px #000;
+}
+
+
+/* Damage Number Styles */
+.damage-number {
+    position: absolute; /* Required for positioning */
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px; /* Base size */
+    font-weight: bold;
+    color: #ffffff; /* Default color for normal hits */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    pointer-events: none; /* Prevent interaction */
+    z-index: 1001; /* Ensure it's above most elements */
+    white-space: nowrap; /* Prevent wrapping */
+    /* Animation is handled by JS */
+}
+
+.damage-number.crit {
+    font-size: 32px; /* Larger font for crits */
+    color: var(--accent-yellow); /* Big yellow font */
+    text-shadow: 0 0 5px var(--accent-yellow), 0 0 10px var(--accent-orange), 1px 1px 2px rgba(0, 0, 0, 0.8);
+    animation: crit-shake 0.3s ease-out; /* Add a little shake */
+}
+
+.damage-number.miss {
+    font-size: 24px; /* Slightly larger than normal */
+    color: #cccccc; /* Greyish color for miss */
+    font-style: italic;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes crit-shake {
+    0% { transform: translate(-50%, 0) scale(1); }
+    25% { transform: translate(-50%, -2px) scale(1.1) rotate(-3deg); }
+    50% { transform: translate(-50%, 2px) scale(1.1) rotate(3deg); }
+    75% { transform: translate(-50%, -1px) scale(1.1) rotate(-2deg); }
+    100% { transform: translate(-50%, 0) scale(1); }
+}

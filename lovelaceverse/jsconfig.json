@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es6"
+    "target": "es6",
+    "lib": ["es6", "dom", "es2015.promise", "esnext"] // Add more standard libraries including Promise
   },
   "include": [
     "*.js",
-    "**/*.js",
-    "c:\\Users\\maven\\.vscode\\extensions\\samplavigne.p5-vscode-1.2.16\\p5types\\global.d.ts"
+    "**/*.js"
+    // Removed p5.js global types path to avoid potential conflicts
   ]
 }

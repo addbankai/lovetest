@@ -21,56 +21,13 @@ const AuthSetup = {
             // Create Supabase client
             this.initSupabaseClient();
             
-            // The tables should already be created by running the SQL script
-            // This is now just doing verification
-            const tablesExist = await this.verifyRequiredTables();
-            
-            if (tablesExist) {
-                console.log('Required tables exist in database');
-            } else {
-                console.warn('Some required tables might be missing. Please run the SQL script.');
-            }
+            // Create required tables if they don't exist
+            await this.createRequiredTables();
             
             console.log('Authentication setup completed successfully!');
         } catch (error) {
             console.error('Authentication setup failed:', error);
             throw error;
-        }
-    },
-    
-    /**
-     * Verify that required tables exist in the database
-     */
-    verifyRequiredTables: async function() {
-        try {
-            console.log('Verifying required tables...');
-            
-            // Check if the player_progress table exists
-            const { data: progressData, error: progressError } = await this.supabase
-                .from('player_progress')
-                .select('progress_id')
-                .limit(1);
-                
-            if (progressError) {
-                console.error('Error verifying player_progress table:', progressError);
-                return false;
-            }
-            
-            // Check if the users table exists
-            const { data: usersData, error: usersError } = await this.supabase
-                .from('users')
-                .select('id')
-                .limit(1);
-                
-            if (usersError) {
-                console.error('Error verifying users table:', usersError);
-                return false;
-            }
-            
-            return true;
-        } catch (error) {
-            console.error('Error verifying tables:', error);
-            return false;
         }
     },
     

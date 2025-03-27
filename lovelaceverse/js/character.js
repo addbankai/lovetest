@@ -151,6 +151,7 @@ const CharacterSystem = {
             hit: 5,
             evasion: 5,
             critical: 5,
+            attackRange: 100, // Default base range, will be adjusted by weapon type
             fireResistance: 5,
             waterResistance: 5,
             windResistance: 5,
@@ -219,22 +220,51 @@ const CharacterSystem = {
         stats.critical = 5 + (stats.luck * 0.5);
         
         // Apply equipment stats
-        const equipmentStats = Inventory.getEquipmentStats(character.id);
+        const equipmentStats = Inventory.getEquipmentStats(character.id); // Assume this returns an object like { attackRange: 50, ... }
         for (const [stat, value] of Object.entries(equipmentStats)) {
-            if (stats[stat] !== undefined) {
-                // For percentage-based stats (like attackSpeed), multiply
+            // Exclude attackRange here, handle it separately below
+            if (stats[stat] !== undefined && stat !== 'attackRange') {
                 if (stat === 'attackSpeed') {
-                    stats[stat] *= (1 + value);
+                    // Attack speed from gear might be a percentage increase or flat, adjust as needed
+                    // Example: stats[stat] *= (1 + value / 100); // If value is percentage
+                    stats[stat] += value; // Assuming flat bonus for now
                 } else {
-                    // For flat stats, add
+                    // For other flat stats, add
                     stats[stat] += value;
                 }
             }
         }
-        
+
+        // --- Calculate Effective Attack Range ---
+        const BASE_MELEE_RANGE = 100;
+        const BASE_RANGED_RANGE = 400; // Increased base range for ranged
+        const BASE_MAGIC_RANGE = 350;  // Increased base range for magic
+
+        let effectiveBaseRange = BASE_MELEE_RANGE; // Default to melee
+        // Check weapon type to set the correct base range
+        if (typeof Inventory !== 'undefined') {
+            const equipment = Inventory.getCharacterEquipment(character.id);
+            const weapon = equipment?.rightHand; // Check right hand weapon
+            if (weapon && weapon.equipmentType) {
+                if (["bow", "crossbow", "rifle"].includes(weapon.equipmentType)) {
+                    effectiveBaseRange = BASE_RANGED_RANGE;
+                } else if (["staff", "wand", "grimoire"].includes(weapon.equipmentType)) {
+                    effectiveBaseRange = BASE_MAGIC_RANGE;
+                }
+                // Otherwise, it stays BASE_MELEE_RANGE
+            }
+        }
+
+        // Add flat range bonus from equipment to the determined base range
+        const rangeBonus = equipmentStats.attackRange || 0; // Get range bonus from equipment stats
+        stats.attackRange = effectiveBaseRange + rangeBonus;
+        // --- End Attack Range Calculation ---
+
         // Ensure HP/SP don't exceed maximum
         stats.currentHp = Math.min(stats.currentHp || stats.maxHp, stats.maxHp);
         stats.currentSp = Math.min(stats.currentSp || stats.maxSp, stats.maxSp);
+
+        console.log(`Calculated stats for ${character.name}: Critical = ${stats.critical}`); // <-- Log final critical stat
     },
     
     /**
@@ -336,7 +366,13 @@ const CharacterSystem = {
         element.style.width = `${character.width}px`;
         element.style.height = `${character.height}px`;
 
-        wrapper.appendChild(element);
+        // Add Name Plate for Character
+        const namePlate = document.createElement('div');
+        namePlate.className = 'character-name-plate';
+        namePlate.textContent = character.name;
+        wrapper.appendChild(namePlate); // Append nameplate to the wrapper
+
+        wrapper.appendChild(element); // Append character sprite after nameplate
         charactersContainer.appendChild(wrapper);
         return element;
     },
@@ -698,6 +734,43 @@ const CharacterSystem = {
                 }
             }
         }
+
+        // Ensure stats are recalculated after potential equipment changes reflected in the modal
+        this.calculateDerivedStats(character);
+        // Refresh the stats display in the modal after recalculating
+        const refreshedStatsContainer = document.getElementById("equipment-character-stats"); // Renamed variable
+         if (refreshedStatsContainer) {
+             refreshedStatsContainer.innerHTML = ""; // Clear previous stats
+             // Re-populate stats (copied logic from above for brevity)
+             const mainStats = ["HP", "SP", "Damage", "Defense"];
+             const statValues = [
+                 `${character.stats.currentHp}/${character.stats.maxHp}`,
+                 `${character.stats.currentSp}/${character.stats.maxSp}`,
+                 character.stats.damage,
+                 character.stats.defense
+             ];
+             mainStats.forEach((stat, index) => {
+                 const statElement = document.createElement("div");
+                 statElement.className = "character-stat";
+                 statElement.innerHTML = `<span class="stat-name">${stat}:</span> <span class="stat-value">${statValues[index]}</span>`;
+                 refreshedStatsContainer.appendChild(statElement); // Use renamed variable
+             });
+             const additionalStats = [
+                 { name: "Attack Speed", value: character.stats.attackSpeed.toFixed(2) }, // Format attack speed
+                 { name: "Magic Damage", value: character.stats.magicDamage },
+                 { name: "Range Damage", value: character.stats.rangeDamage },
+                 { name: "Hit", value: character.stats.hit },
+                 { name: "Evasion", value: character.stats.evasion },
+                 { name: "Critical", value: character.stats.critical },
+                 { name: "Magic Defense", value: character.stats.magicDefense }
+             ];
+             additionalStats.forEach(statObj => {
+                 const statElement = document.createElement("div");
+                 statElement.className = "character-stat";
+                 statElement.innerHTML = `<span class="stat-name">${statObj.name}:</span> <span class="stat-value">${statObj.value}</span>`;
+                 refreshedStatsContainer.appendChild(statElement); // Use renamed variable
+             });
+         }
     },
     
     /**
@@ -1002,16 +1075,18 @@ const CharacterSystem = {
                                 const targetX = target.x + target.width / 2;
                                 const targetY = target.y + target.height / 2;
                                 
-                                // Create the projectile
+                                // Create the projectile, passing pre-calculated damage and crit status
                                 ProjectileEffects.createProjectile(
                                     character.pendingProjectile.type,
                                     sourceX, sourceY,
                                     targetX, targetY,
-                                    target, 
-                                    character
+                                    target,
+                                    character,
+                                    character.pendingProjectile.damage, // Pass calculated damage
+                                    character.pendingProjectile.isCrit    // Pass crit status
                                 );
                             }
-                            
+
                             // Clear pending projectile
                             character.pendingProjectile = null;
                         }
@@ -1093,15 +1168,14 @@ const CharacterSystem = {
                 const dy = targetCenter.y - charCenter.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                const isRangedAttack = character.attackType === 'ranged';
-                const isMagicAttack = character.attackType === 'magic';
-                // Melee: 100, Ranged/Magic: 300 -> 900
-                const attackRange = isRangedAttack || isMagicAttack ? character.modifiedAttackRange() : 100;
+                // Use the calculated attackRange from stats
+                const attackRange = character.stats.attackRange || 100; // Fallback to 100 if undefined
                 
                 if (distance <= attackRange) {
                     // In range - maintain position and continue attacking
                     if (!character.isPositionedForAttack) {
-                        this.positionCharacterForAttack(character, currentTarget, isRangedAttack);
+                        // Pass the actual attack range for positioning
+                        this.positionCharacterForAttack(character, currentTarget, attackRange);
                         character.isPositionedForAttack = true;
                     }
                     
@@ -1142,8 +1216,8 @@ const CharacterSystem = {
         const dy = monsterCenter.y - charCenter.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        const isRangedAttack = character.attackType === 'ranged';
-        const attackRange = isRangedAttack ? 300 : 100;
+        // Use the calculated attackRange from stats
+        const attackRange = character.stats.attackRange || 100; // Fallback to 100 if undefined
         
         if (distance <= attackRange) {
             // New monster in range - start attacking
@@ -1151,7 +1225,8 @@ const CharacterSystem = {
             character.attackTarget = monster.id;
             
             if (!character.isPositionedForAttack) {
-                this.positionCharacterForAttack(character, monster, isRangedAttack);
+                // Pass the actual attack range for positioning
+                this.positionCharacterForAttack(character, monster, attackRange);
                 character.isPositionedForAttack = true;
             }
             
@@ -1234,7 +1309,7 @@ const CharacterSystem = {
             this.setNewMoveTarget(character);
         } else {
             // Reduced speed from 0.05 to 0.02 for even slower movement
-            const speed = 0.1;
+            const speed = 0.05;
             character.x += (dx / distance) * speed * deltaTime;
             character.y += (dy / distance) * speed * deltaTime;
             
@@ -1313,13 +1388,13 @@ const CharacterSystem = {
                 const dy = monsterCenter.y - charCenter.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                // Determine if it's a ranged or melee attack
-                const isRangedAttack = character.attackType === 'ranged';
-                const attackRange = isRangedAttack ? 300 : 100;
+                // Use the calculated attackRange from stats
+                const attackRange = character.stats.attackRange || 100; // Fallback to 100 if undefined
                 
                 // Attack if monster is within range
                 if (distance <= attackRange) {
-                    this.positionCharacterForAttack(character, nearestMonster, isRangedAttack);
+                    // Pass the actual attack range for positioning
+                    this.positionCharacterForAttack(character, nearestMonster, attackRange);
                     this.attackMonster(character, nearestMonster);
                     character.chaseStartTime = 0;
                     character.chaseDuration = 0;
@@ -1351,30 +1426,35 @@ const CharacterSystem = {
     },
     
     /**
-     * Position character properly for attack (in front of monster)
+     * Position character properly for attack based on their attack range.
      * @param {Object} character - Character to position
      * @param {Object} monster - Monster to attack
-     * @param {boolean} isRangedAttack - Whether the attack is ranged
+     * @param {number} attackRange - The character's current calculated attack range.
      */
-    positionCharacterForAttack: function(character, monster, isRangedAttack) {
+    positionCharacterForAttack: function(character, monster, attackRange) {
         const monsterCenterX = monster.x + monster.width / 2;
         const monsterCenterY = monster.y + monster.height / 2;
-        const direction = monsterCenterX > character.x + character.width / 2 ? 1 : -1;
-        
-        let newX, newY;
-        
-        if (isRangedAttack) {
-            // Increased ranged positioning distance to 250 (from 200)
-            const rangedDistance = 250;
-            newX = monsterCenterX - (rangedDistance * direction) - character.width / 2;
-            newY = monsterCenterY - character.height / 2;
+        const direction = monsterCenterX > (character.x + character.width / 2) ? 1 : -1; // Determine direction based on current position
+
+        let desiredDistance;
+        const BASE_MELEE_RANGE_THRESHOLD = 150; // Use a threshold slightly above base melee
+
+        if (attackRange > BASE_MELEE_RANGE_THRESHOLD) {
+            // Ranged or Magic Attack: Position slightly inside max range
+            desiredDistance = attackRange * 0.9; // Position at 90% of max range
         } else {
-            // Keep melee distance the same
-            const meleeDistance = monster.width / 2 + character.width / 2;
-            newX = monsterCenterX - (meleeDistance * direction) - character.width / 2;
-            newY = monsterCenterY - character.height / 2;
+            // Melee Attack: Position based on character and monster widths
+            desiredDistance = (monster.width / 2) + (character.width / 2) + 10; // Add a small buffer
         }
-        
+
+        // Calculate target position based on desired distance and direction
+        const targetX = monsterCenterX - (desiredDistance * direction);
+        const targetY = monsterCenterY; // Align vertically for simplicity, adjust if needed
+
+        // Calculate new position, clamping within movement bounds
+        const newX = targetX - character.width / 2; // Adjust for character width
+        const newY = targetY - character.height / 2; // Adjust for character height
+
         // Ensure position stays within movement bounds
         character.x = Math.max(character.movementBounds.left,
                     Math.min(character.movementBounds.right, newX));
@@ -1512,40 +1592,52 @@ const CharacterSystem = {
         if (character.mapElement) {
             character.mapElement.style.backgroundPosition = "0 0";
         }
-        
-        // Calculate if this is a critical hit
-        let isCritical = false;
-        let critMultiplier = 2.0; // Standard 2x damage for critical hits
-        
-        // Critical chance based on character's critical stat (as a percentage)
-        if (character.stats && character.stats.critical) {
-            const critChance = character.stats.critical / 100;
-            isCritical = Math.random() < critChance;
-            
-            // Play critical hit sound if it's a critical hit
-            if (isCritical && typeof AudioSystem !== 'undefined') {
-                AudioSystem.playSoundEffect('critical_hit');
-            }
+
+        // --- Calculate Damage (including Crit/Miss) for ALL attack types ---
+        let baseDamage = 0;
+        if (animationType === "ranged") {
+            baseDamage = character.stats.rangeDamage || character.stats.damage;
+        } else if (animationType === "magic") {
+            baseDamage = character.stats.magicDamage || character.stats.damage;
+        } else { // Melee
+            baseDamage = character.stats.damage;
         }
-        
-        // For ranged and magic attacks, schedule projectile creation
+
+        console.log(`Character ${character.name} attacking with critical stat: ${character.stats?.critical}`);
+        const combatResult = CombatMechanics.calculateDamage(character, monster, baseDamage);
+
+        // Display the result (damage number or MISS) - This happens immediately for visual feedback
+        CombatMechanics.displayDamageNumber(monster, combatResult.damage, combatResult.isCrit, combatResult.isMiss);
+
+        // --- Apply Damage or Schedule Projectile ---
         if (projectileType) {
-            // Store the target info for projectile launch at the end of animation
-            character.pendingProjectile = {
-                type: projectileType,
-                target: monster,
-                isCritical: isCritical
-            };
-        } else {
-            // For melee attacks, apply damage immediately
-            let damage = Math.round(character.stats.damage);
-            
-            // Apply critical damage multiplier if it's a critical hit
-            if (isCritical) {
-                damage = Math.round(damage * critMultiplier);
+            // Ranged/Magic: Schedule projectile hit if it wasn't a miss
+            if (!combatResult.isMiss) {
+                 character.pendingProjectile = {
+                     type: projectileType,
+                     target: monster,
+                     damage: combatResult.damage, // Pass calculated damage
+                     isCrit: combatResult.isCrit, // Pass crit status
+                     sourceCharacter: character // Pass source character
+                 };
+                 // Note: ProjectileEffects.createProjectile has been updated
+                 // to accept and use this damage value instead of recalculating.
+            } else {
+                 // If it was a miss, play miss sound (optional)
+                 if (typeof AudioSystem !== 'undefined') {
+                     AudioSystem.playSound('miss');
+                 }
             }
-            
-            MonsterSystem.damageMonster(monster.id, damage, character, isCritical);
+        } else {
+            // Melee: Apply damage directly if it wasn't a miss
+            if (!combatResult.isMiss) {
+                MonsterSystem.damageMonster(monster.id, combatResult.damage, character);
+            } else {
+                 // Optional: Play a miss sound or visual effect
+                 if (typeof AudioSystem !== 'undefined') {
+                    AudioSystem.playSound('miss');
+                 }
+            }
         }
     },
     

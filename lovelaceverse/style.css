@@ -6,3 +6,26 @@ html, body {
 canvas {
   display: block;
 }
+
+/* Tutorial Arrow Styles */
+.tutorial-arrow {
+  position: absolute;
+  width: 50px; /* Adjust size as needed */
+  height: 50px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f7ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.59V11H9v-2h2V6.41l3.71 3.71-3.71 3.7zM12 4c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8z" opacity="0.8"/></svg>'); /* Simple arrow icon */
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1001; /* Ensure it's above other UI elements */
+  pointer-events: none; /* Prevent interaction */
+  animation: pointAnimation 1.5s infinite ease-in-out;
+  display: none; /* Hidden by default */
+}
+
+@keyframes pointAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Adjust movement distance */
+  }
+}

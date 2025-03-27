@@ -13,9 +13,7 @@ const AudioSystem = {
         attackSprite: 'music/attackSprite.mp3',
         rangedSprite: 'music/rangedSprite.mp3',
         magicSprite: 'music/magicSprite.mp3',
-        level_transition: 'music/level_transition.mp3',
-        level_up: 'https://cdn.freesound.org/previews/573/573343_5674468-lq.mp3', // Level up fanfare
-        critical_hit: 'https://cdn.freesound.org/previews/435/435417_4929074-lq.mp3' // Critical hit impact
+        level_transition: 'music/level_transition.mp3'
     },
     
     // Background music mapping dungeon IDs to their music files

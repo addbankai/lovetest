@@ -42,16 +42,22 @@ if (typeof window.SupportChat === 'undefined') {
      * @returns {Promise<boolean>} - Whether initialization was successful
      */
     async initialize() {
+      // Prevent double initialization
+      if (this.isInitialized) {
+          console.log("Support chat already initialized.");
+          return true;
+      }
+        
       try {
         console.log('Initializing Shelly AI Support Chat...');
         
         // Load font
         await this.loadFont();
-        
-        // Load HTML and CSS
-        this.injectHtml();
+
+        // Inject HTML and CSS *during* initialization
+        this.injectHtml(); // This will now ensure the container starts hidden
         this.injectCss();
-        
+
         // Wait for DOM to be ready
         if (document.readyState !== 'complete') {
           await new Promise(resolve => {
@@ -109,18 +115,37 @@ if (typeof window.SupportChat === 'undefined') {
           onResponseComplete: (response) => this.handleResponseComplete(response)
         });
         
-        // Display initial messages
+        // Display initial messages (they won't be visible until chat is opened)
         const initialMessages = this.messageHandler.formatMessagesForDisplay();
         this.uiController.displayMessages(initialMessages);
-        
+
         // Scrape game information
         this.scrapeGameInfo();
-        
+
         console.log('Shelly AI Support Chat initialized successfully');
         this.isInitialized = true;
+
+        // --- Make the chat container (bubble) visible now that init is done ---
+        const chatContainer = document.getElementById('support-chat-container');
+        if (chatContainer) {
+            chatContainer.style.display = 'block'; // Or 'flex', depending on your CSS for the container
+        }
+        // --- End making chat visible ---
+
+        // --- Automatically open the chat window after successful initialization ---
+        if (this.uiController) {
+            // Add a slight delay to ensure the container is visible before opening
+            setTimeout(() => {
+                 this.uiController.openChat();
+                 console.log("Automatically opened chat window post-initialization.");
+            }, 100); // 100ms delay
+        }
+        // --- End auto-open ---
+
         return true;
       } catch (error) {
         console.error('Failed to initialize support chat:', error);
+        this.isInitialized = false; // Ensure flag is false on error
         return false;
       }
     }
@@ -145,16 +170,22 @@ if (typeof window.SupportChat === 'undefined') {
       // Check if chat container already exists
       if (document.getElementById('support-chat-container')) {
         console.log('Support chat interface already exists');
+        // Ensure interface is hidden if it somehow exists before init
+        const existingInterface = document.getElementById('support-chat-interface');
+        if (existingInterface) existingInterface.classList.remove('active');
+        // Ensure container is hidden initially
+        const existingContainer = document.getElementById('support-chat-container');
+        if (existingContainer) existingContainer.style.display = 'none';
         return;
       }
 
-      // Direct HTML injection
+      // Direct HTML injection - Start container hidden, ensure interface does NOT have 'active' class initially
       document.body.insertAdjacentHTML('beforeend', `
-        <div id="support-chat-container">
+        <div id="support-chat-container" style="display: none;"> <!-- Start hidden -->
           <div id="support-chat-bubble" class="neon-border">
             <canvas id="shelly-canvas"></canvas>
           </div>
-          <div id="support-chat-interface">
+          <div id="support-chat-interface"> <!-- No 'active' class here -->
             <div id="support-chat-header">
               <div id="support-chat-title">SHELLY AI SUPPORT</div>
               <button id="support-chat-close">×</button>
@@ -176,6 +207,10 @@ if (typeof window.SupportChat === 'undefined') {
      * Inject CSS for the support chat
      */
     injectCss() {
+      // Prevent duplicate CSS injection
+      if (document.querySelector('link[href="support-chat/css/support-chat.css"]')) {
+          return;
+      }
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = 'support-chat/css/support-chat.css';
@@ -204,18 +239,18 @@ if (typeof window.SupportChat === 'undefined') {
       // No need to display it again here to avoid duplication
       
       // Set avatar to thinking state
-      this.threeAvatar.setState('thinking');
+      if (this.threeAvatar) this.threeAvatar.setState('thinking');
       
       // Process the message
-      await this.messageHandler.processMessage(message);
+      if (this.messageHandler) await this.messageHandler.processMessage(message);
     }
 
     /**
      * Handle typing start
      */
     handleTypingStart() {
-      this.uiController.showTypingIndicator();
-      this.threeAvatar.setState('thinking');
+      if (this.uiController) this.uiController.showTypingIndicator();
+      if (this.threeAvatar) this.threeAvatar.setState('thinking');
     }
 
     /**
@@ -223,8 +258,8 @@ if (typeof window.SupportChat === 'undefined') {
      * @param {string} text - Current text being typed
      */
     handleTypingUpdate(text) {
-      this.uiController.updateTypingMessage(text);
-      this.threeAvatar.setState('talking');
+      if (this.uiController) this.uiController.updateTypingMessage(text);
+      if (this.threeAvatar) this.threeAvatar.setState('talking');
     }
 
     /**
@@ -232,8 +267,8 @@ if (typeof window.SupportChat === 'undefined') {
      * @param {string} response - Final response
      */
     handleResponseComplete(response) {
-      this.uiController.finalizeTypingMessage();
-      this.threeAvatar.setState('idle');
+      if (this.uiController) this.uiController.finalizeTypingMessage();
+      if (this.threeAvatar) this.threeAvatar.setState('idle');
     }
 
     /**
@@ -241,11 +276,11 @@ if (typeof window.SupportChat === 'undefined') {
      */
     handleChatOpened() {
       // Show welcome message if new session
-      this.threeAvatar.setState('talking');
+      if (this.threeAvatar) this.threeAvatar.setState('talking');
       
       // Short delay to return to idle
       setTimeout(() => {
-        this.threeAvatar.setState('idle');
+        if (this.threeAvatar) this.threeAvatar.setState('idle');
       }, 1000);
     }
 
@@ -253,7 +288,7 @@ if (typeof window.SupportChat === 'undefined') {
      * Handle chat closed event
      */
     handleChatClosed() {
-      this.threeAvatar.setState('idle');
+      if (this.threeAvatar) this.threeAvatar.setState('idle');
     }
 
     /**
@@ -262,24 +297,84 @@ if (typeof window.SupportChat === 'undefined') {
      */
     handleChatToggle(isOpen) {
       // Set avatar state based on chat state
-      this.threeAvatar.setState(isOpen ? 'talking' : 'idle');
+      if (this.threeAvatar) this.threeAvatar.setState(isOpen ? 'talking' : 'idle');
       
       // If opening, show a short animation
       if (isOpen) {
         setTimeout(() => {
-          this.threeAvatar.setState('idle');
+          if (this.threeAvatar) this.threeAvatar.setState('idle');
         }, 1000);
       }
     }
+
+    /**
+     * Triggered externally (e.g., by Gacha system) after the first character is obtained.
+     */
+    triggerFirstCharacterReward() {
+        if (!this.isInitialized) {
+            console.warn("SupportChat not initialized, cannot trigger reward.");
+            // Optionally, try to initialize now if needed
+            // this.initialize().then(() => this.triggerFirstCharacterReward());
+            return;
+        }
+        console.log("Triggering first character reward in SupportChat...");
+        // Ensure chat is open
+        if (this.uiController) this.uiController.openChat();
+        // Tell message handler to process the reward and congratulatory message
+        if (this.messageHandler) {
+            this.messageHandler.handleFirstCharacterReward();
+        }
+    }
   }
-  window.SupportChat = SupportChat;
+window.SupportChat = SupportChat;
 }
 
-// Initialize when all scripts are loaded
+// Create the instance early so it's available
+if (!window.supportChat) {
+    window.supportChat = new SupportChat();
+}
+
+// Initialize after successful login and progress loading
+document.addEventListener('progressLoaded', () => {
+    console.log('Progress loaded, initializing Support Chat...');
+    if (window.supportChat && !window.supportChat.isInitialized) {
+        // Use a small delay to ensure other UI updates related to login are complete
+        setTimeout(() => {
+            window.supportChat.initialize().then(initialized => {
+                if (!initialized) {
+                    console.error("Support chat failed to initialize after progress load.");
+                }
+            });
+        }, 500); 
+    } else if (window.supportChat && window.supportChat.isInitialized) {
+         console.log("Support chat already initialized.");
+         // If already initialized, maybe just open the chat?
+         if (window.supportChat.uiController && !window.supportChat.uiController.isOpen) {
+              // Add a delay here too
+              setTimeout(() => {
+                   console.log("Chat already initialized, opening window.");
+                   window.supportChat.uiController.openChat();
+              }, 100);
+         }
+    } else {
+         console.error("SupportChat instance not found during progressLoaded event.");
+    }
+});
+
+// Fallback: Initialize on window load if progressLoaded doesn't fire (e.g., offline mode)
 window.addEventListener('load', () => {
-  // Allow a small delay for all scripts to initialize
-  setTimeout(() => {
-    supportChat = new SupportChat();
-    supportChat.initialize();
-  }, 500);
+    // Add a longer delay for the fallback
+    setTimeout(() => {
+        if (window.supportChat && !window.supportChat.isInitialized) {
+            // Check if user is authenticated before fallback init
+            if (typeof AuthenticationSystem !== 'undefined' && AuthenticationSystem.isAuthenticated) {
+                 console.warn("Fallback: Initializing Support Chat on window load (progressLoaded event might not have fired).");
+                 window.supportChat.initialize().catch(err => {
+                      console.error("Fallback support chat initialization failed:", err);
+                 });
+            } else {
+                 console.log("User not authenticated, skipping fallback chat initialization.");
+            }
+        }
+    }, 2000); // 2-second delay for fallback
 });

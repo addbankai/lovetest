@@ -143,68 +143,6 @@
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
-/* Free pulls styling */
-.free-mortal-pulls {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
-    color: #00ff66;
-    text-shadow: 0 0 5px rgba(0, 255, 102, 0.6);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 4px 8px;
-    background: rgba(0, 30, 20, 0.6);
-    border-radius: 4px;
-    border-left: 2px solid #00ff66;
-}
-
-.free-pull-timer {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
-    color: #ff9900;
-    text-shadow: 0 0 5px rgba(255, 153, 0, 0.5);
-    margin-bottom: 8px;
-    padding: 4px 8px;
-    background: rgba(30, 20, 0, 0.6);
-    border-radius: 4px;
-    border-left: 2px solid #ff9900;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.free-pull-timer::before {
-    content: "⏱";
-    margin-right: 5px;
-    font-size: 12px;
-}
-
-.free-label {
-    display: inline-block;
-    background: linear-gradient(45deg, #00cc66, #00ff99);
-    color: #000000;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-    text-shadow: none;
-    animation: pulse-free 2s infinite;
-}
-
-@keyframes pulse-free {
-    0% {
-        box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-    }
-    50% {
-        box-shadow: 0 0 20px rgba(0, 255, 153, 0.8);
-    }
-    100% {
-        box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-    }
-}
-
 .gacha-pull-button {
     padding: 10px;
     width: 100%;
@@ -277,6 +215,46 @@
 .gacha-pull-button:disabled::before {
     display: none;
 }
+
+/* Free Pull Button Styles */
+.gacha-free-pull-button {
+    padding: 10px;
+    width: 100%;
+    background: linear-gradient(45deg, #005030, #009f5f); /* Green gradient */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    margin-top: auto; /* Push to bottom if needed */
+    margin-bottom: 8px; /* Space between free and regular button */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+}
+
+.gacha-free-pull-button:hover {
+    background: linear-gradient(45deg, #007040, #00b97f);
+    transform: translateY(-2px);
+}
+
+.gacha-free-pull-button:active {
+    transform: translateY(1px);
+}
+
+.gacha-free-pull-button:disabled {
+    background: linear-gradient(45deg, #333, #444);
+    color: #777;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 
 /* Hidden pull counter (functionality remains, but not shown) */
 .pull-counter {
@@ -382,43 +360,39 @@
     --rarity-color: #f7ff00;
 }
 
-/* Enhanced cyberpunk modal style - more compact and responsive */
-.cyberpunk-modal {
-    background: linear-gradient(135deg, rgba(5, 15, 25, 0.95), rgba(10, 25, 45, 0.95));
-    border: 1px solid #00f7ff;
-    box-shadow: 0 0 40px rgba(0, 247, 255, 0.3), inset 0 0 20px rgba(0, 40, 60, 0.3);
+/* Enhanced cyberpunk modal style - Hacker Vibe */
+#gacha-modal .cyberpunk-modal { /* More specific selector for gacha modal */
+    background: linear-gradient(160deg, rgba(0, 5, 10, 0.97), rgba(5, 10, 20, 0.97)); /* Darker, bluer gradient */
+    border: 1px solid var(--accent-cyan);
+    box-shadow: 0 0 30px rgba(0, 247, 255, 0.2), inset 0 0 25px rgba(0, 20, 30, 0.4);
     position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
+    overflow: hidden; /* Keep hidden */
+    border-radius: 4px; /* Sharper corners */
+    backdrop-filter: blur(8px);
 }
 
-.cyberpunk-modal::before {
+/* Subtle animated grid overlay */
+#gacha-modal .cyberpunk-modal::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0, 247, 255, 0.03) 20px, rgba(0, 247, 255, 0.03) 40px);
-    pointer-events: none;
-    opacity: 0.7;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+        linear-gradient(rgba(0, 247, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 255, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.5;
+    animation: grid-scroll 15s linear infinite;
     z-index: 0;
 }
 
-.cyberpunk-modal::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #00f7ff, #ff00ff);
-    z-index: 1;
+@keyframes grid-scroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
 }
 
-.cyberpunk-modal .modal-header {
+
+/* Header adjustments */
+#gacha-modal .cyberpunk-modal .modal-header {
     border-bottom: 1px solid rgba(0, 247, 255, 0.3);
     position: relative;
     z-index: 1;
@@ -495,113 +469,265 @@
     padding: 15px;
 }
 
-/* Gacha Results */
+/* Gacha Results - Enhanced Cyberpunk Style */
 .cyberpunk-character-result {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(135deg, rgba(0, 20, 40, 0.9), rgba(0, 40, 60, 0.9));
-    border-radius: 8px;
-    border: 2px solid var(--rarity-color, #00f7ff);
-    box-shadow: 0 0 20px rgba(var(--rarity-rgb, 0, 247, 255), 0.5), inset 0 0 30px rgba(var(--rarity-rgb, 0, 80, 100), 0.3);
-    max-width: 600px;
-    margin: 0 auto;
+    display: grid; /* Use grid for more control */
+    grid-template-columns: 1fr 1.5fr; /* Adjust column ratio */
+    grid-template-rows: auto 1fr auto; /* Header, content, button */
+    grid-template-areas:
+        "header header"
+        "image details"
+        "button button";
+    align-items: start; /* Align items to the start of grid areas */
+    padding: 25px; /* Increased padding */
+    background: linear-gradient(145deg, rgba(0, 10, 20, 0.95), rgba(15, 30, 50, 0.95)); /* Darker gradient */
+    border-radius: 6px; /* Sharper corners */
+    border: 1px solid var(--rarity-color, #00f7ff);
+    box-shadow: 0 0 25px rgba(var(--rarity-rgb, 0, 247, 255), 0.4), inset 0 0 15px rgba(var(--rarity-rgb, 0, 80, 100), 0.2);
+    max-width: 650px; /* Slightly wider */
+    margin: 20px auto; /* Add margin */
     position: relative;
     overflow: hidden;
+    gap: 15px 25px; /* Row and column gap */
 }
 
+/* Add corner accents */
+.cyberpunk-character-result::before,
+.cyberpunk-character-result::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--rarity-color, #00f7ff);
+    border-style: solid;
+    opacity: 0.7;
+}
+.cyberpunk-character-result::before {
+    top: 10px;
+    left: 10px;
+    border-width: 2px 0 0 2px;
+}
+.cyberpunk-character-result::after {
+    bottom: 10px;
+    right: 10px;
+    border-width: 0 2px 2px 0;
+}
+
+
+/* Header spanning both columns */
+.character-card-header {
+    grid-area: header;
+    text-align: center;
+    border-bottom: 1px solid rgba(var(--rarity-rgb, 0, 247, 255), 0.3);
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+.character-card-header h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    color: var(--rarity-color, #00f7ff);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 0;
+    text-shadow: 0 0 8px rgba(var(--rarity-rgb, 0, 247, 255), 0.7);
+}
+.character-card-id {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 5px;
+}
+
+
+/* Image Area */
+.character-card-content { /* Renamed from cyberpunk-character-result */
+    grid-area: image;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Hexagon Frame */
+.character-hexagon-frame {
+    position: relative;
+    width: 180px; /* Increased size */
+    height: 200px; /* Adjusted height for hexagon */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: linear-gradient(145deg, rgba(var(--rarity-rgb, 0, 247, 255), 0.1), rgba(var(--rarity-rgb, 0, 80, 100), 0.2));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hexagon-border {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%, 50% 0%, 47% 3%, 3% 26.5%, 3% 73.5%, 47% 97%, 97% 73.5%, 97% 26.5%, 53% 3%, 50% 0%);
+    background: var(--rarity-color, #00f7ff);
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(var(--rarity-rgb, 0, 247, 255), 0.5);
+}
 .character-image-container {
-    width: 150px;
-    height: 150px;
-    border-radius: 5px;
+    width: 160px; /* Slightly smaller than frame */
+    height: 180px; /* Adjusted */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     overflow: hidden;
-    border: 3px solid var(--rarity-color, #00f7ff);
-    margin-bottom: 15px;
-    box-shadow: 0 0 15px rgba(var(--rarity-rgb, 0, 247, 255), 0.6);
     position: relative;
     z-index: 2;
 }
-
 .character-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: scale(1.1); /* Slightly zoom in */
 }
 
-.character-info {
-    width: 100%;
-    position: relative;
-    z-index: 2;
+
+/* Details Area */
+.character-details {
+    grid-area: details;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.details-section {
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-left: 3px solid var(--rarity-color, #00f7ff);
+    border-radius: 0 4px 4px 0;
+}
+.details-title {
+    font-size: 12px;
+    color: var(--rarity-color, #00f7ff);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+.character-description {
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.5;
 }
 
+
+/* Name Plate below details */
+.character-name-plate {
+    text-align: left;
+    margin-top: 10px;
+}
 .character-name {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 24px;
-    text-align: center;
-    margin: 0 0 8px;
+    font-family: 'Orbitron', sans-serif; /* More futuristic font */
+    font-size: 26px;
+    margin: 0 0 5px;
     color: #ffffff;
-    text-shadow: 0 0 10px var(--rarity-color, #00f7ff);
-    letter-spacing: 2px;
+    text-shadow: 0 0 12px var(--rarity-color, #00f7ff);
+    letter-spacing: 1px;
 }
-
 .character-rarity {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
-    text-align: center;
-    padding: 4px 12px;
-    margin: 0 auto 12px;
-    background-color: rgba(0, 15, 30, 0.8);
+    font-size: 14px;
+    padding: 3px 10px;
+    margin: 0;
+    background-color: rgba(var(--rarity-rgb, 0, 247, 255), 0.15);
     border: 1px solid var(--rarity-color, #00f7ff);
     border-radius: 3px;
     display: inline-block;
     color: var(--rarity-color, #00f7ff);
-    max-width: fit-content;
+    text-transform: uppercase;
 }
 
-.cyberpunk-button {
-    padding: 10px 20px;
-    background: linear-gradient(45deg, #003544, #006c87);
+
+/* Button spanning both columns */
+#gacha-close-result { /* Target the button specifically */
+    grid-area: button;
+    padding: 12px 25px; /* Larger padding */
+    background: linear-gradient(45deg, #005060, #009cb9); /* Adjusted gradient */
     color: #ffffff;
     border: none;
     border-radius: 3px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 16px; /* Larger font */
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 0 10px rgba(0, 108, 135, 0.7);
-    margin-top: 15px;
-    text-shadow: 0 0 5px rgba(0, 247, 255, 0.7);
-    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(0, 108, 135, 0.8); /* Enhanced shadow */
+    margin-top: 20px; /* More space */
+    text-shadow: 0 0 8px rgba(0, 247, 255, 0.8); /* Enhanced text shadow */
+    letter-spacing: 1.5px; /* More spacing */
+    text-transform: uppercase;
 }
 
-.cyberpunk-button:hover {
-    background: linear-gradient(45deg, #00485e, #008fb3);
+#gacha-close-result:hover {
+    background: linear-gradient(45deg, #006a80, #00b8d9); /* Brighter hover */
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 108, 135, 0.8);
+    box-shadow: 0 5px 20px rgba(0, 108, 135, 0.9); /* Enhanced hover shadow */
 }
 
-.cyberpunk-button:active {
+#gacha-close-result:active {
     transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 108, 135, 0.7);
+    box-shadow: 0 2px 8px rgba(0, 108, 135, 0.8);
 }
 
+
+/* Duplicate Result Specific Styles */
+.duplicate-info-container {
+    grid-area: details; /* Place in the details area */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center; /* Center text for duplicate */
+}
 .duplicate-message {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 18px;
-    color: #ff0066;
-    text-align: center;
-    margin-bottom: 8px;
-    text-shadow: 0 0 5px rgba(255, 0, 102, 0.8);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    color: #ff3333; /* More alarming red */
+    margin-bottom: 10px;
+    text-shadow: 0 0 8px rgba(255, 51, 51, 0.8);
+    text-transform: uppercase;
 }
-
 .shard-conversion {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
-    color: #f7ff00;
-    text-align: center;
-    margin-bottom: 15px;
-    text-shadow: 0 0 5px rgba(247, 255, 0, 0.8);
+    font-size: 18px;
+    color: var(--accent-yellow);
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+}
+.duplicate-info-container .details-section {
+    text-align: left; /* Keep description left-aligned */
+    border-left-color: #ff3333; /* Match duplicate color */
+}
+.duplicate-info-container .details-title {
+    color: #ff3333;
+}
+.duplicate-info-container .character-rarity {
+    margin: 15px auto; /* Center rarity */
+}
+
+
+/* Base Stats Styling */
+.character-base-stats .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 8px 15px; /* Row and column gap */
+    margin-top: 5px;
+}
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 3px;
+    border-left: 2px solid rgba(var(--rarity-rgb, 0, 247, 255), 0.5);
+}
+.stat-name {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+}
+.stat-value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(var(--rarity-rgb, 0, 247, 255), 0.5);
 }
 
 /* Rarity RGB variables for box-shadow calculations */

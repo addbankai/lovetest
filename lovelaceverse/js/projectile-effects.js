@@ -126,8 +126,10 @@ const ProjectileEffects = {
      * @param {number} targetY - Target Y position
      * @param {Object} target - Target object (monster)
      * @param {Object} sourceCharacter - Character that fired the projectile
+     * @param {number} calculatedDamage - The pre-calculated damage (including crits)
+     * @param {boolean} isCrit - Whether the hit was critical
      */
-    createProjectile: function(type, sourceX, sourceY, targetX, targetY, target, sourceCharacter) {
+    createProjectile: function(type, sourceX, sourceY, targetX, targetY, target, sourceCharacter, calculatedDamage, isCrit) {
         const projectileType = this.types[type];
         if (!projectileType) {
             console.error(`Unknown projectile type: ${type}`);
@@ -182,7 +184,8 @@ const ProjectileEffects = {
             speed: projectileType.speed,
             target: target,
             sourceCharacter: sourceCharacter,
-            damage: sourceCharacter.stats.damage * projectileType.damage, // Base damage modified by projectile type
+            damage: calculatedDamage, // Use pre-calculated damage
+            isCrit: isCrit,           // Store crit status
             distanceTraveled: 0,
             maxDistance: distance + 100, // Add some extra distance to ensure it passes through
             frame: 0,
@@ -284,16 +287,19 @@ const ProjectileEffects = {
      * @param {Object} target - Target hit by the projectile
      */
     onProjectileHit: function(projectile, target) {
-        // Apply damage to target
+        // Apply damage to target using the stored damage value
         if (target && !target.isDead) {
-            const damage = Math.round(projectile.damage);
-            
+            const damage = Math.round(projectile.damage); // Already includes crit multiplier if applicable
+
             // Call damage function on monster system
             if (typeof MonsterSystem !== 'undefined' && MonsterSystem.damageMonster) {
+                // Pass the calculated damage and the source character
+                // MonsterSystem.damageMonster will handle applying damage and checking for death.
+                // The visual display was already handled when the attack was initiated.
                 MonsterSystem.damageMonster(target.id, damage, projectile.sourceCharacter);
             }
         }
-        
+
         // Create impact effect
         this.createImpactEffect(projectile);
     },

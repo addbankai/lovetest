@@ -1,97 +1,79 @@
-/* Animation for regular damage text fade */
+/**
+ * CSS animations for damage displays and effects
+ * Improves performance by using CSS animations instead of JavaScript
+ */
+
 @keyframes damage-fade {
     0% {
         opacity: 0;
-        transform: translate(-50%, 0);
+        transform: translateY(0);
     }
-    10% {
+    20% {
         opacity: 1;
-        transform: translate(-50%, -20px);
+        transform: translateY(-10px);
     }
-    90% {
+    80% {
         opacity: 1;
-        transform: translate(-50%, -40px);
+        transform: translateY(-20px);
     }
     100% {
         opacity: 0;
-        transform: translate(-50%, -60px);
+        transform: translateY(-30px);
     }
 }
 
-/* Animation for critical damage text fade - bigger and flashier */
-@keyframes critical-damage-fade {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, 0) scale(0.8);
-    }
-    10% {
-        opacity: 1;
-        transform: translate(-50%, -20px) scale(1.2);
-    }
-    30% {
-        transform: translate(-50%, -30px) scale(1.4);
-    }
-    50% {
-        transform: translate(-50%, -40px) scale(1.2);
-    }
-    90% {
-        opacity: 1;
-        transform: translate(-50%, -50px) scale(1.1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -60px) scale(1);
-    }
+/* Item drop animation */
+.item-drop {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 5;
+    pointer-events: none;
+    animation: item-drop-bounce 1.5s ease-out forwards;
 }
 
-/* Animation for critical splash effect */
-@keyframes critical-splash {
+@keyframes item-drop-bounce {
     0% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(0.3);
+        transform: scale(0.5) translateY(-10px);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1.2) translateY(5px);
     }
     40% {
-        opacity: 0.7;
-        transform: translate(-50%, -50%) scale(0.7);
+        transform: scale(1) translateY(-5px);
+    }
+    60% {
+        transform: scale(1) translateY(0);
+    }
+    80% {
+        opacity: 1;
     }
     100% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(1.2);
+        transform: scale(1) translateY(0);
     }
 }
 
-/* Damage text classes */
-.damage-text {
+/* Add monster-specific optimizations */
+.monster-sprite {
     position: absolute;
-    font-family: 'Exo 2', sans-serif;
-    font-weight: bold;
-    font-size: 24px;
-    color: #ff0000;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    pointer-events: none;
-    animation: damage-fade 1s forwards;
-    user-select: none;
+    background-repeat: no-repeat;
+    transform: translate(0, 0); /* Use transform instead of left/top for better performance */
+    will-change: transform; /* Hint to the browser that this element will animate */
+    z-index: 3;
+    transition: opacity 0.8s ease-out; /* For death fade-out effect */
 }
 
-/* Critical hit styling */
-.damage-text.critical {
-    font-size: 32px;
-    color: #ffff00; /* Yellow color for critical hits */
-    text-shadow: 0 0 8px rgba(255, 128, 0, 0.9), 0 0 12px rgba(255, 0, 0, 0.7);
-    animation: critical-damage-fade 1.2s forwards;
+.damage-gauge {
+    animation-fill-mode: forwards; /* Ensure animation ends in final state */
 }
 
-/* Critical splash effect */
-.critical-splash {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0) 70%);
-    animation: critical-splash 0.8s forwards;
-    transform: translate(-50%, -50%);
-    z-index: -1;
+/* Monster health bar optimization */
+.monster-health-bar {
+    transition: width 0.2s ease-out, background 0.2s ease;
 }

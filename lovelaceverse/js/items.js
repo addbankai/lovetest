@@ -153,9 +153,9 @@ this.registerItem({
     rarity: this.RARITIES.EPIC,
     description: 'A pair of venomous daggers that strike like serpents.',
     stats: {
-        damage: 5,
-        attackSpeed: 2,
-        critical: 10
+        damage: 10,
+        attackSpeed: 1.8,
+        critical: 15
     },
     effects: ['Each hit has 10% chance to poison target'],
     icon: 'img/items/twin_fangs.jpg',
@@ -189,9 +189,9 @@ this.registerItem({
     rarity: this.RARITIES.RARE,
     description: 'A bow that fires concentrated energy pulses.',
     stats: {
-        damage: 20,
-        attackSpeed: 1.2,
-        range: 50
+        damage: 10,
+        attackSpeed: 1,
+        range: 180
     },
     effects: ['Arrows penetrate through up to 3 targets'],
     icon: 'img/items/pulse_bow.jpg',
@@ -208,7 +208,7 @@ this.registerItem({
     description: 'An automated crossbow with rapid-fire capability.',
     stats: {
         damage: 16,
-        attackSpeed: 1.1,
+        attackSpeed: 200,
         range: 180
     },
     effects: ['25% chance to fire an additional bolt'],
@@ -788,7 +788,7 @@ this.registerItem({
     effects: [],
     icon: 'img/items/circuit_board.jpg',
     stackable: true,
-    maxStack: 99
+    maxStack: 50
 });
 
 this.registerItem({
@@ -801,7 +801,7 @@ this.registerItem({
     effects: [],
     icon: 'img/items/quantum_core.jpg',
     stackable: true,
-    maxStack: 99
+    maxStack: 10
 });
 
 this.registerItem({
@@ -827,8 +827,7 @@ this.registerItem({
     effects: [],
     icon: 'img/items/encrypted_data_shard.jpg',
     level: 0,
-    stackable: true,
-    maxStack: 99
+    stackable: false
 });
 
 // Materials

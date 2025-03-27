@@ -1097,10 +1097,10 @@ const DungeonThreeEnvironment = {
         this.mixers.forEach(mixer => mixer.update(delta));
         
         // Add camera rotation for dynamic view - slower rotation speed
-        const time = Date.now() * 0.0002; // Reduced from 0.0005 to create slower rotation
-        this.camera.position.x = Math.cos(time) * 5;
-        this.camera.position.z = Math.sin(time) * 5;
-        this.camera.lookAt(0, 1, 0); // Look at the center of the scene
+        // const time = Date.now() * 0.0002; // Reduced from 0.0005 to create slower rotation
+        // this.camera.position.x = Math.cos(time) * 5;
+        // this.camera.position.z = Math.sin(time) * 5;
+        // this.camera.lookAt(0, 1, 0); // Look at the center of the scene
         
         // Render the scene
         this.renderer.render(this.scene, this.camera);

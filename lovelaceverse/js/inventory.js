@@ -85,26 +85,21 @@ const Inventory = {
      * Initialize the inventory system
      * @param {Object} savedData - Saved inventory data (optional)
      */
-    init: function(savedData = null) {
+    init: function() {
         // Try to load from local storage first
-        const localData = this.loadFromLocal();
+        const savedData = this.loadFromLocal();
         
         // Initialize empty inventory if no saved data
         const totalSlots = this.slotsPerTab * Object.keys(this.tabs).length;
-        this.slots = localData?.slots || new Array(totalSlots).fill(null);
+        this.slots = savedData?.slots || new Array(totalSlots).fill(null);
         
         // Initialize current page for each tab
         Object.keys(this.tabs).forEach(tabId => {
-            this.currentPage[tabId] = localData?.currentPage?.[tabId] || 0;
+            this.currentPage[tabId] = savedData?.currentPage?.[tabId] || 0;
         });
         
         // Initialize equipment from saved data or empty
-        this.characterEquipment = localData?.characterEquipment || {};
-        
-        // Override with saved data if provided
-        if (savedData) {
-            this.loadFromData(savedData);
-        }
+        this.characterEquipment = savedData?.characterEquipment || {};
         
         // Set up event listeners
         this.setupEventListeners();
@@ -183,16 +178,14 @@ const Inventory = {
         };
         localStorage.setItem('inventoryData', JSON.stringify(saveData));
         
-        // Dispatch event so GameSync can save to database
+        // Dispatch event so authentication system can save to database
         const event = new CustomEvent('inventoryChanged', {
-            detail: saveData
+            detail: { 
+                slots: this.slots, 
+                characterEquipment: this.characterEquipment 
+            }
         });
         document.dispatchEvent(event);
-        
-        // If GameSync exists, try to save the data using partial sync
-        if (window.GameSync && typeof GameSync.savePartialGameData === 'function') {
-            GameSync.savePartialGameData('inventory', saveData);
-        }
     },
 
     /**
@@ -846,20 +839,18 @@ const Inventory = {
             // If slot has same item and is stackable
             if (slot && slot.id === itemId && item.stackable) {
                 slot.quantity = (slot.quantity || 1) + quantity;
-                this.updateInventoryUI();
-                this.saveToLocal(); // This saves and dispatches inventoryChanged event
-                
-                console.log('Item added to existing stack, dispatching inventoryChanged event');
-                
-                // We can keep this event for gameplay purposes
-                document.dispatchEvent(new CustomEvent('itemCollected', {
-                    detail: {
-                        itemId: itemId,
-                        quantity: quantity
-                    }
-                }));
-                
-                return true;
+            this.updateInventoryUI();
+            this.saveToLocal();
+            
+            // Remove this event dispatch since we don't want to count crafting as collection
+            // document.dispatchEvent(new CustomEvent('itemCollected', {
+            //     detail: {
+            //         itemId: itemId,
+            //         quantity: quantity
+            //     }
+            // }));
+            
+            return true;
             }
             
             // Remember first empty slot
@@ -876,17 +867,15 @@ const Inventory = {
                 ...item
             };
             this.updateInventoryUI();
-            this.saveToLocal(); // This saves and dispatches inventoryChanged event
+            this.saveToLocal();
             
-            console.log('Item added to new slot, dispatching inventoryChanged event');
-            
-            // We can keep this event for gameplay purposes
-            document.dispatchEvent(new CustomEvent('itemCollected', {
-                detail: {
-                    itemId: itemId,
-                    quantity: quantity
-                }
-            }));
+            // Remove this event dispatch since we don't want to count crafting as collection
+            // document.dispatchEvent(new CustomEvent('itemCollected', {
+            //     detail: {
+            //         itemId: itemId,
+            //         quantity: quantity
+            //     }
+            // }));
             
             return true;
         }
@@ -1612,21 +1601,10 @@ const Inventory = {
     
     setCharacterEquipment: function(characterId, slot, item) {
         if (!this.characterEquipment[characterId]) {
-            this.characterEquipment[characterId] = JSON.parse(JSON.stringify(this.emptyEquipment));
+            this.characterEquipment[characterId] = {};
         }
         
-        // Handle both single slot update and full equipment object
-        if (typeof slot === 'object' && item === undefined) {
-            // This is a full equipment object
-            for (const equipSlot in slot) {
-                if (equipSlot in this.emptyEquipment) {
-                    this.characterEquipment[characterId][equipSlot] = slot[equipSlot];
-                }
-            }
-        } else {
-            // This is a single slot update
-            this.characterEquipment[characterId][slot] = item;
-        }
+        this.characterEquipment[characterId][slot] = item;
         
         // Save immediately when equipment changes
         this.saveToLocal();
@@ -1635,7 +1613,8 @@ const Inventory = {
         const event = new CustomEvent('equipmentChanged', {
             detail: {
                 characterId: characterId,
-                equipment: this.characterEquipment[characterId]
+                slot: slot,
+                item: item
             }
         });
         document.dispatchEvent(event);

@@ -52,40 +52,36 @@ const GachaSystem = {
             }
         }
     },
-    
+
     // Super DNA system - tracks pulls for each gacha type
     pullCounter: {
         mortal: 0,
         synthetic: 0,
         divine: 0
     },
-    
+
     // Super DNA threshold (after 20 pulls, get double rarity multiplier)
     superDnaThreshold: 20,
-    
+
     // Track if Super DNA is available for each type
     superDnaAvailable: {
         mortal: false,
         synthetic: false,
         divine: false
     },
-    
-    // Free Mortal DNA extracts tracking
-    freeMortalPulls: {
-        remaining: 2,
-        lastResetTime: null
-    },
-    
-    // Free pull cooldown period in milliseconds (24 hours)
-    freePullCooldown: 24 * 60 * 60 * 1000,
-    
+
+    // Free daily pull tracking
+    lastFreeMortalPullTimestamp: 0,
+    freeMortalPullsUsedToday: 0,
+    MAX_FREE_PULLS_PER_DAY: 2,
+
     // Gacha images
     gachaImages: {
         mortal: 'img/gacha/mortal.png',
         synthetic: 'img/gacha/synthetic.png',
         divine: 'img/gacha/divine.png'
     },
-    
+
     /**
      * Initialize the gacha system
      */
@@ -96,60 +92,64 @@ const GachaSystem = {
             synthetic: 0,
             divine: 0
         };
-        
+
         this.superDnaAvailable = {
             mortal: false,
             synthetic: false,
             divine: false
         };
-        
-        // Initialize free pulls
-        this.freeMortalPulls = {
-            remaining: 2,
-            lastResetTime: null
-        };
-        
+
         // Load saved data if available
         if (savedData) {
             this.pullCounter = savedData.pullCounter || this.pullCounter;
-            
+
             // Check if Super DNA is available based on pull count
             for (const type in this.pullCounter) {
                 if (this.pullCounter[type] >= this.superDnaThreshold) {
                     this.superDnaAvailable[type] = true;
                 }
             }
-            
-            // Load free pull data
-            if (savedData.freeMortalPulls) {
-                this.freeMortalPulls = savedData.freeMortalPulls;
-                
-                // Check if we need to reset free pulls (24 hours passed)
-                this.checkAndResetFreePulls();
-            }
-            
+
             console.log('Super DNA availability:', this.superDnaAvailable);
-            console.log('Free Mortal Pulls remaining:', this.freeMortalPulls.remaining);
+
+            // Load free pull data
+            this.lastFreeMortalPullTimestamp = savedData.lastFreeMortalPullTimestamp || 0;
+            this.freeMortalPullsUsedToday = savedData.freeMortalPullsUsedToday || 0;
+            // Reset daily count if the last pull was on a different day
+            this.resetDailyFreePullsIfNeeded();
         } else {
-            // If no saved data, set lastResetTime to now
-            this.freeMortalPulls.lastResetTime = Date.now();
+             // Also load from localStorage if no direct savedData passed (e.g., initial load)
+            const localGachaData = this.loadData();
+            if (localGachaData) {
+                this.pullCounter = localGachaData.pullCounter || this.pullCounter;
+                this.lastFreeMortalPullTimestamp = localGachaData.lastFreeMortalPullTimestamp || 0;
+                this.freeMortalPullsUsedToday = localGachaData.freeMortalPullsUsedToday || 0;
+                this.skipAnimation = localGachaData.skipAnimation !== undefined ? localGachaData.skipAnimation : false;
+                this.resetDailyFreePullsIfNeeded();
+                 // Check Super DNA based on loaded pullCounter
+                for (const type in this.pullCounter) {
+                    if (this.pullCounter[type] >= this.superDnaThreshold) {
+                        this.superDnaAvailable[type] = true;
+                    }
+                }
+            }
         }
-        
+
         // Set up event listeners
         this.setupEventListeners();
-        
-        // Initialize Three.js environment
-        GachaThreeEnvironment.init();
-        
+
+        // Initialize Three.js environment - REMOVED
+        // GachaThreeEnvironment.init();
+
         // Initialize marketplace
         this.initMarketplace();
-        
+
         // Initialize skip animation checkbox
         this.initSkipAnimationCheckbox();
-        
+
         console.log('Cyberpunk Gacha system initialized');
     },
-    
+
     /**
      * Initialize the marketplace system
      */
@@ -160,7 +160,7 @@ const GachaSystem = {
             marketplaceModal = document.createElement('div');
             marketplaceModal.id = 'marketplace-modal';
             marketplaceModal.className = 'modal marketplace-modal';
-            
+
             marketplaceModal.innerHTML = `
                 <div class="modal-content cyberpunk-modal">
                     <div class="modal-header">
@@ -170,7 +170,7 @@ const GachaSystem = {
                     <div class="modal-body">
                         <!-- Marketplace Three.js container -->
                         <div id="marketplace-three-container"></div>
-                        
+
                         <!-- Marketplace header with balance -->
                         <div class="marketplace-header">
                             <div class="marketplace-balance">
@@ -188,14 +188,14 @@ const GachaSystem = {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Marketplace tabs -->
                         <div id="marketplace-tabs">
                             <button class="marketplace-tab active" data-tab="junk-store">Junk Store</button>
                             <button class="marketplace-tab" data-tab="black-market">Black Market</button>
                             <button class="marketplace-tab" data-tab="neon-bazaar">Neon Bazaar</button>
                         </div>
-                        
+
                         <!-- Marketplace tab content -->
                         <div id="marketplace-content">
                             <div id="marketplace-junk-store" class="marketplace-tab-content active">
@@ -206,7 +206,7 @@ const GachaSystem = {
                                         <div class="rate-info">Rare/Epic items: <span class="rate-value">10 <span class="currency-icon">Ⓢ</span></div>
                                         <div class="rate-info">Legendary items: <span class="rate-value">10 <span class="currency-icon">Ⓖ</span></span></div>
                                     </div>
-                                    
+
                                     <!-- Bulk Sell Container -->
                                     <div class="bulk-sell-container">
                                         <button class="bulk-sell-button">BULK SELL <span class="dropdown-arrow">▼</span></button>
@@ -219,7 +219,7 @@ const GachaSystem = {
                                             <div class="rarity-option" data-rarity="all">All Items</div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="marketplace-grid" id="junk-store-items"></div>
                                 </div>
                             </div>
@@ -243,9 +243,9 @@ const GachaSystem = {
                     </div>
                 </div>
             `;
-            
+
             document.body.appendChild(marketplaceModal);
-            
+
             // Add event listeners for tabs
             const tabs = marketplaceModal.querySelectorAll('.marketplace-tab');
             tabs.forEach(tab => {
@@ -254,11 +254,11 @@ const GachaSystem = {
                     tabs.forEach(t => t.classList.remove('active'));
                     // Add active class to clicked tab
                     tab.classList.add('active');
-                    
+
                     // Hide all tab content
                     const tabContents = marketplaceModal.querySelectorAll('.marketplace-tab-content');
                     tabContents.forEach(content => content.classList.remove('active'));
-                    
+
                     // Show clicked tab content
                     const tabName = tab.dataset.tab;
                     const tabContent = document.getElementById(`marketplace-${tabName}`);
@@ -268,31 +268,31 @@ const GachaSystem = {
                 });
             });
         }
-        
+
 
     },
-    
+
     /**
      * Open the marketplace UI
      */
     openMarketplace: function() {
         // Initialize Three.js environment if not already initialized
-        if (MarketplaceThreeEnvironment && 
-            typeof MarketplaceThreeEnvironment.init === 'function' && 
+        if (MarketplaceThreeEnvironment &&
+            typeof MarketplaceThreeEnvironment.init === 'function' &&
             !MarketplaceThreeEnvironment.scene) {
             MarketplaceThreeEnvironment.init('marketplace-three-container');
         }
-        
+
         // Update currency display in marketplace
         this.updateMarketplaceCurrency();
-        
+
         // Update marketplace UI with items
         this.updateMarketplaceUI();
-        
+
         // Show marketplace modal
         Utils.showModal('marketplace-modal');
     },
-    
+
     /**
      * Update currency display in marketplace
      */
@@ -301,42 +301,42 @@ const GachaSystem = {
             const copperDisplay = document.getElementById('marketplace-copper');
             const silverDisplay = document.getElementById('marketplace-silver');
             const goldDisplay = document.getElementById('marketplace-gold');
-            
+
             if (copperDisplay) copperDisplay.textContent = Currency.copper || 0;
             if (silverDisplay) silverDisplay.textContent = Currency.silver || 0;
             if (goldDisplay) goldDisplay.textContent = Currency.gold || 0;
         }
     },
-    
+
     /**
      * Update marketplace UI
      */
     updateMarketplaceUI: function() {
         // Update currency display
         this.updateMarketplaceCurrency();
-        
+
         // Update Junk Store (for selling items)
         const junkStoreContainer = document.getElementById('junk-store-items');
         if (junkStoreContainer) {
             junkStoreContainer.innerHTML = '';
-            
+
             // Get player's inventory items (if available)
             const playerItems = this.getPlayerInventoryItems();
-            
+
             if (playerItems && playerItems.length > 0) {
                 // Group items by rarity
                 const itemsByRarity = this.groupItemsByRarity(playerItems);
-                
+
                 // Setup bulk sell dropdown functionality
                 this.setupBulkSellDropdown(itemsByRarity);
-                
+
                 // Display items for selling
                 for (const rarity in itemsByRarity) {
                     const items = itemsByRarity[rarity];
                     items.forEach(item => {
                         const sellValue = this.getSellValueForRarity(rarity);
                         const currencyIcon = ['common', 'uncommon'].includes(rarity.toLowerCase()) ? 'Ⓒ' : 'Ⓢ';
-                        
+
                         const itemCard = document.createElement('div');
                         itemCard.className = 'marketplace-item';
                         itemCard.innerHTML = `
@@ -353,9 +353,9 @@ const GachaSystem = {
                                 <button class="sell-button" data-item-id="${item.id}" data-rarity="${rarity.toLowerCase()}">SELL</button>
                             </div>
                         `;
-                        
+
                         junkStoreContainer.appendChild(itemCard);
-                        
+
                         // Add event listener for sell button
                         const sellButton = itemCard.querySelector('.sell-button');
                         if (sellButton) {
@@ -375,19 +375,19 @@ const GachaSystem = {
                 `;
             }
         }
-        
+
         // Update Black Market (randomly generated weapons, armor, accessories)
         const blackMarketContainer = document.getElementById('black-market-items');
         if (blackMarketContainer) {
             blackMarketContainer.innerHTML = '';
-            
+
             // Get today's black market items (randomly generated)
             const blackMarketItems = this.getBlackMarketItems();
-            
+
             if (blackMarketItems && blackMarketItems.length > 0) {
                 blackMarketItems.forEach(item => {
                     const currencyIcon = this.getCurrencyIconForCost(item.cost);
-                    
+
                     const itemCard = document.createElement('div');
                     itemCard.className = 'marketplace-item black-market-item';
                     itemCard.innerHTML = `
@@ -409,9 +409,9 @@ const GachaSystem = {
                             <button class="purchase-button" data-item-id="${item.id}">PURCHASE</button>
                         </div>
                     `;
-                    
+
                     blackMarketContainer.appendChild(itemCard);
-                    
+
                     // Add event listener for purchase button
                     const purchaseButton = itemCard.querySelector('.purchase-button');
                     if (purchaseButton) {
@@ -430,13 +430,13 @@ const GachaSystem = {
             }
         }
     },
-    
+
     /**
      * Group items by rarity for the Junk Store
      */
     groupItemsByRarity: function(items) {
         const result = {};
-        
+
         // For demonstration, we'll use sample items if inventory system is not available
         const sampleItems = [
             {
@@ -468,10 +468,10 @@ const GachaSystem = {
                 description: 'A medical stimulant. Provides quick healing in combat.'
             }
         ];
-        
+
         // Use actual inventory or sample items
         const itemList = items && items.length > 0 ? items : sampleItems;
-        
+
         // Group items by rarity
         itemList.forEach(item => {
             const rarity = item.rarity || 'Common';
@@ -480,10 +480,10 @@ const GachaSystem = {
             }
             result[rarity].push(item);
         });
-        
+
         return result;
     },
-    
+
     /**
      * Get sell value based on item rarity
      */
@@ -501,7 +501,7 @@ const GachaSystem = {
                 return 1;
         }
     },
-    
+
     /**
      * Get random Black Market items
      */
@@ -612,7 +612,7 @@ const GachaSystem = {
             }
         ];
     },
-    
+
     /**
 
      * This is a placeholder - in a real game, it would connect to the inventory system
@@ -621,7 +621,7 @@ const GachaSystem = {
         try {
             // Get current user from authentication
             const { data: { user } } = await supabase.auth.getUser();
-            
+
             if (!user) {
                 console.error('No authenticated user');
                 return [];
@@ -634,7 +634,7 @@ const GachaSystem = {
                 .eq('user_id', user.id);
 
             if (error) throw error;
-            
+
             return data.map(item => ({
                 id: item.id,
                 name: item.item_name,
@@ -642,13 +642,13 @@ const GachaSystem = {
                 description: item.item_data?.description || 'No description',
                 image: item.item_data?.image_url || 'img/items/default.png'
             }));
-            
+
         } catch (error) {
             console.error('Error fetching inventory:', error);
             return [];
         }
     },
-    
+
     /**
      * Initialize skip animation checkbox
      */
@@ -661,19 +661,19 @@ const GachaSystem = {
                 this.skipAnimation = savedData.skipAnimation;
                 skipCheckbox.checked = this.skipAnimation;
             }
-            
+
             // Add event listener
             skipCheckbox.addEventListener('change', (e) => {
                 this.skipAnimation = e.target.checked;
-                
+
                 // Save preference
                 this.saveData();
-                
+
                 console.log(`Animation ${this.skipAnimation ? 'disabled' : 'enabled'}`);
             });
         }
     },
-    
+
     /**
      * Set up gacha UI event listeners
      */
@@ -685,86 +685,52 @@ const GachaSystem = {
                 this.openGachaUI();
             });
         }
-        
-        // Gacha pull buttons
-        document.querySelectorAll('.gacha-pull-button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const gachaType = e.target.dataset.type;
-                this.pullGacha(gachaType);
+
+        // Gacha pull buttons (regular and free)
+        // Use event delegation on the modal body for dynamically added buttons
+        const gachaModalBody = document.querySelector('#gacha-modal .modal-body');
+        if (gachaModalBody) {
+            gachaModalBody.addEventListener('click', (e) => {
+                if (e.target.classList.contains('gacha-pull-button')) {
+                    const gachaType = e.target.dataset.type;
+                    this.pullGacha(gachaType); // Regular pull
+                } else if (e.target.classList.contains('gacha-free-pull-button')) {
+                    const gachaType = e.target.dataset.type;
+                    this.pullGacha(gachaType, false, true); // Free pull
+                } else if (e.target.classList.contains('super-dna-button')) {
+                     const gachaType = e.target.dataset.type;
+                     this.pullSuperDna(gachaType); // Super DNA pull
+                }
             });
-        });
-        
-        // Close result button
-        const closeResultButton = document.getElementById('gacha-close-result');
-        if (closeResultButton) {
-            closeResultButton.addEventListener('click', () => {
-                this.hideGachaResult();
+        }
+
+
+        // Close result button (needs delegation if result is dynamically added)
+        const gachaResultContainer = document.getElementById('gacha-result');
+         if (gachaResultContainer) {
+            gachaResultContainer.addEventListener('click', (e) => {
+                if (e.target.id === 'gacha-close-result') {
+                     this.hideGachaResult();
+                }
             });
         }
     },
-    
+
     /**
      * Open the gacha UI
      */
     openGachaUI: function() {
         // Update gacha UI with current information
         this.updateGachaUI();
-        
+
         // Show gacha modal
         Utils.showModal('gacha-modal');
     },
-    
-    /**
-     * Check if 24 hours have passed since the last free pull reset and reset if needed
-     */
-    checkAndResetFreePulls: function() {
-        const now = Date.now();
-        
-        // If last reset time exists and 24 hours have passed
-        if (this.freeMortalPulls.lastResetTime && 
-            now - this.freeMortalPulls.lastResetTime >= this.freePullCooldown) {
-            
-            // Reset free pulls
-            this.freeMortalPulls.remaining = 2;
-            this.freeMortalPulls.lastResetTime = now;
-            
-            console.log('Free Mortal DNA pulls have been reset!');
-            
-            // Save to storage
-            this.saveData();
-        }
-    },
-    
-    /**
-     * Calculate time remaining until next free pull reset
-     */
-    getTimeUntilNextReset: function() {
-        if (!this.freeMortalPulls.lastResetTime) {
-            return '0h 0m';
-        }
-        
-        const now = Date.now();
-        const nextResetTime = this.freeMortalPulls.lastResetTime + this.freePullCooldown;
-        
-        if (now >= nextResetTime) {
-            return '0h 0m';
-        }
-        
-        // Calculate hours and minutes remaining
-        const millisecondsRemaining = nextResetTime - now;
-        const hoursRemaining = Math.floor(millisecondsRemaining / (60 * 60 * 1000));
-        const minutesRemaining = Math.floor((millisecondsRemaining % (60 * 60 * 1000)) / (60 * 1000));
-        
-        return `${hoursRemaining}h ${minutesRemaining}m`;
-    },
-    
+
     /**
      * Update the gacha UI
      */
     updateGachaUI: function() {
-        // Check if free pulls need to be reset
-        this.checkAndResetFreePulls();
-        
         // Update Super DNA counters
         for (const type in this.pullCounter) {
             // Find or update the counter element
@@ -778,15 +744,15 @@ const GachaSystem = {
                     gachaOption.appendChild(counterElement);
                 }
             }
-            
+
             if (counterElement) {
                 counterElement.textContent = `PULLS: ${this.pullCounter[type]}/${this.superDnaThreshold}`;
             }
-            
+
             // Check if Super DNA is available
             const isSuperDnaAvailable = this.pullCounter[type] >= this.superDnaThreshold;
             this.superDnaAvailable[type] = isSuperDnaAvailable;
-            
+
             // Find or create the Super DNA button
             let superDnaButton = document.querySelector(`.super-dna-button[data-type="${type}"]`);
             if (!superDnaButton) {
@@ -796,28 +762,25 @@ const GachaSystem = {
                     // Create a container for the Super DNA option
                     const superDnaContainer = document.createElement('div');
                     superDnaContainer.className = 'super-dna-container';
-                    
+
                     superDnaButton = document.createElement('button');
                     superDnaButton.className = 'super-dna-button';
                     superDnaButton.dataset.type = type;
                     superDnaButton.textContent = 'SUPER DNA';
-                    
+
                     // Add description
                     const superDnaDesc = document.createElement('div');
                     superDnaDesc.className = 'super-dna-description';
                     superDnaDesc.textContent = 'Double rarity multiplier!';
-                    
+
                     superDnaContainer.appendChild(superDnaButton);
                     superDnaContainer.appendChild(superDnaDesc);
                     gachaOption.appendChild(superDnaContainer);
-                    
-                    // Add event listener
-                    superDnaButton.addEventListener('click', () => {
-                        this.pullSuperDna(type);
-                    });
+
+                    // Event listener is now handled by delegation in setupEventListeners
                 }
             }
-            
+
             // Update the Super DNA button
             if (superDnaButton) {
                 if (isSuperDnaAvailable) {
@@ -827,114 +790,123 @@ const GachaSystem = {
                     superDnaButton.disabled = true;
                     superDnaButton.classList.remove('available');
                 }
-            }
-        }
-        
-        // Update currency amounts and show free pulls for mortal type
-        for (const type in this.gachaTypes) {
-            const costElement = document.querySelector(`.gacha-option[data-type="${type}"] .gacha-cost-value`);
-            
-            if (costElement) {
-                const cost = this.gachaTypes[type].cost;
-                
-                // For mortal type, add free pull info
-                if (type === 'mortal') {
-                    // Update or create free pull display
-                    let freePullDisplay = document.querySelector('.free-mortal-pulls');
-                    if (!freePullDisplay) {
-                        freePullDisplay = document.createElement('div');
-                        freePullDisplay.className = 'free-mortal-pulls';
-                        costElement.parentElement.appendChild(freePullDisplay);
-                    }
-                    
-                    // Update timer display
-                    let timerDisplay = document.querySelector('.free-pull-timer');
-                    if (!timerDisplay) {
-                        timerDisplay = document.createElement('div');
-                        timerDisplay.className = 'free-pull-timer';
-                        costElement.parentElement.appendChild(timerDisplay);
-                    }
-                    
-                    // Display remaining free pulls
-                    freePullDisplay.textContent = `FREE PULLS: ${this.freeMortalPulls.remaining}/2`;
-                    
-                    // Display timer if no free pulls remain
-                    if (this.freeMortalPulls.remaining === 0) {
-                        const timeRemaining = this.getTimeUntilNextReset();
-                        timerDisplay.textContent = `NEXT FREE PULLS: ${timeRemaining}`;
-                        timerDisplay.style.display = 'block';
-                    } else {
-                        timerDisplay.style.display = 'none';
-                    }
-                    
-                    // Update cost display to show actual cost or FREE
-                    if (this.freeMortalPulls.remaining > 0) {
-                        costElement.innerHTML = '<span class="free-label">FREE</span>';
-                    } else {
-                        costElement.textContent = `${cost.amount}`;
-                    }
-                    
-                    // Check if player has enough currency or has free pulls
-                    const hasEnough = this.freeMortalPulls.remaining > 0 || Currency.hasEnough(cost.currency, cost.amount);
-                    const pullButton = document.querySelector(`.gacha-pull-button[data-type="${type}"]`);
-                    if (pullButton) {
-                        pullButton.disabled = !hasEnough;
-                    }
-                } else {
-                    // For other types, show regular cost
-                    costElement.textContent = `${cost.amount}`;
-                    
-                    // Check if player has enough currency
-                    const hasEnough = Currency.hasEnough(cost.currency, cost.amount);
-                    const pullButton = document.querySelector(`.gacha-pull-button[data-type="${type}"]`);
-                    if (pullButton) {
-                        pullButton.disabled = !hasEnough;
-                    }
-                }
+             }
+         }
+
+         // Update currency amounts and add Free Pull button logic
+         for (const type in this.gachaTypes) {
+             const gachaOption = document.querySelector(`.gacha-option[data-type="${type}"]`);
+             if (!gachaOption) continue;
+
+             const cost = this.gachaTypes[type].cost;
+             const costElement = gachaOption.querySelector('.gacha-cost-value');
+             const costIconElement = gachaOption.querySelector('.gacha-cost-icon');
+             const pullButton = gachaOption.querySelector('.gacha-pull-button');
+             let freePullButton = gachaOption.querySelector('.gacha-free-pull-button');
+
+             // Reset daily pulls if needed (important to do before checking availability)
+             this.resetDailyFreePullsIfNeeded();
+
+             // --- Free Pull Logic (Only for Mortal DNA) ---
+             if (type === 'mortal') {
+                 const freePullsRemaining = this.MAX_FREE_PULLS_PER_DAY - this.freeMortalPullsUsedToday;
+                 const hasFreePulls = freePullsRemaining > 0;
+
+                 if (!freePullButton) {
+                     // Create the free pull button if it doesn't exist
+                     freePullButton = document.createElement('button');
+                     freePullButton.className = 'gacha-free-pull-button';
+                     freePullButton.dataset.type = type;
+                     // Insert it before the regular pull button
+                     if (pullButton) {
+                         pullButton.parentNode.insertBefore(freePullButton, pullButton);
+                     } else {
+                         // Fallback if pull button isn't found (shouldn't happen)
+                         gachaOption.querySelector('.gacha-info').appendChild(freePullButton);
+                     }
+                     // Event listener is now handled by delegation in setupEventListeners
+                 }
+
+                 if (hasFreePulls) {
+                     freePullButton.textContent = `FREE PULL (${freePullsRemaining}/${this.MAX_FREE_PULLS_PER_DAY})`;
+                     freePullButton.style.display = 'block'; // Show free button
+                     freePullButton.disabled = false;
+                     // Hide cost display when free pull is available
+                     if (costElement) costElement.style.display = 'none';
+                     if (costIconElement) costIconElement.style.display = 'none';
+                     if (pullButton) pullButton.style.display = 'none'; // Hide regular pull button
+                 } else {
+                     freePullButton.style.display = 'none'; // Hide free button
+                     // Show cost display when no free pulls left
+                     if (costElement) costElement.style.display = 'inline';
+                     if (costIconElement) costIconElement.style.display = 'inline';
+                     if (pullButton) pullButton.style.display = 'block'; // Show regular pull button
+                 }
+             } else {
+                 // For other gacha types, ensure free pull button is hidden
+                 if (freePullButton) freePullButton.style.display = 'none';
+                 // Ensure cost is visible
+                 if (costElement) costElement.style.display = 'inline';
+                 if (costIconElement) costIconElement.style.display = 'inline';
+                 if (pullButton) pullButton.style.display = 'block';
+             }
+             // --- End Free Pull Logic ---
+
+
+             // Update cost display (even if hidden for free pull)
+             if (costElement) {
+                 costElement.textContent = `${cost.amount}`;
+             }
+
+             // Update regular pull button state based on currency (if visible)
+             if (pullButton && pullButton.style.display !== 'none') {
+                 const hasEnough = Currency.hasEnough(cost.currency, cost.amount);
+                 pullButton.disabled = !hasEnough;
             }
         }
     },
-    
+
     /**
      * Pull from a gacha with animation
+     * @param {string} type - Gacha type ('mortal', 'synthetic', 'divine')
+     * @param {boolean} [isSuper=false] - Whether this is a Super DNA pull
+     * @param {boolean} [isFree=false] - Whether this is a free daily pull
      */
-    pullGacha: function(type, isSuper = false) {
+    pullGacha: function(type, isSuper = false, isFree = false) {
         // Check if gacha type exists
         if (!this.gachaTypes[type]) {
             console.error(`Unknown gacha type: ${type}`);
             return null;
         }
-        
-        let usedFreePull = false;
-        
-        // Check for free mortal pulls if this is a mortal pull
-        if (type === 'mortal' && !isSuper && this.freeMortalPulls.remaining > 0) {
-            // Use a free pull
-            this.freeMortalPulls.remaining--;
-            usedFreePull = true;
-            
-            // If this is the first use, set the last reset time
-            if (this.freeMortalPulls.lastResetTime === null) {
-                this.freeMortalPulls.lastResetTime = Date.now();
+
+        // Handle free pull logic for Mortal DNA
+        if (isFree && type === 'mortal') {
+            this.resetDailyFreePullsIfNeeded(); // Ensure counter is up-to-date
+            if (this.freeMortalPullsUsedToday >= this.MAX_FREE_PULLS_PER_DAY) {
+                console.error("No free Mortal DNA pulls remaining today.");
+                Utils.showNotification("Gacha Error", "No free pulls remaining today.", 3000);
+                return null;
             }
-            
-            console.log(`Used a free Mortal DNA pull. Remaining: ${this.freeMortalPulls.remaining}`);
+            // Use a free pull
+            this.freeMortalPullsUsedToday++;
+            this.lastFreeMortalPullTimestamp = Date.now();
+            console.log(`Used free Mortal DNA pull (${this.freeMortalPullsUsedToday}/${this.MAX_FREE_PULLS_PER_DAY}).`);
+            this.saveData(); // <<< SAVE AFTER USING FREE PULL
         } else {
-            // Not using a free pull, check if player has enough currency
+            // Regular pull: Check and spend currency
             const cost = this.gachaTypes[type].cost;
             if (!Currency.hasEnough(cost.currency, cost.amount)) {
                 console.error(`Not enough ${cost.currency} to pull ${type} gacha`);
+                Utils.showNotification("Insufficient Funds", `Not enough ${cost.currency}.`, 3000);
                 return null;
             }
-            
-            // Spend currency
             Currency.spend(cost.currency, cost.amount);
         }
-        
+
         // Increment pull counter if not using Super DNA
         if (!isSuper) {
             this.pullCounter[type]++;
-            
+
             // Check if Super DNA is now available
             if (this.pullCounter[type] >= this.superDnaThreshold) {
                 this.superDnaAvailable[type] = true;
@@ -944,17 +916,17 @@ const GachaSystem = {
             this.superDnaAvailable[type] = false;
             this.pullCounter[type] = 0;
         }
-        
+
         // Determine rarity based on rates and Super DNA status
         const rarity = this.determineRarity(type, isSuper);
-        
+
         // Get a character of the determined rarity
         const characterTemplate = this.getRandomCharacterByRarity(rarity);
-        
+
         if (!characterTemplate) {
             return null;
         }
-        
+
         // Dispatch gacha pull event for mission tracking
         document.dispatchEvent(new CustomEvent('gachaPull', {
             detail: {
@@ -963,13 +935,19 @@ const GachaSystem = {
                 rarity: rarity
             }
         }));
-        
+
         // Use Three.js for the animation
         this.playPullAnimation(type, rarity, characterTemplate);
-        
+
+        // Update the UI after the pull (to reflect currency/free pull changes)
+        this.updateGachaUI();
+
+        // Save data after any pull (regular, free, or super)
+        this.saveData();
+
         return characterTemplate;
     },
-    
+
     /**
      * Pull using Super DNA (double rarity chances)
      */
@@ -979,14 +957,14 @@ const GachaSystem = {
             console.error(`Super DNA not available for ${type}`);
             return null;
         }
-        
+
         // Pull using Super DNA (double rarity chances)
         return this.pullGacha(type, true);
     },
-    
+
     // Animation control
     skipAnimation: false,
-    
+
     /**
      * Play pull animation with Three.js
      * @param {string} type - Gacha type
@@ -994,57 +972,71 @@ const GachaSystem = {
      * @param {Object} characterTemplate - Character template
      */
     playPullAnimation: function(type, rarity, characterTemplate) {
-        console.log(`Processing ${rarity} character result`);
-        
-        if (this.skipAnimation || typeof GachaThreeEnvironment !== 'object') {
-            // Process the character result directly if animation is skipped
-            this.processCharacterResult(characterTemplate);
-        } else {
-            // Use Three.js for the animation with callback to process result
-            GachaThreeEnvironment.playPullAnimation(type, rarity, characterTemplate, () => {
-                this.processCharacterResult(characterTemplate);
-            });
-        }
+        // --- REMOVED Three.js Animation Call ---
+        console.log(`Processing ${rarity} character result (animation skipped)`);
+        // Process the character result directly, bypassing animation
+        this.processCharacterResult(characterTemplate);
+        // --- End Removal ---
     },
-    
+
     /**
      * Process the character result after animation
      */
     processCharacterResult: function(characterTemplate) {
         try {
             if (!characterTemplate) return;
-            
+
             // Check if character already exists
             const existingCharacter = CharacterSystem.getCharacterById(characterTemplate.id);
-            
+
             if (existingCharacter) {
                 // Convert to shards using ShardSystem's conversion method
                 const shardAmount = ShardSystem.convertToShards(characterTemplate);
-                
+
                 // Show duplicate result with shard conversion
                 this.showDuplicateResult(characterTemplate, shardAmount);
             } else {
                 // Create a new character using CharacterSystem's createCharacter method
                 // This ensures consistency with crafting system
                 const newCharacter = CharacterSystem.createCharacter(characterTemplate);
-                
+
                 // Show gacha result
                 this.showGachaResult(newCharacter);
-                
+
+                // --- Check if this is the first character and trigger chat reward ---
+                if (typeof CharacterSystem !== 'undefined' && CharacterSystem.characters && CharacterSystem.characters.length === 1) {
+                    console.log("First character obtained! Triggering chat reward.");
+                    if (typeof window.supportChat !== 'undefined' && typeof window.supportChat.triggerFirstCharacterReward === 'function') {
+                        // Use a small delay to ensure the gacha result UI is processed first
+                        setTimeout(() => {
+                             window.supportChat.triggerFirstCharacterReward();
+                        }, 500); // 500ms delay
+                    } else {
+                        console.warn("SupportChat or triggerFirstCharacterReward function not found.");
+                    }
+                }
+                // --- End first character check ---
+
+
+                // // Update the tutorial arrow state (it should hide now)
+                // if (typeof UIManager !== 'undefined') {
+                //     UIManager.updateGachaTutorialArrow();
+                // }
+
                 // If in dungeon, activate the character
                 if (DungeonSystem && DungeonSystem.currentDungeon) {
                     CharacterSystem.activateCharacter(newCharacter.id);
                 }
             }
-            
+
             // Save game data
             Game.saveGameData();
-            
+
         } catch (error) {
             console.error("Error processing character result:", error);
         }
     },
-    
+
     /**
      * Determine the rarity of a gacha pull
      * @param {string} type - The gacha type
@@ -1054,44 +1046,44 @@ const GachaSystem = {
     determineRarity: function(type, isSuper = false) {
         // Get the base rates for this gacha type
         const baseRates = this.gachaTypes[type].rates;
-        
+
         // If using Super DNA, double the chances for higher rarities
         let rates = {...baseRates};
         if (isSuper) {
             // Adjust rates to favor higher rarities (double everything except common)
             const commonRate = rates.common;
             delete rates.common; // Remove common temporarily
-            
+
             // Calculate sum of all non-common rates
             let nonCommonSum = 0;
             for (const rate of Object.values(rates)) {
                 nonCommonSum += rate;
             }
-            
+
             // Double each non-common rate
             for (const rarity in rates) {
                 rates[rarity] *= 2;
             }
-            
+
             // Calculate the new sum of non-common rates after doubling
             let newNonCommonSum = 0;
             for (const rate of Object.values(rates)) {
                 newNonCommonSum += rate;
             }
-            
+
             // Adjust common rate to maintain total probability of 1.0
             rates.common = Math.max(0, 1 - newNonCommonSum);
-            
+
             console.log(`Using Super DNA for ${type} gacha! Double rarity multiplier activated!`);
         }
-        
+
         // Perform the probability roll
         const roll = Math.random();
         let cumulativeProbability = 0;
-        
+
         // Check rarities from highest to lowest for better odds with Super DNA
         const rarityOrder = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
-        
+
         for (const rarity of rarityOrder) {
             if (rates[rarity]) {
                 cumulativeProbability += rates[rarity];
@@ -1100,11 +1092,11 @@ const GachaSystem = {
                 }
             }
         }
-        
+
         // Fallback to common
         return 'common';
     },
-    
+
     // Character templates
     characterTemplates: [
         {
@@ -1303,7 +1295,7 @@ const GachaSystem = {
                 intelligence: 10,
                 luck: 10
             },
-            specialAbility: 'precision_shot'
+            specialAbility: 'multi_shot'
         },
         {
             id: 'chrome',
@@ -1444,16 +1436,16 @@ const GachaSystem = {
     getRandomCharacterByRarity: function(rarity) {
         // Filter characters by rarity
         const characters = this.characterTemplates.filter(char => char.rarity === rarity);
-        
+
         if (characters.length === 0) {
             console.error(`No characters found with rarity: ${rarity}`);
             return null;
         }
-        
+
         // Return a random character
         return characters[Math.floor(Math.random() * characters.length)];
     },
-    
+
     /**
      * Show the gacha result for a new character
      */
@@ -1461,36 +1453,53 @@ const GachaSystem = {
         const resultContainer = document.getElementById('gacha-result');
         const characterResult = document.getElementById('gacha-character-result');
         const optionsContainer = document.getElementById('gacha-options');
-        
+
         if (!resultContainer || !characterResult || !optionsContainer) return;
-        
+
         // Hide options, show result
         optionsContainer.style.display = 'none';
         resultContainer.style.display = 'block';
-        
+
         // Clear previous result
         characterResult.innerHTML = '';
-        
+
+        // Find the original template to get the description
+        // Find the original template to get the description and base stats
+        const template = this.characterTemplates.find(t => t.id === character.id);
+        const description = template ? template.description : 'No description available.'; // Fallback
+        const baseStats = template ? template.baseStats : {};
+
+        // Generate HTML for base stats
+        let statsHTML = '';
+        for (const stat in baseStats) {
+            statsHTML += `<div class="stat-item"><span class="stat-name">${stat.toUpperCase()}</span><span class="stat-value">${baseStats[stat]}</span></div>`;
+        }
+
         const charInfoHTML = `
             <div class="cyberpunk-character-result">
                 <div class="character-card-header">
                     <h2>CHARACTER ACQUIRED</h2>
                     <div class="character-card-id">#${character.id.toUpperCase()}</div>
                 </div>
-                
+
                 <!-- Left section: Character details -->
                 <div class="character-details">
                     <div class="details-section">
                         <div class="details-title">PROFILE</div>
-                        <div class="character-description">${character.description}</div>
+                        <div class="character-description">${description}</div>
                     </div>
-                    
+
+                    <div class="details-section character-base-stats">
+                        <div class="details-title">BASE STATS</div>
+                        <div class="stats-grid">${statsHTML}</div>
+                    </div>
+
                     <div class="character-name-plate">
                         <h3 class="character-name">${character.name}</h3>
-                        <div class="character-rarity ${character.rarity.toLowerCase()}">${character.rarity}</div>
+                        <div class="character-rarity ${character.rarity.toLowerCase()}">${character.rarity.toUpperCase()}</div>
                     </div>
                 </div>
-                
+
                 <!-- Right section: Character image -->
                 <div class="character-card-content">
                     <div class="character-hexagon-frame">
@@ -1500,14 +1509,14 @@ const GachaSystem = {
                         <div class="hexagon-border"></div>
                     </div>
                 </div>
-                
+
                 <!-- Close result button -->
                 <button id="gacha-close-result">CONTINUE</button>
             </div>
         `;
-        
+
         characterResult.innerHTML = charInfoHTML;
-        
+
         // Re-attach event listener for close button
         const closeResultButton = document.getElementById('gacha-close-result');
         if (closeResultButton) {
@@ -1516,13 +1525,13 @@ const GachaSystem = {
             });
         }
     },
-    
+
     /**
      * Determine character class based on stats
      */
     getCharacterClass: function(character) {
         const stats = character.stats;
-        
+
         // Determine character class based on highest stats
         if (stats.intelligence > stats.strength && stats.intelligence > stats.agility) {
             return "Netrunner";
@@ -1536,7 +1545,7 @@ const GachaSystem = {
             return "Operative";
         }
     },
-    
+
     /**
      * Show duplicate character result with shard conversion
      */
@@ -1544,16 +1553,16 @@ const GachaSystem = {
         const resultContainer = document.getElementById('gacha-result');
         const characterResult = document.getElementById('gacha-character-result');
         const optionsContainer = document.getElementById('gacha-options');
-        
+
         if (!resultContainer || !characterResult || !optionsContainer) return;
-        
+
         // Hide options, show result
         optionsContainer.style.display = 'none';
         resultContainer.style.display = 'block';
-        
+
         // Clear previous result
         characterResult.innerHTML = '';
-        
+
         // Build duplicate character info with cyberpunk styling
         const dupInfoHTML = `
             <div class="cyberpunk-character-result">
@@ -1561,22 +1570,22 @@ const GachaSystem = {
                     <h2>DUPLICATE CHARACTER</h2>
                     <div class="character-card-id">#${character.id.toUpperCase()}</div>
                 </div>
-                
+
                 <!-- Left section: Duplicate info -->
                 <div class="duplicate-info-container">
                     <div class="duplicate-message">DUPLICATE DETECTED</div>
                     <div class="shard-conversion">Converted to ${shardAmount} character shards</div>
-                    
+
                     <div class="details-section">
                         <div class="details-title">CHARACTER INFO</div>
                         <div class="character-description">
                             This character has been converted to character shards that can be used to upgrade your existing characters.
                         </div>
                     </div>
-                    
+
                     <div class="character-rarity rarity-${character.rarity}">${character.rarity.toUpperCase()}</div>
                 </div>
-                
+
                 <!-- Right section: Character image -->
                 <div class="character-card-content">
                     <div class="character-hexagon-frame">
@@ -1585,20 +1594,20 @@ const GachaSystem = {
                         </div>
                         <div class="hexagon-border"></div>
                     </div>
-                    
+
                     <!-- Character name plate -->
                     <div class="character-name-plate">
                         <h3 class="character-name">${character.name}</h3>
                     </div>
                 </div>
-                
+
                 <!-- Close result button -->
                 <button id="gacha-close-result">CONTINUE</button>
             </div>
         `;
-        
+
         characterResult.innerHTML = dupInfoHTML;
-        
+
         // Re-attach event listener for close button
         const closeResultButton = document.getElementById('gacha-close-result');
         if (closeResultButton) {
@@ -1607,24 +1616,24 @@ const GachaSystem = {
             });
         }
     },
-    
+
     /**
      * Hide the gacha result
      */
     hideGachaResult: function() {
         const resultContainer = document.getElementById('gacha-result');
         const optionsContainer = document.getElementById('gacha-options');
-        
+
         if (!resultContainer || !optionsContainer) return;
-        
+
         // Hide result, show options
         resultContainer.style.display = 'none';
         optionsContainer.style.display = 'flex';
-        
+
         // Update gacha UI
         this.updateGachaUI();
     },
-    
+
     /**
      * Get ability name from special ability ID
      */
@@ -1651,10 +1660,10 @@ const GachaSystem = {
             quick_process: { name: "Quick Process" },
             encryption_field: { name: "Encryption Field" }
         };
-        
+
         return specialAbilities[abilityId]?.name || abilityId;
     },
-    
+
     /**
      * Get ability description from special ability ID
      */
@@ -1681,10 +1690,10 @@ const GachaSystem = {
             quick_process: { description: "Speeds up neural processing, allowing faster reactions and decision making." },
             encryption_field: { description: "Creates an impenetrable field that blocks hostile signals and scans." }
         };
-        
+
         return specialAbilities[abilityId]?.description || "No description available.";
     },
-    
+
     /**
      * Save gacha data
      */
@@ -1693,10 +1702,28 @@ const GachaSystem = {
             pullCounter: this.pullCounter,
             superDnaAvailable: this.superDnaAvailable,
             skipAnimation: this.skipAnimation,
-            freeMortalPulls: this.freeMortalPulls
+            // Save free pull data
+            lastFreeMortalPullTimestamp: this.lastFreeMortalPullTimestamp,
+            freeMortalPullsUsedToday: this.freeMortalPullsUsedToday
         });
     },
-    
+
+    /**
+     * Resets the daily free pull count if the last pull was on a different day.
+     */
+    resetDailyFreePullsIfNeeded: function() {
+        const now = new Date();
+        const lastPullDate = new Date(this.lastFreeMortalPullTimestamp);
+
+        if (now.toDateString() !== lastPullDate.toDateString()) {
+            console.log("New day detected, resetting free daily pulls.");
+            this.freeMortalPullsUsedToday = 0;
+            // Optionally update the timestamp here too, or wait until the first pull of the day
+            // this.lastFreeMortalPullTimestamp = now.getTime(); // Let's update only on pull
+            this.saveData(); // Save the reset count
+        }
+    },
+
     /**
      * Load gacha data from storage
      * @returns {Object|null} Loaded gacha data or null if not found
