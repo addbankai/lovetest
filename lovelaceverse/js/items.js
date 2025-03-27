@@ -208,7 +208,7 @@ this.registerItem({
     description: 'An automated crossbow with rapid-fire capability.',
     stats: {
         damage: 16,
-        attackSpeed: 1.2,
+        attackSpeed: 200,
         range: 180
     },
     effects: ['25% chance to fire an additional bolt'],

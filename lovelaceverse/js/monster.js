@@ -26,7 +26,7 @@ const MonsterSystem = {
             frameDuration: 200,
             dropRate: 0.8,
             dropTable: [
-                { itemId: 'scrap_metal', chance: 1, quantity: [1, 1] },
+                { itemId: 'scrap_metal', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'cyber_blade', chance: 0.01, quantity: [1, 1] },
                 { itemId: 'shock_knuckles', chance: 0.01, quantity: [1, 1] },
@@ -49,10 +49,10 @@ const MonsterSystem = {
                 { itemId: 'gravity_stompers', chance: 0.005, quantity: [1, 1] },
                 { itemId: 'reflex_booster', chance: 0.005, quantity: [1, 1] },
                 { itemId: 'luck_charm', chance: 0.005, quantity: [1, 1] },
-                { itemId: 'neon_circuit', chance: 1, quantity: [1, 1] },
-                { itemId: "scrap_metal", chance: 1.0, quantity: [1, 1] },      // Common
-                { itemId: "cyber_scrap", chance: 1.0, quantity: [1, 1] },       // Common
-                { itemId: "circuit_board", chance: 0.8, quantity: [1, 1] }
+                { itemId: 'neon_circuit', chance: 0.1, quantity: [1, 1] },
+                { itemId: "scrap_metal", chance: 0.1, quantity: [1, 1] },      // Common
+                { itemId: "cyber_scrap", chance: 0.1, quantity: [1, 1] },       // Common
+                { itemId: "circuit_board", chance: 0.1, quantity: [1, 1] }
             ]
         },
         snekk: { 
@@ -72,10 +72,10 @@ const MonsterSystem = {
             frameDuration: 200,
             dropRate: 0.8,
             dropTable: [
-                { itemId: 'circuit_board', chance: 1, quantity: [1, 1] },
+                { itemId: 'circuit_board', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'pulse_bow', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'synth_leather', chance: 1, quantity: [1, 1] },
+                { itemId: 'synth_leather', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'cyber_blade', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'cyber_blade', chance: 0.01, quantity: [1, 1] },
@@ -101,7 +101,7 @@ const MonsterSystem = {
                 { itemId: 'luck_charm', chance: 0.005, quantity: [1, 1] },
                 { itemId: 'encrypted_data_shard', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'neural_interface_gel', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'chang_chip', chance: 0.8, quantity: [1, 1] },
+                { itemId: 'chang_chip', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'quantum_core', chance: 0.01, quantity: [1, 1] }
             ]
         },
@@ -122,10 +122,10 @@ const MonsterSystem = {
             frameDuration: 200,
             dropRate: 0.8,
             dropTable: [
-                { itemId: 'circuit_board', chance: 1, quantity: [1, 1] },
+                { itemId: 'circuit_board', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'pulse_bow', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'synth_leather', chance: 1, quantity: [1, 1] },
+                { itemId: 'synth_leather', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'cyber_blade', chance: 0.01, quantity: [1, 1] },
                 { itemId: 'shock_knuckles', chance: 0.01, quantity: [1, 1] },
@@ -151,7 +151,7 @@ const MonsterSystem = {
                 { itemId: 'cyber_blade', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'encrypted_data_shard', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'neural_interface_gel', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'chang_chip', chance: 0.8, quantity: [1, 1] },
+                { itemId: 'chang_chip', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'quantum_core', chance: 0.01, quantity: [1, 1] }
             ]
         },
@@ -172,10 +172,10 @@ const MonsterSystem = {
             frameDuration: 150,
             dropRate: 0.85,
             dropTable: [
-                { itemId: 'circuit_board', chance: 1, quantity: [1, 1] },
+                { itemId: 'circuit_board', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'pulse_bow', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'synth_leather', chance: 1, quantity: [1, 1] },
+                { itemId: 'synth_leather', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'laser_rifle', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'cyber_blade', chance: 0.01, quantity: [1, 1] },
                 { itemId: 'shock_knuckles', chance: 0.01, quantity: [1, 1] },
@@ -201,7 +201,7 @@ const MonsterSystem = {
                 { itemId: 'cyber_blade', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'encrypted_data_shard', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'neural_interface_gel', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'chang_chip', chance: 0.8, quantity: [1, 1] },
+                { itemId: 'chang_chip', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'quantum_core', chance: 0.01, quantity: [1, 1] }
             ]
         },
@@ -224,7 +224,7 @@ const MonsterSystem = {
             dropTable: [
                 { itemId: 'scrap_metal', chance: 0.6, quantity: [2, 4] },
                 { itemId: 'circuit_board', chance: 0.3, quantity: [1, 2] },
-                { itemId: 'neon_circuit', chance: 0.8, quantity: [1, 1] },
+                { itemId: 'neon_circuit', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'quantum_alloy', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'quantum_dagger', chance: 0.005, quantity: [1, 1] },
                 { itemId: 'pulse_bow', chance: 0.005, quantity: [1, 1] },
@@ -358,7 +358,7 @@ const MonsterSystem = {
                 { itemId: 'razor_grimoire', chance: 0.001, quantity: [1, 1] },
                 { itemId: 'guardian_grimoire', chance: 0.001, quantity: [1, 1] },
                 { itemId: 'smart_polymer', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'carbon_fiber_weave', chance: 1.0, quantity: [1, 1] },
+                { itemId: 'carbon_fiber_weave', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'quantum_core', chance: 0.01, quantity: [1, 1] }
             ]
         },
@@ -381,9 +381,9 @@ const MonsterSystem = {
             dropTable: [
                 { itemId: 'scrap_metal', chance: 0.5, quantity: [3, 5] },
                 { itemId: 'circuit_board', chance: 0.4, quantity: [1, 3] },
-                { itemId: 'nano_concrete', chance: 0.8, quantity: [1, 1] },
-                { itemId: 'scrap_metal', chance: 1.0, quantity: [1, 1] },
-                { itemId: 'synth_leather', chance: 1.0, quantity: [1, 1] }
+                { itemId: 'nano_concrete', chance: 0.1, quantity: [1, 1] },
+                { itemId: 'scrap_metal', chance: 0.1, quantity: [1, 1] },
+                { itemId: 'synth_leather', chance: 0.1, quantity: [1, 1] }
             ]
         },
         chip: { 
@@ -458,9 +458,9 @@ const MonsterSystem = {
                 { itemId: 'guardian_wand', chance: 0.001, quantity: [1, 1] },
                 { itemId: 'razor_grimoire', chance: 0.001, quantity: [1, 1] },
                 { itemId: 'guardian_grimoire', chance: 0.001, quantity: [1, 1] },
-                { itemId: 'chang_chip', chance: 0.8, quantity: [1, 1] },
-                { itemId: 'circuit_board', chance: 0.8, quantity: [1, 1] },
-                { itemId: 'cyber_scrap', chance: 1.0, quantity: [1, 1] }
+                { itemId: 'chang_chip', chance: 0.1, quantity: [1, 1] },
+                { itemId: 'circuit_board', chance: 0.1, quantity: [1, 1] },
+                { itemId: 'cyber_scrap', chance: 0.1, quantity: [1, 1] }
             ]
         },
         chimeradog: { 
@@ -483,7 +483,7 @@ const MonsterSystem = {
                 { itemId: 'scrap_metal', chance: 0.5, quantity: [3, 5] },
                 { itemId: 'circuit_board', chance: 0.4, quantity: [1, 3] },
                 { itemId: 'energy_drink', chance: 0.2, quantity: [1, 1] },
-				{ itemId: 'synth_leather', chance: 1.0, quantity: [1, 1] },
+				{ itemId: 'synth_leather', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'pulse_bow', chance: 0.005, quantity: [1, 1] },
                 { itemId: 'data_staff', chance: 0.005, quantity: [1, 1] },
                 { itemId: 'volt_lance', chance: 0.005, quantity: [1, 1] },
@@ -538,7 +538,7 @@ const MonsterSystem = {
                 { itemId: 'razor_grimoire', chance: 0.001, quantity: [1, 1] },
                 { itemId: 'guardian_grimoire', chance: 0.001, quantity: [1, 1] },
 				{ itemId: 'neural_interface_gel', chance: 0.5, quantity: [1, 1] },
-				{ itemId: 'carbon_fiber_weave', chance: 1.0, quantity: [1, 1] }
+				{ itemId: 'carbon_fiber_weave', chance: 0.1, quantity: [1, 1] }
             ]
         },
         orc: { 
@@ -558,11 +558,11 @@ const MonsterSystem = {
             frameDuration: 250,
             dropRate: 0.95,
             dropTable: [
-                { itemId: 'scrap_metal', chance: 0.7, quantity: [5, 8] },
+                { itemId: 'scrap_metal', chance: 0.1, quantity: [5, 8] },
                 { itemId: 'circuit_board', chance: 0.5, quantity: [2, 4] },
                 { itemId: 'energy_drink', chance: 0.3, quantity: [1, 2] },
                 { itemId: 'quantum_alloy', chance: 0.5, quantity: [1, 1] },
-                { itemId: 'scrap_metal', chance: 1.0, quantity: [1, 1] },
+                { itemId: 'scrap_metal', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'encrypted_data_shard', chance: 0.5, quantity: [1, 1] },
                 { itemId: 'dark_matter_shard', chance: 0.01, quantity: [1, 1] }
             ]
@@ -584,11 +584,11 @@ const MonsterSystem = {
             frameDuration: 250,
             dropRate: 0.95,
             dropTable: [
-                { itemId: 'scrap_metal', chance: 0.7, quantity: [5, 8] },
+                { itemId: 'scrap_metal', chance: 0.1, quantity: [5, 8] },
                 { itemId: 'circuit_board', chance: 0.5, quantity: [2, 4] },
                 { itemId: 'energy_drink', chance: 0.3, quantity: [1, 2] },
-                { itemId: 'dark_matter_shard', chance: 1, quantity: [1, 1] },
-                { itemId: 'quantum_core', chance: 1, quantity: [1, 1] },
+                { itemId: 'dark_matter_shard', chance: 0.1, quantity: [1, 1] },
+                { itemId: 'quantum_core', chance: 0.1, quantity: [1, 1] },
                 { itemId: 'twin_fangs', chance: 0.01, quantity: [1, 1] },
                 { itemId: 'auto_crossbow', chance: 0.01, quantity: [1, 1] },
                 { itemId: 'neon_katana', chance: 0.01, quantity: [1, 1] },
@@ -675,7 +675,7 @@ const MonsterSystem = {
                 { itemId: 'aegis_grimoire', chance: 0.001, quantity: [1, 1] },
                 { itemId: 'smart_polymer', chance: 2, quantity: [1, 1] },
                 { itemId: 'encrypted_data_shard', chance: 2, quantity: [1, 1] },
-                { itemId: 'circuit_board', chance: 1, quantity: [1, 1] }
+                { itemId: 'circuit_board', chance: 0.1, quantity: [1, 1] }
             ]
         },
         dragon: { 
@@ -695,8 +695,8 @@ const MonsterSystem = {
             frameDuration: 300,
             dropRate: 1.0,
             dropTable: [
-                { itemId: 'scrap_metal', chance: 1.0, quantity: [10, 15] },
-                { itemId: 'circuit_board', chance: 0.8, quantity: [5, 8] },
+                { itemId: 'scrap_metal', chance: 0.1, quantity: [10, 15] },
+                { itemId: 'circuit_board', chance: 0.1, quantity: [5, 8] },
                 { itemId: 'quantum_core', chance: 0.5, quantity: [1, 2] },
                 { itemId: 'nano_repair', chance: 0.6, quantity: [1, 3] }
             ]
@@ -759,7 +759,8 @@ const MonsterSystem = {
             dropTable: monsterType.dropTable,
             currentFrame: 0,
             lastFrameTime: Date.now(),
-            level: MapSystem.currentDungeonLevel || 1
+            level: MapSystem.currentDungeonLevel || 1,
+            stunDuration: 500 // Added: Duration monster is stunned after being hit (in ms)
         };
         
         // Apply level scaling

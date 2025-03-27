@@ -37,5 +37,6 @@ const SupabaseClient = {
 // Make it globally available
 window.SupabaseClient = SupabaseClient;
 
-// Initialize immediately - REMOVED (Instance will be created on first call to getInstance)
-// SupabaseClient.getInstance();
+// Initialize immediately
+SupabaseClient.getInstance();
+

@@ -1293,25 +1293,34 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 768px) {
     #game-ui {
         flex-direction: column;
-        height: auto;
-        gap: 10px;
-        padding: 10px;
+        height: auto; /* Keep auto height for column layout */
+        gap: 5px; /* Further reduce gap */
+        padding: 5px; /* Further reduce padding */
     }
-    
+
     #currency-display, #buff-container, #character-info, #menu-buttons {
         width: 100%;
         justify-content: center;
     }
-    
+
     #menu-buttons {
         flex-wrap: wrap;
+        gap: 5px; /* Reduce gap between wrapped buttons */
     }
-    
+
     .menu-button {
         flex-grow: 1;
         text-align: center;
-        font-size: 14px;
-        padding: 8px 10px;
+        font-size: 11px; /* Further reduced font size */
+        padding: 5px 6px; /* Further reduced padding */
+        /* Adjust icon padding if needed */
+        padding-left: 24px; /* Ensure space for smaller icon */
+    }
+
+    .menu-button .button-icon {
+        width: 14px; /* Even smaller icon */
+        height: 14px;
+        left: 5px; /* Adjust icon position */
     }
     
     #character-list {

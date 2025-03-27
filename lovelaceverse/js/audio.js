@@ -13,7 +13,8 @@ const AudioSystem = {
         attackSprite: 'music/attackSprite.mp3',
         rangedSprite: 'music/rangedSprite.mp3',
         magicSprite: 'music/magicSprite.mp3',
-        level_transition: 'music/level_transition.mp3'
+        level_transition: 'music/level_transition.mp3',
+        level_up: 'music/levelup.mp3' // Added level up sound
     },
     
     // Background music mapping dungeon IDs to their music files

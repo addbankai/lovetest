@@ -761,6 +761,14 @@
 
 /* Mobile design adjustments */
 @media (max-width: 600px) {
+    /* Gacha Options */
+    #gacha-options {
+        grid-template-columns: 1fr; /* Already set, good */
+        gap: 15px;
+    }
+    .gacha-option {
+        margin-bottom: 10px;
+    }
     .gacha-name {
         font-size: 16px;
     }
@@ -784,6 +792,63 @@
     
     .cyberpunk-modal .modal-title {
         font-size: 18px;
+    }
+
+    /* Gacha Result */
+    .cyberpunk-character-result {
+        grid-template-columns: 1fr; /* Stack image and details */
+        grid-template-rows: auto auto auto auto; /* Header, image, details, button */
+        grid-template-areas:
+            "header"
+            "image"
+            "details"
+            "button";
+        padding: 15px; /* Reduce padding */
+        max-width: 90vw; /* Use viewport width */
+        gap: 15px; /* Adjust gap */
+    }
+
+    .character-hexagon-frame {
+        width: 150px; /* Smaller hexagon */
+        height: 170px;
+        margin: 0 auto; /* Center hexagon */
+    }
+    .character-image-container {
+        width: 135px;
+        height: 155px;
+    }
+
+    .character-details {
+        text-align: center; /* Center details text */
+    }
+
+    .details-section {
+        border-left: none; /* Remove left border */
+        border-top: 2px solid var(--rarity-color, #00f7ff); /* Add top border */
+        border-radius: 4px;
+        padding-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .character-name-plate {
+        text-align: center; /* Center name */
+    }
+
+    .character-base-stats .stats-grid {
+        grid-template-columns: 1fr; /* Single column for stats */
+    }
+
+    #gacha-close-result {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    /* Duplicate Result Adjustments */
+    .duplicate-info-container {
+        text-align: center;
+    }
+    .duplicate-info-container .details-section {
+        border-top-color: #ff3333; /* Match duplicate color */
     }
 }
 

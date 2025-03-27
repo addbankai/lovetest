@@ -280,13 +280,13 @@
     <!-- Core Libraries -->
     <!-- Temporary CDN links for testing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- <script src="https://unpkg.com/@supabase/supabase-js"></script> --> <!-- Removed duplicate Supabase script -->
-<script src="js/character-panel-effects.js"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase-client.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js"></script>
+    <script src="js/character-panel-effects.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     <!-- Your other scripts -->
     <script src="js/utils.js"></script>
     <script src="js/authentication.js"></script>
@@ -353,42 +353,45 @@
     <script src="support-chat/js/support-chat.js"></script>
     
   <script>
-    // Consolidated DOMContentLoaded listener
+    // Once the loading screen is complete, perform any final setup
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize game after DOM is ready
+    if (typeof Game !== 'undefined') {
+        Game.init();
+    }
+});
+
+    
+    // Set up Supabase tables in background - now controlled by loading screen sequence
+    if (typeof AuthSetup !== 'undefined' && typeof AuthenticationSystem.offlineMode === 'undefined') {
+        console.log('Initializing database tables as fallback...');
+        AuthSetup.init().catch(err => {
+            console.error('Error initializing database tables:', err);
+        });
+    }
+
+    
+    // This is a fallback for direct DOMContentLoaded initialization
+    // in case the loading screen fails to initialize properly
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, initializing...');
-
-        // Initialize game after DOM is ready
-        // Game.init() should handle AuthenticationSystem.init() which calls SupabaseClient.getInstance()
-        if (typeof Game !== 'undefined') {
-            Game.init(); 
-        } else {
-             console.error("Game object not defined at DOMContentLoaded!");
+      console.log('DOM loaded, checking if game needs to be initialized...');
+      
+	 
+      // If after 5 seconds the game hasn't started, initialize directly
+      setTimeout(function() {
+        if (typeof Game !== 'undefined' && !Game.hasInitialized) {
+          console.warn('Game not initialized after timeout, starting manually...');
+          Game.init();
         }
-
-        // Fallback for AuthSetup initialization if Game.init doesn't cover it or fails
-        // This might still be redundant if Game.init reliably calls AuthSetup or its equivalent
-        if (typeof AuthSetup !== 'undefined' && typeof AuthenticationSystem !== 'undefined' && typeof AuthenticationSystem.offlineMode === 'undefined') {
-            // Add a check to see if AuthSetup was already initialized by Game.init to avoid double calls
-            if (!AuthSetup.initialized) { // Assuming AuthSetup might have an 'initialized' flag
-                 console.log('Initializing database tables via fallback...');
-                 AuthSetup.init().catch(err => { 
-                     console.error('Error initializing database tables via fallback:', err);
-                 });
-            } else {
-                 console.log('AuthSetup already initialized, skipping fallback.');
-            }
-        }
-
-        // Fallback timeout initialization (keep as safety net)
-        setTimeout(function() {
-          if (typeof Game !== 'undefined' && !Game.hasInitialized) {
-            console.warn('Game not initialized after 5 seconds, attempting manual start...');
-            // Ensure Game.init doesn't run again if it somehow started but didn't set flag
-            if (!Game.isRunning) { 
-                 Game.init();
-            }
-          }
-        }, 5000);
+      }, 5000);
+      
+      // Set up Supabase tables in background - now controlled by loading screen sequence
+      if (typeof AuthSetup !== 'undefined' && typeof AuthenticationSystem.offlineMode === 'undefined') {
+        console.log('Initializing database tables as fallback...');
+        AuthSetup.init().catch(err => {
+          console.error('Error initializing database tables:', err);
+        });
+      }
     });
   </script>
   

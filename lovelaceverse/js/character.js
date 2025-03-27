@@ -122,7 +122,11 @@ const CharacterSystem = {
             chaseStartTime: 0,
             chaseDuration: 0,
             chaseTargetId: null,
-            attackRange: 50 // Distance at which character can attack without perfect overlap
+            attackRange: 50, // Distance at which character can attack without perfect overlap
+            // Stun properties
+            isHit: false,
+            hitTime: 0,
+            stunDuration: 500 // 0.5 seconds stun duration
         };
     },
     
@@ -366,11 +370,11 @@ const CharacterSystem = {
         element.style.width = `${character.width}px`;
         element.style.height = `${character.height}px`;
 
-        // Add Name Plate for Character
-        const namePlate = document.createElement('div');
-        namePlate.className = 'character-name-plate';
-        namePlate.textContent = character.name;
-        wrapper.appendChild(namePlate); // Append nameplate to the wrapper
+        // // Add Name Plate for Character - REMOVED as requested
+        // const namePlate = document.createElement('div');
+        // namePlate.className = 'character-name-plate';
+        // namePlate.textContent = character.name;
+        // wrapper.appendChild(namePlate); // Append nameplate to the wrapper
 
         wrapper.appendChild(element); // Append character sprite after nameplate
         charactersContainer.appendChild(wrapper);
@@ -945,8 +949,8 @@ const CharacterSystem = {
         
         // Define the box boundaries higher on the screen
         const movementBox = {
-            top: 400,    // Changed from 450 to 350
-            bottom: 600, // Changed from 650 to 550
+            top: 450,    // Adjusted lower (was 400)
+            bottom: 650, // Adjusted lower (was 600)
             left: containerRect.width * 0.2,
             right: containerRect.width * 0.8
         };
@@ -971,6 +975,21 @@ const CharacterSystem = {
     updateCharacters: function(deltaTime) {
         const now = Date.now();
         this.activeCharacters.forEach(character => {
+            // Check for stun status
+            const isStunned = character.isHit && (now - character.hitTime < character.stunDuration);
+
+            // Clear hit state if stun duration is over
+            if (character.isHit && !isStunned) {
+                character.isHit = false;
+            }
+
+            // Skip updates if stunned
+            if (isStunned) {
+                // Optionally, you could add a specific "hit" animation here
+                // this.setAnimation(character, "hit"); // Assuming a "hit" animation exists
+                return; // Skip the rest of the update for this character
+            }
+
             const frameElapsed = now - character.lastFrameTime;
             // Scale animation speed with attack speed for attack animations
             const baseFrameDuration = character.isAttacking ? 100 : 200;
@@ -1309,7 +1328,7 @@ const CharacterSystem = {
             this.setNewMoveTarget(character);
         } else {
             // Reduced speed from 0.05 to 0.02 for even slower movement
-            const speed = 0.05;
+            const speed = 0.1;
             character.x += (dx / distance) * speed * deltaTime;
             character.y += (dy / distance) * speed * deltaTime;
             
@@ -2601,6 +2620,10 @@ const CharacterSystem = {
             actualDamage,
             "#ff0000"
         );
+
+        // Set hit state for stun
+        character.isHit = true;
+        character.hitTime = Date.now();
         
         // Update UI
         if (window.UIManager) {
