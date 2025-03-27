@@ -122,8 +122,7 @@ this.registerItem({
         attackSpeed: 1.2
     },
     effects: ['Deals 5 bonus damage to robotic enemies'],
-    icon: 'img/items/cyber_blade.jpg',
-    level: 1
+    icon: 'img/items/cyber_blade.jpg'
 });
 
 // DAGGER
@@ -140,8 +139,7 @@ this.registerItem({
         critical: 10
     },
     effects: ['15% chance to ignore target defense'],
-    icon: 'img/items/quantum_dagger.jpg',
-    level: 5
+    icon: 'img/items/quantum_dagger.jpg'
 });
 
 // DUAL_DAGGER
@@ -158,8 +156,7 @@ this.registerItem({
         critical: 15
     },
     effects: ['Each hit has 10% chance to poison target'],
-    icon: 'img/items/twin_fangs.jpg',
-    level: 15
+    icon: 'img/items/twin_fangs.jpg'
 });
 
 // DUAL_BLADE
@@ -176,8 +173,7 @@ this.registerItem({
         critical: 8
     },
     effects: ['Attacks hit twice, with the second hit dealing 50% damage'],
-    icon: 'img/items/binary_blades.jpg',
-    level: 20
+    icon: 'img/items/binary_blades.jpg'
 });
 
 // BOW
@@ -194,8 +190,7 @@ this.registerItem({
         range: 180
     },
     effects: ['Arrows penetrate through up to 3 targets'],
-    icon: 'img/items/pulse_bow.jpg',
-    level: 12
+    icon: 'img/items/pulse_bow.jpg'
 });
 
 // CROSSBOW
@@ -212,8 +207,7 @@ this.registerItem({
         range: 180
     },
     effects: ['25% chance to fire an additional bolt'],
-    icon: 'img/items/auto_crossbow.jpg',
-    level: 18
+    icon: 'img/items/auto_crossbow.jpg'
 });
 
 // STAFF
@@ -225,13 +219,12 @@ this.registerItem({
     rarity: this.RARITIES.RARE,
     description: 'A staff channeling digital energies.',
     stats: {
-        magicDamage: 25,
-        attackSpeed: 0.8,
-        intelligence: 10
+        magicDamage: 15,
+        attackSpeed: 0.5,
+        intelligence: 5
     },
     effects: ['Spells cost 15% less energy'],
-    icon: 'img/items/data_staff.jpg',
-    level: 14
+    icon: 'img/items/data_staff.jpg'
 });
 
 // KATANA
@@ -248,8 +241,7 @@ this.registerItem({
         critical: 12
     },
     effects: ['Critical hits cause bleeding for 3 seconds'],
-    icon: 'img/items/neon_katana.jpg',
-    level: 16
+    icon: 'img/items/neon_katana.jpg'
 });
 
 // KNUCKLES
@@ -266,8 +258,7 @@ this.registerItem({
         evasion: 5
     },
     effects: ['15% chance to stun target for 1 second'],
-    icon: 'img/items/shock_knuckles.jpg',
-    level: 8
+    icon: 'img/items/shock_knuckles.jpg'
 });
 
 // SPEAR
@@ -284,8 +275,7 @@ this.registerItem({
         range: 80
     },
     effects: ['Attacks chain to nearby enemies for 30% damage'],
-    icon: 'img/items/volt_lance.jpg',
-    level: 12
+    icon: 'img/items/volt_lance.jpg'
 });
 
 // SCYTHE
@@ -302,8 +292,7 @@ this.registerItem({
         critical: 15
     },
     effects: ['Defeated enemies explode, dealing damage to nearby foes'],
-    icon: 'img/items/data_reaper.jpg',
-    level: 25
+    icon: 'img/items/data_reaper.jpg'
 });
 
 // WAND
@@ -320,8 +309,7 @@ this.registerItem({
         intelligence: 8
     },
     effects: ['10% chance to temporarily disable enemy abilities'],
-    icon: 'img/items/code_wand.jpg',
-    level: 10
+    icon: 'img/items/code_wand.jpg'
 });
 
 // GRIMOIRE
@@ -338,8 +326,7 @@ this.registerItem({
         intelligence: 15
     },
     effects: ['Spells have 20% increased area of effect'],
-    icon: 'img/items/algorithm_grimoire.jpg',
-    level: 20
+    icon: 'img/items/algorithm_grimoire.jpg'
 });
 
 // RIFLE
@@ -356,8 +343,7 @@ this.registerItem({
         range: 250
     },
     effects: ['Slight chance to overheat enemy circuits'],
-    icon: 'img/items/laser_rifle.jpg',
-    level: 3
+    icon: 'img/items/laser_rifle.jpg'
 });
 
 this.registerItem({
@@ -373,8 +359,7 @@ this.registerItem({
         range: 220
     },
     effects: ['20% chance to cause a burn effect'],
-    icon: 'img/items/plasma_carbine.jpg',
-    level: 7
+    icon: 'img/items/plasma_carbine.jpg'
 });
 
 this.registerItem({
@@ -391,8 +376,7 @@ this.registerItem({
         critical: 20
     },
     effects: ['Pierces through enemy armor with devastating impact'],
-    icon: 'img/items/railgun.jpg',
-    level: 15
+    icon: 'img/items/railgun.jpg'
 });
 
 // Legacy Weapons (No specific equipmentType)
@@ -409,8 +393,7 @@ this.registerItem({
         range: 150
     },
     effects: ['20% chance to apply a burn effect'],
-    icon: 'img/items/plasma_pistol.jpg',
-    level: 5
+    icon: 'img/items/plasma_pistol.jpg'
 });
 
 
@@ -430,8 +413,7 @@ this.registerItem({
         hp: 20
     },
     effects: [],
-    icon: 'img/items/synth_vest.jpg',
-    level: 1
+    icon: 'img/items/synth_vest.jpg'
 });
 
 this.registerItem({
@@ -447,8 +429,7 @@ this.registerItem({
         agility: 5
     },
     effects: ['Boosts dodge chance by 5%'],
-    icon: 'img/items/nano_jacket.jpg',
-    level: 4
+    icon: 'img/items/nano_jacket.jpg'
 });
 
 // MEDIUM_ARMOR
@@ -465,8 +446,7 @@ this.registerItem({
         magicDefense: 15
     },
     effects: ['Regenerates 1 HP per second'],
-    icon: 'img/items/nano_armor.jpg',
-    level: 8
+    icon: 'img/items/nano_armor.jpg'
 });
 
 this.registerItem({
@@ -482,8 +462,7 @@ this.registerItem({
         magicDefense: 20
     },
     effects: ['Triggers a damage absorption shield for 2 seconds when hit'],
-    icon: 'img/items/reactive_body_armor.jpg',
-    level: 10
+    icon: 'img/items/reactive_body_armor.jpg'
 });
 
 // HEAVY_ARMOR
@@ -500,8 +479,7 @@ this.registerItem({
         strength: 10
     },
     effects: ['Reduces physical damage by 15%'],
-    icon: 'img/items/cybernetic_plate.jpg',
-    level: 12
+    icon: 'img/items/cybernetic_plate.jpg'
 });
 
 this.registerItem({
@@ -517,8 +495,7 @@ this.registerItem({
         strength: 15
     },
     effects: ['Increases strength by 10% and reduces knockback'],
-    icon: 'img/items/exoskeletal_suit.jpg',
-    level: 14
+    icon: 'img/items/exoskeletal_suit.jpg'
 });
 
 // SHIELD
@@ -536,8 +513,7 @@ this.registerItem({
         evasion: 10
     },
     effects: ['15% chance to completely negate damage'],
-    icon: 'img/items/quantum_shield.jpg',
-    level: 15
+    icon: 'img/items/quantum_shield.jpg'
 });
 
 // =============== GLOVES ===============
@@ -556,8 +532,7 @@ this.registerItem({
         critical: 5
     },
     effects: ['Increases critical hit damage by 10%'],
-    icon: 'img/items/cyber_gloves.jpg',
-    level: 5
+    icon: 'img/items/cyber_gloves.jpg'
 });
 
 // HEAVY_GLOVES
@@ -574,8 +549,7 @@ this.registerItem({
         defense: 8
     },
     effects: ['Melee attacks deal 5% splash damage to nearby enemies'],
-    icon: 'img/items/power_gauntlets.jpg',
-    level: 10
+    icon: 'img/items/power_gauntlets.jpg'
 });
 
 // =============== BOOTS ===============
@@ -594,8 +568,7 @@ this.registerItem({
         attackSpeed: 0.1
     },
     effects: ['Increases movement speed by 15%'],
-    icon: 'img/items/speed_runners.jpg',
-    level: 6
+    icon: 'img/items/speed_runners.jpg'
 });
 
 // HEAVY_BOOTS
@@ -612,8 +585,7 @@ this.registerItem({
         damage: 10
     },
     effects: ['Jump attacks deal 30% increased damage'],
-    icon: 'img/items/gravity_stompers.jpg',
-    level: 12
+    icon: 'img/items/gravity_stompers.jpg'
 });
 
 // =============== ACCESSORIES ===============
@@ -631,8 +603,7 @@ this.registerItem({
         magicDamage: 15
     },
     effects: ['Reduces skill cooldowns by 10%'],
-    icon: 'img/items/neural_implant.jpg',
-    level: 3
+    icon: 'img/items/neural_implant.jpg'
 });
 
 // BRACELET
@@ -649,8 +620,7 @@ this.registerItem({
         evasion: 5
     },
     effects: ['20% chance to dodge attacks'],
-    icon: 'img/items/reflex_booster.jpg',
-    level: 7
+    icon: 'img/items/reflex_booster.jpg'
 });
 
 // AMULET
@@ -667,8 +637,7 @@ this.registerItem({
         evasion: 15
     },
     effects: ['5% chance to reset skill cooldowns after use'],
-    icon: 'img/items/chrono_amulet.jpg',
-    level: 20
+    icon: 'img/items/chrono_amulet.jpg'
 });
 
 // NECKLACE
@@ -685,8 +654,7 @@ this.registerItem({
         magicDefense: 15
     },
     effects: ['Spells have 15% chance to critically hit'],
-    icon: 'img/items/neural_necklace.jpg',
-    level: 15
+    icon: 'img/items/neural_necklace.jpg'
 });
 
 // CHARM
@@ -703,8 +671,7 @@ this.registerItem({
         evasion: 8
     },
     effects: ['10% chance to find additional loot'],
-    icon: 'img/items/luck_charm.jpg',
-    level: 10
+    icon: 'img/items/luck_charm.jpg'
 });
 
 // =============== CONSUMABLES ===============
@@ -826,8 +793,8 @@ this.registerItem({
     stats: {},
     effects: [],
     icon: 'img/items/encrypted_data_shard.jpg',
-    level: 0,
-    stackable: false
+    stackable: true,
+    maxStack: 99
 });
 
 // Materials
@@ -926,7 +893,7 @@ this.registerItem({
     effects: [],
     icon: 'img/items/dark_matter_shard.jpg',
     stackable: true,
-    maxStack: 99
+    maxStack: 10
 });
 
 // 
@@ -995,9 +962,7 @@ this.registerItem({
     description: 'A ring pulsing with protective energy.',
     stats: { hp: 100, defense: 10, magicDefense: 10 },
     effects: ['Increases max HP by 10%'],
-    icon: 'img/items/fortified_ring.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/fortified_ring.jpg'
 });
 
 // Epic Attack Ring
@@ -1010,9 +975,7 @@ this.registerItem({
     description: 'A ring that sharpens the wearer’s combat edge.',
     stats: { damage: 15, critical: 5 },
     effects: ['Increases critical chance by 5%'],
-    icon: 'img/items/assault_ring.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/assault_ring.jpg'
 });
 
 // Legendary Defense Ring
@@ -1025,9 +988,7 @@ this.registerItem({
     description: 'A ring that defies damage with ancient tech.',
     stats: { hp: 150, defense: 15, magicDefense: 15 },
     effects: ['Grants a 10% chance to negate damage'],
-    icon: 'img/items/invincible_ring.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/invincible_ring.jpg'
 });
 
 // Legendary Attack Ring
@@ -1040,9 +1001,7 @@ this.registerItem({
     description: 'A ring that thrives on bloodshed.',
     stats: { damage: 25, critical: 10 },
     effects: ['Each kill increases damage by 5% for 10 seconds, stacks up to 5 times'],
-    icon: 'img/items/berserker_ring.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/berserker_ring.jpg'
 });
 
 // Epic Defense Light Boots
@@ -1055,9 +1014,7 @@ this.registerItem({
     description: 'Boots with shock-absorbing tech for survival.',
     stats: { defense: 10, hp: 40, evasion: 5 },
     effects: ['Increases movement speed by 10% when health is below 50%'],
-    icon: 'img/items/fortified_light_boots.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/fortified_light_boots.jpg'
 });
 
 // Epic Attack Light Boots
@@ -1070,9 +1027,7 @@ this.registerItem({
     description: 'Boots built for swift and deadly maneuvers.',
     stats: { attackSpeed: 0.1, critical: 5, movementSpeed: 10 },
     effects: ['Dash attacks deal 20% more damage'],
-    icon: 'img/items/assault_light_boots.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/assault_light_boots.jpg'
 });
 
 // Legendary Defense Light Boots
@@ -1085,9 +1040,7 @@ this.registerItem({
     description: 'Boots that make the wearer untouchable in motion.',
     stats: { defense: 20, hp: 60, evasion: 10 },
     effects: ['Grants a 15% chance to dodge attacks'],
-    icon: 'img/items/invincible_light_boots.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/invincible_light_boots.jpg'
 });
 
 // Legendary Attack Light Boots
@@ -1100,9 +1053,7 @@ this.registerItem({
     description: 'Boots that accelerate combat rage.',
     stats: { attackSpeed: 0.15, critical: 8, movementSpeed: 15 },
     effects: ['Each kill increases movement speed by 5% for 5 seconds, stacks up to 5 times'],
-    icon: 'img/items/berserker_light_boots.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/berserker_light_boots.jpg'
 });
 
 
@@ -1117,9 +1068,7 @@ this.registerItem({
     description: 'Gloves with embedded plating for enhanced resilience.',
     stats: { defense: 15, hp: 50 },
     effects: ['Increases block chance by 5%'],
-    icon: 'img/items/fortified_light_gloves.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/fortified_light_gloves.jpg'
 });
 
 // Epic Attack Light Gloves
@@ -1132,9 +1081,7 @@ this.registerItem({
     description: 'Gloves optimized for rapid, lethal strikes.',
     stats: { attackSpeed: 0.1, critical: 5 },
     effects: ['Increases critical damage by 10%'],
-    icon: 'img/items/assault_light_gloves.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/assault_light_gloves.jpg'
 });
 
 // Legendary Defense Light Gloves
@@ -1147,9 +1094,7 @@ this.registerItem({
     description: 'Gloves that turn hands into unbreakable shields.',
     stats: { defense: 25, hp: 80 },
     effects: ['Reflects 10% of incoming damage back to the attacker'],
-    icon: 'img/items/invincible_light_gloves.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/invincible_light_gloves.jpg'
 });
 
 // Legendary Attack Light Gloves
@@ -1162,9 +1107,7 @@ this.registerItem({
     description: 'Gloves that amplify every punch with fury.',
     stats: { attackSpeed: 0.2, critical: 10 },
     effects: ['Each consecutive hit on the same target increases damage by 5%, up to 25%'],
-    icon: 'img/items/berserker_light_gloves.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/berserker_light_gloves.jpg'
 });
 
 // Epic Defense Light Armor
@@ -1177,9 +1120,7 @@ this.registerItem({
     description: 'A sleek suit with reinforced nanomesh for urban survival.',
     stats: { defense: 40, hp: 100 },
     effects: ['Reduces incoming damage by 10%'],
-    icon: 'img/items/fortified_light_armor.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/fortified_light_armor.jpg'
 });
 
 // Epic Attack Light Armor
@@ -1192,9 +1133,7 @@ this.registerItem({
     description: 'Light armor wired to amplify combat aggression.',
     stats: { defense: 30, damage: 10, critical: 5 },
     effects: ['Increases damage by 5%'],
-    icon: 'img/items/assault_light_armor.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/assault_light_armor.jpg'
 });
 
 // Legendary Defense Light Armor
@@ -1207,9 +1146,7 @@ this.registerItem({
     description: 'A masterpiece of cybernetic defense technology.',
     stats: { defense: 60, hp: 150 },
     effects: ['Grants immunity to critical hits'],
-    icon: 'img/items/invincible_light_armor.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/invincible_light_armor.jpg'
 });
 
 // Legendary Attack Light Armor
@@ -1222,9 +1159,7 @@ this.registerItem({
     description: 'Armor that fuels a relentless assault in neon-lit streets.',
     stats: { defense: 40, damage: 20, critical: 10 },
     effects: ['Each kill increases damage by 2% for 10 seconds, stacks up to 10 times'],
-    icon: 'img/items/berserker_light_armor.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/berserker_light_armor.jpg'
 });
 
 // Epic Attack Sword
@@ -1237,9 +1172,7 @@ this.registerItem({
     description: 'A neon-edged blade that slices through armor with precision.',
     stats: { damage: 50, attackSpeed: 1.2, critical: 15 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_sword.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_sword.jpg'
 });
 
 // Epic Defense Sword
@@ -1252,9 +1185,7 @@ this.registerItem({
     description: 'A blade with integrated shielding tech for the wielder’s safety.',
     stats: { damage: 40, defense: 20 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 30 damage'],
-    icon: 'img/items/guardian_sword.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_sword.jpg'
 });
 
 // Legendary Attack Sword
@@ -1267,9 +1198,7 @@ this.registerItem({
     description: 'A devastating weapon forged in the fires of a dying city.',
     stats: { damage: 70, attackSpeed: 1.3, critical: 20 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_sword.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_sword.jpg'
 });
 
 // Legendary Defense Sword
@@ -1282,9 +1211,7 @@ this.registerItem({
     description: 'A blade that channels energy into a protective barrier.',
     stats: { damage: 55, defense: 30 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_sword.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_sword.jpg'
 });
 
 // Register Epic and Legendary items for each equipment type
@@ -1300,9 +1227,7 @@ this.registerItem({
     description: 'A swift blade with a neon edge, perfect for quick strikes.',
     stats: { damage: 40, attackSpeed: 1.5, critical: 10 },
     effects: ['Increases critical damage by 15%'],
-    icon: 'img/items/razor_dagger.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_dagger.jpg'
 });
 
 // Epic Defense Dagger
@@ -1315,9 +1240,7 @@ this.registerItem({
     description: 'A dagger with a built-in energy shield for protection.',
     stats: { damage: 30, defense: 15 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 20 damage'],
-    icon: 'img/items/guardian_dagger.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_dagger.jpg'
 });
 
 // Legendary Attack Dagger
@@ -1330,9 +1253,7 @@ this.registerItem({
     description: 'A dagger forged in the heart of a collapsing star, dealing massive damage.',
     stats: { damage: 60, attackSpeed: 1.6, critical: 15 },
     effects: ['Attacks have a 15% chance to deal triple damage'],
-    icon: 'img/items/apocalypse_dagger.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_dagger.jpg'
 });
 
 // Legendary Defense Dagger
@@ -1345,9 +1266,7 @@ this.registerItem({
     description: 'A dagger that channels defensive energy, protecting the wielder.',
     stats: { damage: 45, defense: 25 },
     effects: ['Killing an enemy grants a shield equal to 20% of max HP'],
-    icon: 'img/items/aegis_dagger.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_dagger.jpg'
 });
 
 // =============== DUAL_DAGGER ===============
@@ -1361,9 +1280,7 @@ this.registerItem({
     description: 'Twin daggers with neon edges, designed for rapid slashes.',
     stats: { damage: 35, attackSpeed: 1.8, critical: 12 },
     effects: ['Each hit has a 10% chance to strike twice'],
-    icon: 'img/items/razor_dual_dagger.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_dual_dagger.jpg'
 });
 
 // Epic Defense Dual Dagger
@@ -1376,9 +1293,7 @@ this.registerItem({
     description: 'Dual daggers with integrated shielding for the agile fighter.',
     stats: { damage: 25, defense: 20 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 25 damage'],
-    icon: 'img/items/guardian_dual_dagger.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_dual_dagger.jpg'
 });
 
 // Legendary Attack Dual Dagger
@@ -1391,9 +1306,7 @@ this.registerItem({
     description: 'Twin blades that bring destruction with every slash.',
     stats: { damage: 55, attackSpeed: 1.9, critical: 18 },
     effects: ['Each hit has a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_dual_dagger.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_dual_dagger.jpg'
 });
 
 // Legendary Defense Dual Dagger
@@ -1406,9 +1319,7 @@ this.registerItem({
     description: 'Dual daggers that create a protective aura with each strike.',
     stats: { damage: 40, defense: 30 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_dual_dagger.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_dual_dagger.jpg'
 });
 
 // =============== DUAL_BLADE ===============
@@ -1422,9 +1333,7 @@ this.registerItem({
     description: 'Twin blades with energy edges, slicing through foes effortlessly.',
     stats: { damage: 45, attackSpeed: 1.4, critical: 10 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_dual_blade.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_dual_blade.jpg'
 });
 
 // Epic Defense Dual Blade
@@ -1437,9 +1346,7 @@ this.registerItem({
     description: 'Dual blades with defensive tech for the balanced warrior.',
     stats: { damage: 35, defense: 20 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 30 damage'],
-    icon: 'img/items/guardian_dual_blade.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_dual_blade.jpg'
 });
 
 // Legendary Attack Dual Blade
@@ -1452,9 +1359,7 @@ this.registerItem({
     description: 'Twin blades that bring ruin to all who oppose them.',
     stats: { damage: 65, attackSpeed: 1.5, critical: 15 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_dual_blade.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_dual_blade.jpg'
 });
 
 // Legendary Defense Dual Blade
@@ -1467,9 +1372,7 @@ this.registerItem({
     description: 'Dual blades that protect the wielder with each swing.',
     stats: { damage: 50, defense: 30 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_dual_blade.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_dual_blade.jpg'
 });
 
 // =============== BOW ===============
@@ -1483,9 +1386,7 @@ this.registerItem({
     description: 'A high-tech bow with laser-guided arrows for precision.',
     stats: { damage: 45, attackSpeed: 1.0, range: 200 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_bow.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_bow.jpg'
 });
 
 // Epic Defense Bow
@@ -1498,9 +1399,7 @@ this.registerItem({
     description: 'A bow with a built-in energy shield for the archer.',
     stats: { damage: 35, defense: 20, range: 180 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 25 damage'],
-    icon: 'img/items/guardian_bow.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_bow.jpg'
 });
 
 // Legendary Attack Bow
@@ -1513,9 +1412,7 @@ this.registerItem({
     description: 'A bow that fires arrows of pure energy, devastating foes.',
     stats: { damage: 65, attackSpeed: 1.1, range: 220 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_bow.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_bow.jpg'
 });
 
 // Legendary Defense Bow
@@ -1528,9 +1425,7 @@ this.registerItem({
     description: 'A bow that creates a protective barrier with each shot.',
     stats: { damage: 50, defense: 30, range: 200 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_bow.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_bow.jpg'
 });
 
 // =============== CROSSBOW ===============
@@ -1544,9 +1439,7 @@ this.registerItem({
     description: 'A compact crossbow with auto-reloading bolts.',
     stats: { damage: 50, attackSpeed: 0.9, range: 180 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_crossbow.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_crossbow.jpg'
 });
 
 // Epic Defense Crossbow
@@ -1559,9 +1452,7 @@ this.registerItem({
     description: 'A crossbow with integrated defensive systems.',
     stats: { damage: 40, defense: 20, range: 160 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 25 damage'],
-    icon: 'img/items/guardian_crossbow.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_crossbow.jpg'
 });
 
 // Legendary Attack Crossbow
@@ -1574,9 +1465,7 @@ this.registerItem({
     description: 'A crossbow that fires bolts of destructive energy.',
     stats: { damage: 70, attackSpeed: 1.0, range: 200 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_crossbow.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_crossbow.jpg'
 });
 
 // Legendary Defense Crossbow
@@ -1589,9 +1478,7 @@ this.registerItem({
     description: 'A crossbow that shields the user with each shot.',
     stats: { damage: 55, defense: 30, range: 180 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_crossbow.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_crossbow.jpg'
 });
 
 // =============== STAFF ===============
@@ -1605,9 +1492,7 @@ this.registerItem({
     description: 'A staff channeling neon energy for devastating spells.',
     stats: { magicDamage: 50, attackSpeed: 0.8, intelligence: 15 },
     effects: ['Increases spell damage by 10%'],
-    icon: 'img/items/razor_staff.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_staff.jpg'
 });
 
 // Epic Defense Staff
@@ -1620,9 +1505,7 @@ this.registerItem({
     description: 'A staff with protective runes for the caster.',
     stats: { magicDamage: 40, magicDefense: 20, intelligence: 10 },
     effects: ['Each spell cast has a 10% chance to grant a magic shield absorbing 30 damage'],
-    icon: 'img/items/guardian_staff.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_staff.jpg'
 });
 
 // Legendary Attack Staff
@@ -1635,9 +1518,7 @@ this.registerItem({
     description: 'A staff that unleashes cataclysmic magic.',
     stats: { magicDamage: 70, attackSpeed: 0.9, intelligence: 20 },
     effects: ['Spells have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_staff.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_staff.jpg'
 });
 
 // Legendary Defense Staff
@@ -1650,9 +1531,7 @@ this.registerItem({
     description: 'A staff that fortifies the caster with each spell.',
     stats: { magicDamage: 55, magicDefense: 30, intelligence: 15 },
     effects: ['Killing an enemy with a spell grants a magic shield equal to 20% of max HP'],
-    icon: 'img/items/aegis_staff.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_staff.jpg'
 });
 
 // =============== KATANA ===============
@@ -1666,9 +1545,7 @@ this.registerItem({
     description: 'A katana with a neon blade, slicing through enemies with precision.',
     stats: { damage: 55, attackSpeed: 1.1, critical: 12 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_katana.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_katana.jpg'
 });
 
 // Epic Defense Katana
@@ -1681,9 +1558,7 @@ this.registerItem({
     description: 'A katana with defensive enhancements for the samurai.',
     stats: { damage: 45, defense: 20 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 30 damage'],
-    icon: 'img/items/guardian_katana.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_katana.jpg'
 });
 
 // Legendary Attack Katana
@@ -1696,9 +1571,7 @@ this.registerItem({
     description: 'A katana that brings doom to all who face it.',
     stats: { damage: 75, attackSpeed: 1.2, critical: 18 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_katana.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_katana.jpg'
 });
 
 // Legendary Defense Katana
@@ -1711,9 +1584,7 @@ this.registerItem({
     description: 'A katana that shields the wielder with each strike.',
     stats: { damage: 60, defense: 30 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_katana.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_katana.jpg'
 });
 
 // =============== KNUCKLES ===============
@@ -1727,9 +1598,7 @@ this.registerItem({
     description: 'Electrified knuckles that deliver shocking punches.',
     stats: { damage: 35, attackSpeed: 1.6, critical: 10 },
     effects: ['Increases critical damage by 15%'],
-    icon: 'img/items/razor_knuckles.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_knuckles.jpg'
 });
 
 // Epic Defense Knuckles
@@ -1742,9 +1611,7 @@ this.registerItem({
     description: 'Knuckles with reinforced plating for protection.',
     stats: { damage: 25, defense: 20 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 20 damage'],
-    icon: 'img/items/guardian_knuckles.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_knuckles.jpg'
 });
 
 // Legendary Attack Knuckles
@@ -1757,9 +1624,7 @@ this.registerItem({
     description: 'Knuckles that unleash devastating power with each punch.',
     stats: { damage: 55, attackSpeed: 1.7, critical: 15 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_knuckles.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_knuckles.jpg'
 });
 
 // Legendary Defense Knuckles
@@ -1772,9 +1637,7 @@ this.registerItem({
     description: 'Knuckles that protect the user with each strike.',
     stats: { damage: 40, defense: 30 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_knuckles.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_knuckles.jpg'
 });
 
 // =============== SPEAR ===============
@@ -1788,9 +1651,7 @@ this.registerItem({
     description: 'A spear with a neon tip, piercing through armor.',
     stats: { damage: 50, attackSpeed: 1.0, range: 100 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_spear.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_spear.jpg'
 });
 
 // Epic Defense Spear
@@ -1803,9 +1664,7 @@ this.registerItem({
     description: 'A spear with defensive enhancements for the lancer.',
     stats: { damage: 40, defense: 20, range: 90 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 30 damage'],
-    icon: 'img/items/guardian_spear.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_spear.jpg'
 });
 
 // Legendary Attack Spear
@@ -1818,9 +1677,7 @@ this.registerItem({
     description: 'A spear that brings destruction with each thrust.',
     stats: { damage: 70, attackSpeed: 1.1, range: 120 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_spear.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_spear.jpg'
 });
 
 // Legendary Defense Spear
@@ -1833,9 +1690,7 @@ this.registerItem({
     description: 'A spear that shields the wielder with each strike.',
     stats: { damage: 55, defense: 30, range: 100 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_spear.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_spear.jpg'
 });
 
 // =============== SCYTHE ===============
@@ -1849,9 +1704,7 @@ this.registerItem({
     description: 'A scythe with a glowing blade, reaping souls with ease.',
     stats: { damage: 60, attackSpeed: 0.9, critical: 10 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_scythe.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_scythe.jpg'
 });
 
 // Epic Defense Scythe
@@ -1864,9 +1717,7 @@ this.registerItem({
     description: 'A scythe with protective enchantments for the reaper.',
     stats: { damage: 50, defense: 25 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 35 damage'],
-    icon: 'img/items/guardian_scythe.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_scythe.jpg'
 });
 
 // Legendary Attack Scythe
@@ -1879,9 +1730,7 @@ this.registerItem({
     description: 'A scythe that brings the end to all who face it.',
     stats: { damage: 80, attackSpeed: 1.0, critical: 15 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_scythe.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_scythe.jpg'
 });
 
 // Legendary Defense Scythe
@@ -1894,9 +1743,7 @@ this.registerItem({
     description: 'A scythe that protects the wielder with each swing.',
     stats: { damage: 65, defense: 35 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_scythe.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_scythe.jpg'
 });
 
 // =============== RIFLE ===============
@@ -1910,9 +1757,7 @@ this.registerItem({
     description: 'A high-powered rifle with neon sights for precision.',
     stats: { damage: 55, attackSpeed: 0.8, range: 250 },
     effects: ['Increases critical damage by 20%'],
-    icon: 'img/items/razor_rifle.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_rifle.jpg'
 });
 
 // Epic Defense Rifle
@@ -1925,9 +1770,7 @@ this.registerItem({
     description: 'A rifle with integrated shielding for the marksman.',
     stats: { damage: 45, defense: 20, range: 230 },
     effects: ['Each hit has a 10% chance to grant a shield absorbing 30 damage'],
-    icon: 'img/items/guardian_rifle.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_rifle.jpg'
 });
 
 // Legendary Attack Rifle
@@ -1940,9 +1783,7 @@ this.registerItem({
     description: 'A rifle that fires bolts of pure destruction.',
     stats: { damage: 75, attackSpeed: 0.9, range: 270 },
     effects: ['Attacks have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_rifle.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_rifle.jpg'
 });
 
 // Legendary Defense Rifle
@@ -1955,9 +1796,7 @@ this.registerItem({
     description: 'A rifle that shields the user with each shot.',
     stats: { damage: 60, defense: 30, range: 250 },
     effects: ['Killing an enemy grants a shield equal to 15% of max HP'],
-    icon: 'img/items/aegis_rifle.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_rifle.jpg'
 });
 
 // =============== WAND ===============
@@ -1971,9 +1810,7 @@ this.registerItem({
     description: 'A wand that channels neon energy for powerful spells.',
     stats: { magicDamage: 45, attackSpeed: 1.2, intelligence: 12 },
     effects: ['Increases spell damage by 10%'],
-    icon: 'img/items/razor_wand.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_wand.jpg'
 });
 
 // Epic Defense Wand
@@ -1986,9 +1823,7 @@ this.registerItem({
     description: 'A wand with protective enchantments for the caster.',
     stats: { magicDamage: 35, magicDefense: 20, intelligence: 10 },
     effects: ['Each spell cast has a 10% chance to grant a magic shield absorbing 25 damage'],
-    icon: 'img/items/guardian_wand.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_wand.jpg'
 });
 
 // Legendary Attack Wand
@@ -2001,9 +1836,7 @@ this.registerItem({
     description: 'A wand that unleashes devastating magic.',
     stats: { magicDamage: 65, attackSpeed: 1.3, intelligence: 18 },
     effects: ['Spells have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_wand.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_wand.jpg'
 });
 
 // Legendary Defense Wand
@@ -2016,9 +1849,7 @@ this.registerItem({
     description: 'A wand that fortifies the caster with each spell.',
     stats: { magicDamage: 50, magicDefense: 30, intelligence: 15 },
     effects: ['Killing an enemy with a spell grants a magic shield equal to 20% of max HP'],
-    icon: 'img/items/aegis_wand.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_wand.jpg'
 });
 
 // =============== GRIMOIRE ===============
@@ -2032,9 +1863,7 @@ this.registerItem({
     description: 'A tome filled with neon spells for destruction.',
     stats: { magicDamage: 50, attackSpeed: 0.7, intelligence: 15 },
     effects: ['Increases spell damage by 10%'],
-    icon: 'img/items/razor_grimoire.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/razor_grimoire.jpg'
 });
 
 // Epic Defense Grimoire
@@ -2047,9 +1876,7 @@ this.registerItem({
     description: 'A tome with protective spells for the mage.',
     stats: { magicDamage: 40, magicDefense: 25, intelligence: 10 },
     effects: ['Each spell cast has a 10% chance to grant a magic shield absorbing 30 damage'],
-    icon: 'img/items/guardian_grimoire.jpg',
-    level: 20,
-    stackable: false
+    icon: 'img/items/guardian_grimoire.jpg'
 });
 
 // Legendary Attack Grimoire
@@ -2062,9 +1889,7 @@ this.registerItem({
     description: 'A tome that brings cataclysmic magic to the battlefield.',
     stats: { magicDamage: 70, attackSpeed: 0.8, intelligence: 20 },
     effects: ['Spells have a 15% chance to deal double damage'],
-    icon: 'img/items/apocalypse_grimoire.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/apocalypse_grimoire.jpg'
 });
 
 // Legendary Defense Grimoire
@@ -2077,12 +1902,17 @@ this.registerItem({
     description: 'A tome that shields the caster with each spell.',
     stats: { magicDamage: 55, magicDefense: 35, intelligence: 15 },
     effects: ['Killing an enemy with a spell grants a magic shield equal to 20% of max HP'],
-    icon: 'img/items/aegis_grimoire.jpg',
-    level: 30,
-    stackable: false
+    icon: 'img/items/aegis_grimoire.jpg'
 });
+
+    // Placeholder Materials for Recycling
+    this.registerItem({ id: 'common_material', name: 'Common Material', category: this.CATEGORIES.MATERIAL, rarity: this.RARITIES.COMMON, description: 'A common material obtained from recycling.', stackable: true, icon: 'img/items/cyber_scrap.png', maxStack: 99 });
+    this.registerItem({ id: 'uncommon_material', name: 'Uncommon Material', category: this.CATEGORIES.MATERIAL, rarity: this.RARITIES.UNCOMMON, description: 'An uncommon material obtained from recycling.', stackable: true, icon: 'img/items/circuit_board.png', maxStack: 99 });
+    this.registerItem({ id: 'rare_material', name: 'Rare Material', category: this.CATEGORIES.MATERIAL, rarity: this.RARITIES.RARE, description: 'A rare material obtained from recycling.', stackable: true, icon: 'img/items/quantum_alloy.jpg', maxStack: 99 });
+    this.registerItem({ id: 'epic_material', name: 'Epic Material', category: this.CATEGORIES.MATERIAL, rarity: this.RARITIES.EPIC, description: 'An epic material obtained from recycling.', stackable: true, icon: 'img/items/dark_matter_shard.jpg', maxStack: 99 });
+    this.registerItem({ id: 'legendary_material', name: 'Legendary Material', category: this.CATEGORIES.MATERIAL, rarity: this.RARITIES.LEGENDARY, description: 'A legendary material obtained from recycling.', stackable: true, icon: 'img/items/quantum_core.jpg', maxStack: 99 });
     },
-    
+
     /**
      * Register a new item
      * @param {Object} itemData - Item data
@@ -2171,11 +2001,24 @@ this.registerItem({
      * @returns {boolean} True if item was used successfully
      */
     useItem: function(item, character) {
+        // Explicitly prevent using material or quest items
+        if (item.category === this.CATEGORIES.MATERIAL || item.category === this.CATEGORIES.QUEST) {
+            console.log(`Item ${item.id} is a ${item.category} and cannot be used.`);
+            return false;
+        }
+
         if (!this.isUsable(item)) {
+            console.log(`Item ${item.id} is not usable.`);
             return false;
         }
         
-        return item.useEffect(character);
+        // Ensure useEffect exists before calling
+        if (typeof item.useEffect === 'function') {
+            return item.useEffect(character);
+        } else {
+            console.log(`Item ${item.id} has no useEffect function.`);
+            return false;
+        }
     },
     
     /**

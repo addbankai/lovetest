@@ -162,7 +162,108 @@
     </div>
     
     <!-- Removed marketplace modal -->
-    
+
+    <!-- Market Modal -->
+    <div id="market-modal" class="modal">
+        <div class="modal-content cyberpunk-modal"> <!-- Added cyberpunk-modal for styling consistency -->
+            <div class="modal-header">
+                <h2 class="modal-title">MARKETPLACE</h2>
+                <!-- Currency Display Added Here -->
+                <div class="modal-currency-display">
+                    <div class="currency copper">
+                        <span class="currency-icon">₵</span>
+                        <span id="market-copper-amount">0</span>
+                    </div>
+                    <div class="currency silver">
+                        <span class="currency-icon">Ⓢ</span>
+                        <span id="market-silver-amount">0</span>
+                    </div>
+                    <div class="currency gold">
+                        <span class="currency-icon">Ⓖ</span>
+                        <span id="market-gold-amount">0</span>
+                    </div>
+                    <!-- Diamond display can be added if needed -->
+                </div>
+                <div class="modal-header-controls">
+                    <span class="close-modal">&times;</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="market-tabs">
+                    <button class="tab-button active" data-tab="junk">Junk Market</button>
+                    <button class="tab-button" data-tab="recycle">Recycle Shop</button>
+                    <button class="tab-button" data-tab="blackmarket">Blackmarket</button>
+                </div>
+
+                <!-- Junk Market Tab Content -->
+                <div id="market-tab-junk" class="market-tab-content active">
+                    <h3>Junk Market</h3>
+                    <p>Sell unwanted items based on rarity.</p>
+                    <div class="junk-market-prices">
+                        <div><span class="rarity-legendary">Legendary:</span> 10 GOLD</div>
+                        <div><span class="rarity-epic">Epic:</span> 1 GOLD</div>
+                        <div><span class="rarity-rare">Rare:</span> 50 Silver</div>
+                        <div><span class="rarity-uncommon">Uncommon:</span> 1 Silver</div>
+                        <div><span class="rarity-common">Common:</span> 50 Copper</div>
+                    </div>
+                    <div id="junk-inventory-grid" class="inventory-grid">
+                        <!-- Inventory items eligible for junk sale will appear here -->
+                    </div>
+                    <button id="sell-junk-button" class="cyberpunk-button">Sell Selected Junk</button>
+                    <div id="junk-sell-total">Total Value: 0</div>
+                </div>
+
+                <!-- Recycle Shop Tab Content -->
+                <div id="market-tab-recycle" class="market-tab-content">
+                    <h3>Recycle Shop</h3>
+                    <p>Recycle equipment for a chance at random materials of the same rarity.</p>
+                     <div id="recycle-inventory-grid" class="inventory-grid">
+                        <!-- Inventory equipment eligible for recycling will appear here -->
+                    </div>
+                    <button id="recycle-items-button" class="cyberpunk-button">Recycle Selected Items</button>
+                     <div id="recycle-result-display">
+                        <!-- Results of recycling will appear here -->
+                    </div>
+                </div>
+
+                <!-- Blackmarket Tab Content -->
+                <div id="market-tab-blackmarket" class="market-tab-content">
+                    <h3>Blackmarket</h3>
+                    <p>Consign items for other players to purchase using Seeds.</p>
+                    <p class="coming-soon">[AVAILABLE SOON]</p>
+                    <!-- Placeholder for future consignment UI -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Market Modal -->
+
+    <!-- Quantity Selection Modal -->
+    <div id="quantity-modal" class="modal">
+        <div class="modal-content cyberpunk-modal quantity-modal-content"> <!-- Added specific class -->
+            <div class="modal-header">
+                <h2 id="quantity-modal-title" class="modal-title">Select Quantity</h2>
+                 <!-- No close button here, force confirm/cancel -->
+            </div>
+            <div class="modal-body">
+                <div id="quantity-item-info">
+                    <!-- Item details will be populated here -->
+                    <img id="quantity-item-icon" src="" alt="Item Icon">
+                    <span id="quantity-item-name">Item Name</span>
+                </div>
+                <p>How many do you want to sell?</p>
+                <input type="number" id="quantity-input" min="1" value="1">
+                <div id="quantity-max">Max: <span></span></div>
+                <div id="quantity-error" class="error-message" style="display: none;">Invalid quantity.</div>
+            </div>
+            <div class="modal-footer">
+                 <button id="quantity-confirm-button" class="cyberpunk-button">Confirm</button>
+                 <button id="quantity-cancel-button" class="cyberpunk-button cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!-- End Quantity Selection Modal -->
+
     <div id="gacha-modal" class="modal">
         <div class="modal-content cyberpunk-modal">
             <div class="modal-header">
@@ -307,6 +408,7 @@
     <script src="js/currency.js"></script>
     <script src="js/items.js"></script>
     <script src="js/inventory.js"></script>
+    <script src="js/market.js"></script> <!-- Added Market System Script -->
     <script src="js/abilities.js"></script>
     <script src="js/projectile-effects.js"></script>
     <script src="js/character.js"></script>

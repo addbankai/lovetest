@@ -9,7 +9,8 @@ const UIManager = {
      */
     init: function() {
         console.log('Initializing UI Manager...');
-        this.setupTabSystem();
+        this.setupTabSystem(); // Sets up inventory tabs
+        this.setupMarketTabs(); // Sets up market tabs
         this.setupCharacterUIEvents();
         this.initializeCharacterPanel();
         this.setupMenuButtons();
@@ -100,16 +101,27 @@ const UIManager = {
             });
         }
 
-        // Market button
+        // Market button (Updated to open the modal)
         const marketButton = document.getElementById('market-button');
         if (marketButton) {
-            marketButton.title = 'Market (Coming Soon)'; // Add tooltip
+            marketButton.title = 'Marketplace'; // Update tooltip
             marketButton.addEventListener('click', function() {
-                Utils.showNotification(
-                    'Coming Soon',
-                    'Market feature will be available soon!',
-                    3000
-                );
+                const marketModal = document.getElementById('market-modal');
+                if (marketModal) {
+                    marketModal.style.display = 'block';
+                    // Explicitly populate grids when modal is opened via button click
+                    if (typeof MarketSystem !== 'undefined') {
+                        console.log("[UIManager] Populating market grids and currency on button click."); // Update log
+                        MarketSystem.populateJunkGrid();
+                        MarketSystem.populateRecycleGrid();
+                        MarketSystem.updateMarketCurrencyDisplay(); // Update currency display
+                        MarketSystem.clearSelections(); // Also clear selections here
+                    } else {
+                        console.error("[UIManager] MarketSystem is not defined when trying to populate grids/currency.");
+                    }
+                } else {
+                    console.error("Market modal not found!");
+                }
             });
         }
 
@@ -828,3 +840,53 @@ createCharacterThumbnail: function(character) {
 document.addEventListener('DOMContentLoaded', () => {
     UIManager.init();
 });
+
+// Add the new function for market tabs
+UIManager.setupMarketTabs = function() {
+    const marketModal = document.getElementById('market-modal');
+    if (!marketModal) return;
+
+    const tabs = marketModal.querySelectorAll('.market-tabs .tab-button');
+    const tabContents = marketModal.querySelectorAll('.market-tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+
+            // Remove active class from all tabs and content
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked tab and corresponding content
+            tab.classList.add('active');
+            const activeContent = marketModal.querySelector(`#market-tab-${targetTab}`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+                // Optional: Add logic here to refresh content when tab is clicked
+                // e.g., UIManager.updateMarketTab(targetTab);
+            } else {
+                console.warn(`Market tab content not found for: ${targetTab}`);
+            }
+        });
+    });
+
+    // Ensure the default active tab ('junk') is displayed initially if modal is opened
+    const defaultActiveTab = marketModal.querySelector('.market-tabs .tab-button.active');
+    const defaultActiveContent = marketModal.querySelector('.market-tab-content.active');
+    if (defaultActiveTab && !defaultActiveContent) {
+        const targetTab = defaultActiveTab.dataset.tab;
+        const contentToShow = marketModal.querySelector(`#market-tab-${targetTab}`);
+        if (contentToShow) {
+            contentToShow.classList.add('active');
+        }
+    } else if (!defaultActiveTab && defaultActiveContent) {
+         // If content is active but tab isn't, sync them
+         defaultActiveContent.classList.remove('active');
+         const firstTab = marketModal.querySelector('.market-tabs .tab-button');
+         const firstContent = marketModal.querySelector('.market-tab-content');
+         if(firstTab && firstContent) {
+            firstTab.classList.add('active');
+            firstContent.classList.add('active');
+         }
+    }
+};

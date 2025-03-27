@@ -1328,6 +1328,12 @@ const Inventory = {
     handleSlotClick: function(index) {
         const slot = this.slots[index];
         if (!slot) return;
+
+        // Prevent any action for material or quest items
+        if (slot.category === Items.CATEGORIES.MATERIAL || slot.category === Items.CATEGORIES.QUEST) {
+            console.log(`Clicked on a non-interactive item: ${slot.name} (${slot.category})`);
+            return; // Do nothing for these item types
+        }
         
         // Show context menu with options
         const options = [];

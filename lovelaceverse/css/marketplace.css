@@ -492,3 +492,272 @@
     color: #c0eaff;
     font-style: italic;
 }
+
+/* New Market Modal Styles */
+
+/* Ensure the modal itself uses the cyberpunk theme if not already */
+#market-modal .modal-content.cyberpunk-modal {
+    /* Styles from cyberpunk-modal should apply */
+    /* Add specific overrides if needed */
+}
+
+/* Market Tabs */
+.market-tabs {
+    display: flex;
+    background: rgba(10, 20, 40, 0.8); /* Slightly different background */
+    border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+    margin-bottom: 20px; /* Add some space below tabs */
+}
+
+/* Reusing .tab-button style from crafting.css if available, or define similar */
+/* Assuming .tab-button exists and is styled similarly to .marketplace-tab */
+/* If not, uncomment and adjust the following: */
+/*
+.market-tabs .tab-button {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    color: #c0eaff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 3px solid transparent;
+}
+
+.market-tabs .tab-button:hover {
+    color: #ffffff;
+    background: rgba(0, 247, 255, 0.1);
+}
+
+.market-tabs .tab-button.active {
+    color: #00f7ff;
+    text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+    border-bottom-color: #00f7ff;
+}
+*/
+
+/* Market Tab Content */
+.market-tab-content {
+    display: none; /* Hide inactive tabs */
+    padding: 15px; /* Add padding inside tab content */
+    animation: fadeIn 0.5s ease; /* Add fade-in animation */
+}
+
+.market-tab-content.active {
+    display: block; /* Show active tab */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Junk Market Specific Styles */
+.junk-market-prices {
+    background: rgba(5, 15, 30, 0.7);
+    border: 1px solid rgba(0, 247, 255, 0.15);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    color: #c0eaff;
+    font-size: 14px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.junk-market-prices div span[class^="rarity-"] {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+#junk-inventory-grid, #recycle-inventory-grid {
+    /* Assuming .inventory-grid is already styled */
+    /* Add specific overrides if needed */
+    margin-bottom: 20px;
+    min-height: 200px; /* Ensure it has some height */
+    max-height: 40vh; /* Limit height and allow scrolling */
+    overflow-y: auto;
+    border: 1px dashed rgba(0, 247, 255, 0.2); /* Add a border to define area */
+    padding: 10px;
+    background: rgba(0, 5, 10, 0.3);
+    /* Ensure grid display for market inventory */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); /* Adjust minmax size as needed */
+    gap: 10px;
+    justify-content: start; /* Align items to the start */
+}
+
+#sell-junk-button, #recycle-items-button {
+    /* Assuming .cyberpunk-button is styled */
+    margin-top: 10px;
+    margin-right: 15px; /* Space between button and total */
+    display: inline-block; /* Align with total */
+    vertical-align: middle;
+}
+
+#junk-sell-total {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    color: #00f7ff;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+/* Recycle Shop Specific Styles */
+#recycle-result-display {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(5, 15, 30, 0.7);
+    border: 1px solid rgba(0, 247, 255, 0.15);
+    border-radius: 4px;
+    min-height: 50px;
+    color: #c0eaff;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Blackmarket Specific Styles */
+.coming-soon {
+    font-family: 'Orbitron', sans-serif; /* Use a more futuristic font */
+    font-size: 1.5em;
+    color: #ff00ff; /* Magenta color */
+    text-align: center;
+    margin-top: 40px;
+    text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 15px #ff00ff;
+    animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+}
+
+/* General h3 styling within tabs */
+.market-tab-content h3 {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00f7ff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+    padding-bottom: 5px;
+}
+
+.market-tab-content p {
+    color: #c0eaff;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Currency Display in Modal Header */
+.modal-currency-display {
+    display: flex;
+    gap: 15px; /* Spacing between currency types */
+    margin-left: auto; /* Push it towards the right, before the close button */
+    margin-right: 20px; /* Space before the close button */
+    align-items: center;
+}
+
+/* Reuse existing currency styles if possible, or define */
+.modal-currency-display .currency {
+    display: flex;
+    align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px; /* Adjust size as needed */
+    color: #f0f0f0;
+}
+
+.modal-currency-display .currency-icon {
+    margin-right: 5px;
+    font-size: 16px; /* Adjust size */
+    text-shadow: 0 0 3px rgba(0, 247, 255, 0.5);
+}
+
+/* Specific icon colors */
+.modal-currency-display .copper .currency-icon { color: #cd7f32; }
+.modal-currency-display .silver .currency-icon { color: #c0c0c0; }
+.modal-currency-display .gold .currency-icon { color: #ffd700; }
+
+/* Quantity Modal Styles */
+.quantity-modal-content {
+    max-width: 350px; /* Smaller width */
+    text-align: center;
+}
+
+#quantity-item-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+#quantity-item-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+#quantity-item-name {
+    font-weight: bold;
+    color: var(--text-primary, #fff);
+}
+
+#quantity-input {
+    width: 80px;
+    padding: 8px;
+    margin: 10px auto;
+    text-align: center;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: var(--text-primary, #fff);
+    border: 1px solid var(--accent-cyan, #00f7ff);
+    border-radius: 4px;
+}
+
+#quantity-max {
+    font-size: 12px;
+    color: var(--text-secondary, #aaa);
+    margin-bottom: 10px;
+}
+
+.quantity-modal-content .modal-footer {
+    justify-content: center; /* Center buttons */
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Rarity Indicator in Item Slot */
+.item-slot-rarity {
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 9px; /* Small text */
+    font-weight: bold;
+    color: #fff; /* Default white text */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    padding: 1px 0;
+    text-transform: uppercase;
+    pointer-events: none; /* Don't interfere with clicks */
+    line-height: 1;
+}
+
+/* Apply rarity colors (ensure these match your global rarity styles) */
+.item-slot-rarity.rarity-common { color: #aaaaaa; }
+.item-slot-rarity.rarity-uncommon { color: #00ff66; }
+.item-slot-rarity.rarity-rare { color: #00f3ff; }
+.item-slot-rarity.rarity-epic { color: #ff00ff; }
+.item-slot-rarity.rarity-legendary { color: #f7ff00; }
+.item-slot-rarity.rarity-unknown { color: #ff4444; } /* Style for unknown rarity */

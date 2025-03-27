@@ -13,9 +13,10 @@ const Game = {
     // Game systems
     systems: [
         Utils,
-        Currency,
+        Currency, // Note: Used as CurrencySystem elsewhere, ensure consistency if needed
         Items,
         Inventory,
+        MarketSystem, // Added MarketSystem here
         Abilities,
         BuffSystem,
         CharacterSystem,
