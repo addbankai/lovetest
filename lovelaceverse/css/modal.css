@@ -57,6 +57,103 @@
     }
 }
 
+/* Adamon Placeholder Modal Styles */
+.adamon-modal-content {
+    background-image: url('../img/adamon/beatrix.jpg'); /* Ensure this path is correct */
+    background-size: cover;
+    background-position: center center;
+    border: 3px solid #ffcb05; /* Pokemon Yellow */
+    box-shadow: 0 0 20px rgba(255, 203, 5, 0.7), 0 0 15px rgba(52, 105, 176, 0.5); /* Yellow and Blue glow */
+    border-radius: 15px; /* Rounded corners */
+    max-width: 500px; /* Smaller modal */
+}
+
+/* Remove the default gradient background */
+.adamon-modal-content {
+    background: none; /* Override the default gradient */
+}
+
+/* Apply background image specifically */
+.adamon-modal-content {
+    background-image: url('../img/adamon/beatrix.jpg');
+    background-size: cover;
+    background-position: center center;
+    position: relative; /* Needed for the overlay */
+}
+
+/* Add a semi-transparent overlay for text readability */
+.adamon-modal-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    border-radius: inherit; /* Match parent's rounded corners */
+    z-index: 1; /* Below the content but above the background */
+}
+
+
+.adamon-modal-content .modal-header {
+    background-color: rgba(52, 105, 176, 0.8); /* Pokemon Blue */
+    border-bottom: 2px solid #ffcb05; /* Pokemon Yellow */
+    position: relative; /* Ensure header is above the overlay */
+    z-index: 2;
+}
+
+.adamon-modal-content .modal-header h2 {
+    color: #ffcb05; /* Pokemon Yellow */
+    font-family: 'Orbitron', sans-serif; /* Use a playful/techy font */
+    text-shadow: 2px 2px 0 #3469b0, -2px -2px 0 #3469b0, 2px -2px 0 #3469b0, -2px 2px 0 #3469b0; /* Blue outline */
+}
+
+.adamon-modal-content .close-modal {
+    color: #ffcb05;
+    background-color: rgba(52, 105, 176, 0.9);
+    border: 1px solid #ffcb05;
+    box-shadow: 0 0 8px rgba(255, 203, 5, 0.7);
+    text-shadow: 0 0 5px #ffcb05;
+    position: relative; /* Ensure close button is above the overlay */
+    z-index: 2;
+}
+
+.adamon-modal-content .close-modal:hover {
+    color: #fff;
+    background-color: rgba(255, 203, 5, 0.3);
+    box-shadow: 0 0 12px rgba(255, 203, 5, 1);
+}
+
+.adamon-modal-body {
+    text-align: center;
+    padding: 40px 20px;
+    position: relative; /* Ensure body content is above the overlay */
+    z-index: 2;
+}
+
+.adamon-coming-soon-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5em; /* Larger text */
+    font-weight: 700;
+    color: #ffcb05; /* Pokemon Yellow */
+    text-shadow: 3px 3px 0 #3469b0, -3px -3px 0 #3469b0, 3px -3px 0 #3469b0, -3px 3px 0 #3469b0, 4px 4px 5px rgba(0,0,0,0.5); /* Blue outline + drop shadow */
+    margin-bottom: 10px;
+}
+
+.adamon-date-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8em;
+    font-weight: 500;
+    color: #ffffff; /* White text */
+    text-shadow: 2px 2px 0 #3469b0, -2px -2px 0 #3469b0, 2px -2px 0 #3469b0, -2px 2px 0 #3469b0, 3px 3px 4px rgba(0,0,0,0.4); /* Blue outline + drop shadow */
+}
+
+/* Ensure the modal itself is displayed correctly */
+#adamon-modal {
+    /* Inherits .modal styles like display: none, position, etc. */
+    /* No additional styles needed here unless overriding defaults */
+}
+
 @keyframes modal-appear {
     from {
         opacity: 0;

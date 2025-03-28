@@ -203,7 +203,7 @@ this.registerItem({
     description: 'An automated crossbow with rapid-fire capability.',
     stats: {
         damage: 16,
-        attackSpeed: 200,
+        attackSpeed: 1.2,
         range: 180
     },
     effects: ['25% chance to fire an additional bolt'],
@@ -1903,6 +1903,19 @@ this.registerItem({
     stats: { magicDamage: 55, magicDefense: 35, intelligence: 15 },
     effects: ['Killing an enemy with a spell grants a magic shield equal to 20% of max HP'],
     icon: 'img/items/aegis_grimoire.jpg'
+});
+
+this.registerItem({
+    id: 'tcg_adamons',
+    name: 'Adamons TCG Pack',
+    category: this.CATEGORIES.MATERIAL,
+    rarity: this.RARITIES.COMMON,
+    description: 'You can open this when ADAMONS is released.',
+    stats: {},
+    effects: [],
+    icon: 'img/items/tcgpack.jpg',
+    stackable: true,
+    maxStack: 99
 });
 
     // Placeholder Materials for Recycling

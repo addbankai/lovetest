@@ -1276,6 +1276,72 @@ const GachaSystem = {
             specialAbility: 'cyber_blast'
         },
         {
+            id: 'elpump',
+            name: 'El Pump',
+            rarity: 'rare',
+            description: 'El loves Pump.',
+            thumbnail: 'img/thumbnail/elpump.png', // Updated
+            sitSprite: 'img/elpumpsit.png', // Updated
+            idleSprite: 'img/elpumpidle.png', // Updated
+            runningSprite: 'img/elpump.png', // Updated
+            attackSprite: 'img/elpumpattack.png', // Updated
+            rangedSprite: 'img/elpumpranged.png', // Updated
+            magicSprite: 'img/elpumpmagic.png', // Updated
+            baseStats: {
+                strength: 3,
+                agility: 11,
+                vitality: 4,
+                dexterity: 5,
+                intelligence: 7,
+                luck: 4
+            },
+            specialAbility: 'neural_overload'
+        },
+        {
+            id: 'bud',
+            name: 'Bud',
+            rarity: 'rare',
+            description: 'Unknown from space.',
+            thumbnail: 'img/thumbnail/bud.png', // Updated
+            sitSprite: 'img/budsit.png', // Updated
+            idleSprite: 'img/budidle.png', // Updated
+            runningSprite: 'img/bud.png', // Updated
+            attackSprite: 'img/budattack.png', // Updated
+            rangedSprite: 'img/budranged.png', // Updated
+            magicSprite: 'img/budmagic.png', // Updated
+            baseStats: {
+                strength: 5,
+                agility: 5,
+                vitality: 4,
+                dexterity: 5,
+                intelligence: 12,
+                luck: 4
+            },
+            specialAbility: 'precision_shot'
+        },
+        {
+            id: 'red',
+            name: 'Red',
+            rarity: 'rare',
+            description: 'Everybody hates red.',
+            thumbnail: 'img/thumbnail/red.png', // Updated
+            sitSprite: 'img/redsit.png', // Updated
+            idleSprite: 'img/redidle.png', // Updated
+            runningSprite: 'img/red.png', // Updated
+            attackSprite: 'img/redattack.png', // Updated
+            rangedSprite: 'img/redranged.png', // Updated
+            magicSprite: 'img/redmagic.png', // Updated
+            baseStats: {
+                strength: 3,
+                agility: 6,
+                vitality: 10,
+                dexterity: 5,
+                intelligence: 6,
+                luck: 4
+            },
+            specialAbility: 'cyber_blast'
+        },
+        {
             id: 'beemo',
             name: 'Beemo',
             rarity: 'uncommon',

@@ -154,15 +154,31 @@ const UIManager = {
         // Adamons button
         const adamonsButton = document.getElementById('adamons-button');
         if (adamonsButton) {
-            adamonsButton.title = 'Adamons (Coming Soon)'; // Add tooltip
+            adamonsButton.title = 'Adamons (Coming March 31st)'; // Update tooltip
             adamonsButton.addEventListener('click', function() {
-                Utils.showNotification(
-                    'Coming Soon',
-                    'Adamons feature will be available soon!',
-                    3000
-                );
+                const adamonModal = document.getElementById('adamon-modal');
+                if (adamonModal) {
+                    adamonModal.style.display = 'block';
+                } else {
+                    console.error("Adamon modal not found!");
+                }
             });
         }
+
+        // General Modal Close Logic
+        document.addEventListener('click', function(event) {
+            // Close modal if clicking on the close button (span.close-modal)
+            if (event.target.matches('.close-modal')) {
+                const modal = event.target.closest('.modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+            // Close modal if clicking on the modal background (optional)
+            // if (event.target.matches('.modal')) {
+            //     event.target.style.display = 'none';
+            // }
+        });
     },
 
     /**
