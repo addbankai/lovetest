@@ -1,0 +1,526 @@
+/* --- Global Styles & Cyberpunk Theme --- */
+:root {
+    --background-color: #0a0a0a; /* Very dark grey/black */
+    --primary-neon: #00ff00; /* Neon Green */
+    --secondary-neon: #9d00ff; /* Neon Purple */
+    --text-color: #e0e0e0; /* Light grey for readability */
+    --border-color: rgba(0, 255, 0, 0.3); /* Faint neon green border */
+    --terminal-bg: #050505;
+    --terminal-text: var(--primary-neon);
+    --font-primary: 'VT323', monospace; /* Pixelated/Terminal font */
+    --font-secondary: 'Share Tech Mono', monospace; /* Cleaner mono font */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-secondary);
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    /* Add subtle background pattern or texture if desired */
+    /* background-image: url('path/to/grid-pattern.png'); */
+}
+
+h2 {
+    font-family: var(--font-primary);
+    color: var(--primary-neon);
+    text-shadow: 0 0 5px var(--primary-neon), 0 0 10px var(--primary-neon);
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+a {
+    color: var(--secondary-neon);
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+a:hover, a:focus {
+    color: var(--primary-neon);
+    text-shadow: 0 0 5px var(--primary-neon);
+}
+
+button {
+    font-family: var(--font-primary);
+    background-color: transparent;
+    border: 1px solid var(--primary-neon);
+    color: var(--primary-neon);
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    text-shadow: 0 0 3px var(--primary-neon);
+}
+
+button:hover, button:focus {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #fff;
+    box-shadow: 0 0 10px var(--primary-neon);
+}
+
+/* --- Header --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: rgba(10, 10, 10, 0.8); /* Slightly transparent header */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-family: var(--font-primary);
+    font-size: 1.8em;
+    color: var(--primary-neon);
+    text-shadow: 0 0 8px var(--primary-neon);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+.nav-link {
+    font-family: var(--font-primary);
+    font-size: 1.2em;
+    letter-spacing: 1px;
+}
+
+.wallet-connector {
+    display: flex;
+    align-items: center;
+}
+
+#wallet-status {
+    font-family: var(--font-primary);
+    margin-left: 15px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+#wallet-status.disconnected {
+    color: #ff4d4d; /* Red for disconnected */
+    border: 1px solid #ff4d4d;
+}
+
+#wallet-status.connected {
+    color: var(--primary-neon);
+    border: 1px solid var(--primary-neon);
+}
+
+/* --- Main Content --- */
+main {
+    padding: 40px 30px;
+}
+
+section {
+    margin-bottom: 50px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    background-color: rgba(15, 15, 15, 0.5); /* Slightly darker section background */
+}
+
+/* --- Featured NFTs --- */
+#featured-nfts h2 {
+    color: var(--secondary-neon); /* Purple for featured */
+    text-shadow: 0 0 5px var(--secondary-neon), 0 0 10px var(--secondary-neon);
+}
+
+.holographic-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+    /* Add perspective for 3D effect if desired */
+}
+
+.nft-card {
+    border: 1px solid var(--secondary-neon);
+    background-color: var(--terminal-bg);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* For potential pseudo-elements/effects */
+    overflow: hidden; /* Contain glitch effects */
+}
+
+.nft-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 15px var(--secondary-neon);
+}
+
+.nft-image-placeholder {
+    height: 200px;
+    background-color: #222;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-family: var(--font-primary);
+    /* Placeholder for glitch/scanline effect */
+    position: relative;
+}
+
+/* Basic Scanline Effect */
+.nft-image-placeholder::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 255, 0, 0.05) 50%, transparent 50%);
+    background-size: 100% 4px;
+    opacity: 0.5;
+    animation: scanline 10s linear infinite;
+}
+
+@keyframes scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 40px; }
+}
+
+
+.nft-info {
+    text-align: center;
+}
+
+.nft-name {
+    font-family: var(--font-primary);
+    font-size: 1.3em;
+    color: var(--primary-neon);
+    margin-bottom: 5px;
+}
+
+.nft-price {
+    font-family: var(--font-secondary);
+    color: var(--secondary-neon);
+    font-weight: bold;
+}
+
+/* --- Collection List --- */
+#collection-list h2 {
+    color: var(--primary-neon); /* Green for collections section */
+    text-shadow: 0 0 5px var(--primary-neon), 0 0 10px var(--primary-neon);
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller cards for collections */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.collection-card {
+    border: 1px solid var(--primary-neon);
+    background-color: var(--terminal-bg);
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.collection-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 12px var(--primary-neon);
+}
+
+.collection-image-placeholder {
+    height: 150px; /* Smaller image area */
+    background-color: #1a1a1a;
+    margin-bottom: 10px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-family: var(--font-primary);
+    position: relative;
+}
+
+/* Re-use scanline effect */
+.collection-image-placeholder::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 255, 0, 0.04) 50%, transparent 50%);
+    background-size: 100% 3px;
+    opacity: 0.4;
+    animation: scanline 12s linear infinite;
+}
+
+.collection-name {
+    font-family: var(--font-primary);
+    font-size: 1.1em;
+    color: var(--secondary-neon); /* Purple for name */
+}
+
+/* --- Collection Details Page Specific Styles --- */
+.policy-info {
+    text-align: center;
+    color: #888;
+    font-family: var(--font-secondary);
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    word-break: break-all;
+}
+
+/* --- Collection Search --- */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 10px; /* Space between input and button */
+}
+
+#collection-search-input {
+    padding: 8px 12px;
+    font-family: var(--font-secondary);
+    background-color: var(--terminal-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    min-width: 300px; /* Give it some width */
+    font-size: 0.9em;
+}
+
+#collection-search-input::placeholder {
+    color: #666;
+    font-family: var(--font-primary);
+}
+
+#collection-search-input:focus {
+    outline: none;
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 5px var(--primary-neon);
+}
+
+#collection-search-btn {
+    /* Inherits general button styles, can add specifics if needed */
+    padding: 8px 18px; /* Match input height */
+}
+
+
+.asset-holder {
+    font-family: var(--font-secondary);
+    font-size: 0.8em;
+    color: #aaa;
+    margin-top: 8px;
+    word-break: break-all; /* Ensure long addresses wrap */
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+
+.pagination button:disabled {
+    border-color: #555;
+    color: #555;
+    cursor: not-allowed;
+    text-shadow: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.pagination span {
+    margin: 0 10px;
+    font-family: var(--font-primary);
+    color: var(--primary-neon);
+}
+
+
+.loading-text, .error-text {
+    font-family: var(--font-primary);
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2em;
+}
+
+.loading-text {
+    color: var(--primary-neon);
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.error-text {
+    color: #ff4d4d; /* Red for errors */
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+
+/* --- Live Feed --- */
+.terminal-output {
+    background-color: var(--terminal-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    height: 200px; /* Adjust as needed */
+    overflow-y: scroll;
+    font-family: var(--font-primary);
+    color: var(--terminal-text);
+    font-size: 1.1em;
+}
+
+.terminal-output p {
+    margin-bottom: 5px;
+    word-break: break-all; /* Prevent long IDs from breaking layout */
+}
+
+.feed-item {
+    color: var(--text-color); /* Slightly different color for feed items */
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-secondary);
+    font-size: 0.9em;
+    color: #666; /* Dimmed text */
+}
+
+/* --- Terminal Pop-up --- */
+#terminal-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background-color: var(--terminal-bg);
+    border: 1px solid var(--primary-neon);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    z-index: 1000;
+    color: var(--terminal-text);
+    font-family: var(--font-primary);
+}
+
+#terminal-popup.hidden {
+    display: none;
+}
+
+.terminal-header {
+    background-color: rgba(0, 255, 0, 0.1);
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.terminal-header span {
+    font-weight: bold;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--primary-neon);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.terminal-body {
+    padding: 15px;
+    min-height: 100px;
+}
+
+.cursor {
+    display: inline-block;
+    background-color: var(--primary-neon);
+    width: 10px; /* Adjust cursor width */
+    height: 1.2em; /* Match line height */
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: bottom;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* --- Utility Classes --- */
+.hidden {
+    display: none;
+}
+
+/* --- Glitch Effect (Basic Example - Apply to elements as needed) --- */
+.glitch {
+    animation: glitch-anim 1.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { transform: translate(0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(-3px, -3px); }
+  60% { transform: translate(3px, 3px); }
+  80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0); }
+}
+
+/* --- Auction Page Specific Styles --- */
+.auction-card {
+    /* Can reuse .nft-card styles or create specific ones */
+    border: 1px solid var(--primary-neon); /* Green border for auctions */
+    background-color: var(--terminal-bg);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.auction-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 15px var(--primary-neon);
+}
+
+.auction-info {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.auction-bid {
+    font-family: var(--font-secondary);
+    color: var(--primary-neon);
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.auction-time {
+    font-family: var(--font-primary);
+    color: #ff4d4d; /* Red for urgency */
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+/* Add more specific styles, animations, and effects below */

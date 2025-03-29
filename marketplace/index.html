@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk NFT Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo">LOVELACE MARKETPLACE</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link">[BROWSE]</a></li>
+                <li><a href="index.html#collection-list" class="nav-link">[COLLECTIONS]</a></li>
+                <li><a href="#" class="nav-link">[SELL]</a></li>
+                <li><a href="auctions.html" class="nav-link">[AUCTIONS]</a></li> <!-- Corrected link -->
+                <li><a href="#" class="nav-link">[STATS]</a></li>
+            </ul>
+        </nav>
+        <div class="wallet-connector">
+            <button id="connect-wallet-btn">[CONNECT_WALLET]</button>
+            <span id="wallet-status" class="disconnected">[OFFLINE]</span>
+        </div>
+    </header>
+
+    <main>
+        <section id="featured-nfts">
+            <h2>// FEATURED ASSETS //</h2>
+            <div class="holographic-display">
+                <!-- Featured NFTs will be loaded here -->
+                <div class="nft-card placeholder">
+                    <div class="nft-image-placeholder"></div>
+                    <div class="nft-info">
+                        <p class="nft-name">[LOADING ASSET...]</p>
+                        <p class="nft-price">[PRICE_PENDING]</p>
+                    </div>
+                </div>
+                 <div class="nft-card placeholder">
+                    <div class="nft-image-placeholder"></div>
+                    <div class="nft-info">
+                        <p class="nft-name">[LOADING ASSET...]</p>
+                        <p class="nft-price">[PRICE_PENDING]</p>
+                    </div>
+                </div>
+                 <div class="nft-card placeholder">
+                    <div class="nft-image-placeholder"></div>
+                    <div class="nft-info">
+                        <p class="nft-name">[LOADING ASSET...]</p>
+                        <p class="nft-price">[PRICE_PENDING]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="collection-list">
+            <h2>// COLLECTIONS //</h2>
+            <div class="collection-grid">
+                <!-- Collection cards will be loaded here -->
+                <p class="loading-text">[LOADING COLLECTIONS...]</p>
+            </div>
+        </section>
+
+        <section id="live-feed">
+             <h2>// LIVE MARKET FEED //</h2>
+             <div class="terminal-output">
+                <p>> Initializing market data stream...</p>
+                <p>> Connection established.</p>
+                <p class="feed-item">[TIME] [TYPE] [ASSET_ID] [PRICE] [SELLER_ID]</p>
+                <!-- Live feed items will appear here -->
+             </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CYBER_MARKET // Secure Transactions on Cardano Network //</p>
+    </footer>
+
+    <!-- Terminal Pop-up Placeholder -->
+    <div id="terminal-popup" class="hidden">
+        <div class="terminal-header">
+            <span>[SYSTEM_MESSAGE]</span>
+            <button class="close-btn">[X]</button>
+        </div>
+        <div class="terminal-body">
+            <p id="terminal-message"></p>
+            <span class="cursor">_</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

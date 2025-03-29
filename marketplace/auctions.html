@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auctions - Cyberpunk NFT Marketplace</title>
+    <link rel="stylesheet" href="style.css"> <!-- Re-use main styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <!-- Re-use the same header structure -->
+        <div class="logo">[CYBER_MARKET]</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link">[HOME]</a></li>
+                <li><a href="index.html#collection-list" class="nav-link">[COLLECTIONS]</a></li>
+                <li><a href="#" class="nav-link">[SELL]</a></li>
+                <li><a href="auctions.html" class="nav-link">[AUCTIONS]</a></li> <!-- Active link -->
+                <li><a href="#" class="nav-link">[STATS]</a></li>
+            </ul>
+        </nav>
+        <div class="wallet-connector">
+            <button id="connect-wallet-btn">[CONNECT_WALLET]</button>
+            <span id="wallet-status" class="disconnected">[OFFLINE]</span>
+        </div>
+    </header>
+
+    <main>
+        <section id="live-auctions">
+            <h2>// SAMEPLE LIVE AUCTIONS - WE DON'T OWN ANY //</h2>
+            <div id="auction-grid" class="holographic-display">
+                <!-- Auction items will be loaded here -->
+                <p class="loading-text">[LOADING LIVE AUCTIONS...]</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CYBER_MARKET // Secure Transactions on Cardano Network //</p>
+    </footer>
+
+     <!-- Re-use terminal pop-up -->
+    <div id="terminal-popup" class="hidden">
+         <div class="terminal-header">
+            <span>[SYSTEM_MESSAGE]</span>
+            <button class="close-btn">[X]</button>
+        </div>
+        <div class="terminal-body">
+            <p id="terminal-message"></p>
+            <span class="cursor">_</span>
+        </div>
+    </div>
+
+    <script src="auctions.js"></script> <!-- Specific script for this page -->
+</body>
+</html>
