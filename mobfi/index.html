@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MobFi</title> <!-- Changed title -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+    <!-- SUI dApp Kit CSS Removed -->
+    <link rel="icon" href="data:,"> <!-- Add dummy favicon link -->
+</head>
+<body>
+    <div id="loading-screen">
+        <img src="img/load.jpg" alt="Loading...">
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Box -->
+    <div id="custom-alert" class="custom-alert-hidden">
+        <p id="custom-alert-message"></p>
+        <button id="custom-alert-close" class="btn btn-brown">OK</button> <!-- Added classes -->
+    </div>
+
+    <div id="mobile-container"> <!-- Start Mobile Container -->
+        <div id="game-time">00:00:00 UTC</div> <!-- Added Game Time Display -->
+        <button id="show-dashboard-btn" class="show-ui-btn" title="Show User Dashboard">👤</button> <!-- Show Dashboard Button -->
+        <div id="map">
+            <!-- Map Control Buttons -->
+            <div class="map-controls">
+                <button id="zoom-in-btn" class="btn" title="Zoom In">+</button> <!-- Added class -->
+                <button id="zoom-out-btn" class="btn" title="Zoom Out">-</button> <!-- Added class -->
+                <button id="center-map-btn" class="btn" title="Center on Me">🎯</button> <!-- Added class -->
+            </div>
+        </div>
+        <div id="dashboard" class="minimized">
+            <button class="minimize-btn" title="Minimize User Dashboard">_</button> <!-- Minimize Dashboard Button -->
+            <div class="dashboard-header">
+                 <h2>USER DASHBOARD</h2> <!-- Changed title -->
+            </div>
+            <div class="dashboard-section">
+                <label for="username-input">Username:</label>
+                <input type="text" id="username-input" placeholder="Enter username">
+            </div>
+            <div class="dashboard-section">
+                <label for="alias-input">Alias:</label>
+                <input type="text" id="alias-input" placeholder="Enter alias">
+            </div>
+            <div class="dashboard-actions">
+                <button id="save-user-info-btn" class="btn btn-blue">Save Info</button> <!-- Changed to btn-blue -->
+                <button id="logout-btn" class="btn btn-red">Logout</button> <!-- Added Logout Button -->
+            </div>
+            <div class="dashboard-section">
+            <span class="label">Cash:</span>
+            <span class="value">$<span id="cash-amount">0</span></span>
+        </div>
+        <!-- Add HP Bar Here -->
+        <div class="dashboard-section">
+            <span class="label">HP:</span>
+            <div class="hp-bar-container">
+                <div id="player-hp-bar" class="hp-bar"></div>
+            </div>
+            <span class="value"><span id="player-current-hp">100</span> / <span id="player-max-hp">100</span></span>
+        </div>
+        <div class="dashboard-section">
+            <span class="label">Organization:</span> <!-- Renamed label -->
+            <span class="value" id="user-organization">None</span> <!-- Renamed ID -->
+        </div>
+        <div class="dashboard-actions">
+             <button id="leave-organization-button" class="btn btn-red" style="display: none;">Leave Organization</button> <!-- Added classes -->
+        </div>
+        <!-- Sound Settings -->
+        <div class="dashboard-section sound-settings">
+            <label for="sound-toggle">Sound:</label>
+            <input type="checkbox" id="sound-toggle" checked> <!-- Default to sound on -->
+        </div>
+        <!-- Wallet Address Display -->
+        <div class="dashboard-section">
+            <span class="label">Wallet:</span>
+            <span class="value" id="user-wallet-address" title="Connected Cardano Wallet Address" style="font-size: 0.8em; word-break: break-all;">Not Connected</span>
+            <button id="link-wallet-btn" class="btn btn-blue" style="display: none; margin-top: 5px; width: 100%;">Link Wallet</button> <!-- Added Link Wallet Button -->
+        </div>
+        <!-- Player Title Display -->
+        <div class="dashboard-section" id="player-title-section" style="display: none;"> <!-- Hidden by default -->
+             <span class="label">Title:</span>
+             <span class="value" id="player-title-display" style="color: #0096FF; font-weight: bold;"></span> <!-- Blue color for title -->
+        </div>
+        <!-- Inventory Section Removed from Dashboard -->
+        <!-- Equipment/Inventory/Stats Buttons -->
+        <div class="dashboard-actions button-row"> <!-- Added button-row class -->
+            <!-- Buttons moved to bottom bar -->
+        </div>
+    </div>
+
+    <!-- Protection Money Book -->
+    <div id="protection-book" class="minimized" style="display: none;">
+        <button class="minimize-btn" title="Minimize Book">_</button> <!-- Minimize Button -->
+        <h3>Protection Book</h3>
+        <ul id="controlled-businesses-list">
+            <!-- List items will be added here by JS -->
+        </ul>
+    </div>
+
+        <!-- Button to show the book is now moved to the bottom bar -->
+
+        <!-- New Bottom Bar -->
+        <div id="bottom-bar">
+            <div id="player-info-bar">
+                <!-- Player Portrait Image Removed -->
+                <div id="player-stats-text">
+                    <span id="player-alias-bar">Alias</span> <!-- Placeholder -->
+                    <span id="player-level-bar">Level: 1</span> <!-- Placeholder -->
+                </div>
+            </div>
+            <!-- SUI Connect Container Removed -->
+            <div id="action-buttons-bar">
+                <button id="action-userinfo-btn" class="action-btn" title="User Info">👤</button> <!-- Placeholder Icon -->
+                <button id="action-stats-btn" class="action-btn" title="Stats">📊</button> <!-- Placeholder Icon -->
+                <button id="action-equipment-btn" class="action-btn" title="Equipment">⚔️</button> <!-- Placeholder Icon -->
+                <button id="action-inventory-btn" class="action-btn" title="Inventory">🎒</button> <!-- Placeholder Icon -->
+                <button id="action-housing-btn" class="action-btn" title="Housing">🏠</button> <!-- Housing Button Added -->
+                <button id="action-leaderboard-btn" class="action-btn" title="Leaderboard">🏆</button> <!-- Leaderboard Button -->
+                <button id="show-book-btn" class="action-btn" title="Show Protection Book">📖</button> <!-- Moved here, changed class -->
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div id="how-to-play-modal" class="modal modal-hidden">
+            <div class="modal-content">
+                <span class="close-btn" id="close-how-to-play-btn">&times;</span>
+                <h2>How to Play MobFi</h2>
+                <div class="how-to-play-content">
+                    <p>Welcome to MobFi! Here's a quick guide:</p>
+                    <ul>
+                        <li><strong>Explore:</strong> Move around the map using your device's GPS.</li>
+                        <li><strong>Cash Drops:</strong> Tap on money bags (<img src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/64/000000/external-money-bag-valentines-day-flatart-icons-flat-flatarticons.png" alt="Cash" class="inline-icon">) to collect cash.</li>
+                        <li><strong>Businesses:</strong> Find businesses (<img src="img/business.png" alt="Business" class="inline-icon">) and shops (<img src="img/shop.png" alt="Shop" class="inline-icon">).</li>
+                        <li><strong>Organizations:</strong> Join an organization by visiting their base (<img src="img/org.png" alt="Base" class="inline-icon">).</li>
+                        <li><strong>Protection:</strong> Protect businesses within your organization's territory to earn passive income. Collect profits by tapping the business marker.</li>
+                        <li><strong>Rivals:</strong> Watch out for rival players (<img src="https://img.icons8.com/ios-filled/50/000000/user-secret.png" alt="Rival" class="inline-icon">)! Engage them in battle by tapping their marker.</li>
+                        <li><strong>Combat:</strong> Attack enemies, use items (from Inventory), and try to survive!</li>
+                        <li><strong>Inventory/Equipment:</strong> Manage your items and gear using the bottom bar buttons (🎒, ⚔️).</li>
+                        <li><strong>Stats:</strong> Check your progress and stats (📊).</li>
+                        <li><strong>Dashboard:</strong> Manage your alias, organization, and sound settings (👤).</li>
+                    </ul>
+                    <p>Good luck, boss!</p>
+                    <p>Join us on X: <a href="https://x.com/Web3MOBFI" target="_blank" rel="noopener noreferrer">https://x.com/Web3MOBFI</a></p>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Mobile Container -->
+
+    <!-- Library Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Game Scripts -->
+    <script src="items.js"></script>       <!-- Item definitions -->
+    <script src="equipment.js"></script>   <!-- Equipment definitions and logic -->
+    <script src="shop.js"></script>        <!-- Shop class and logic -->
+    <script src="enemy.js"></script>       <!-- Enemy class and spawning -->
+    <!-- Load Core Logic and UI BEFORE Battle -->
+    <script src="gameWorld.js"></script>   <!-- Core game state, data, logic (depends on map) -->
+    <script src="uiManager.js"></script>   <!-- UI updates, DOM manipulation, event listeners (depends on map, gameWorld) -->
+    <script src="battle.js"></script>      <!-- Battle simulation logic (depends on gameWorld, uiManager) -->
+    <script src="saveGame.js"></script>      <!-- Local save and Supabase sync logic -->
+    <script src="titleSystem.js" type="module"></script>   <!-- NFT Title System (ES Module) -->
+
+    <!-- SUI Integration Removed -->
+
+    <script src="initialization.js"></script> <!-- Loading, map init, game start (needs Shop, gameWorld, uiManager, SaveManager) -->
+
+
+    <!-- Equipment Modal -->
+    <div id="equipment-modal" class="modal-hidden">
+        <div class="modal-content">
+            <span class="close-btn" id="close-equipment-btn">&times;</span>
+            <h2>Equipment</h2>
+            <div class="equipment-layout">
+                <!-- Character preview removed -->
+                <div class="equipment-slots">
+                    <div class="equipment-slot" data-slot-type="Head">
+                        <span class="slot-label">Head</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Mask">
+                        <span class="slot-label">Mask</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Body">
+                        <span class="slot-label">Body</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Gloves">
+                        <span class="slot-label">Gloves</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Pants">
+                        <span class="slot-label">Pants</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Boots">
+                        <span class="slot-label">Boot</span> <!-- Label kept as Boot -->
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Accessory">
+                        <span class="slot-label">Accessory</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Charm">
+                        <span class="slot-label">Charm</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <div class="equipment-slot" data-slot-type="Weapon">
+                        <span class="slot-label">Weapon</span>
+                        <div class="slot-item"></div>
+                    </div>
+                    <!-- Offhand slot removed -->
+                </div>
+            </div>
+            <!-- Added Power Display Section -->
+            <div class="equipment-summary">
+                <span class="summary-label">Power:</span>
+                <span class="summary-value" id="equipment-power-value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div id="inventory-modal" class="modal-hidden">
+        <div class="modal-content inventory-modal-content"> <!-- Added class for specific styling -->
+            <span class="close-btn" id="close-inventory-btn">&times;</span>
+            <h2 class="inventory-title">Inventory</h2> <!-- Added class for styling -->
+            <!-- Inventory Tabs -->
+            <div class="inventory-tabs">
+                <button class="tab-btn active-tab" data-category="all">All</button>
+                <button class="tab-btn" data-category="housing-plots">Housing & Plots</button> <!-- Combined Tab -->
+                <button class="tab-btn" data-category="weapon">Weapons</button> <!-- Added Weapon Tab -->
+                <button class="tab-btn" data-category="suit">Suits</button> <!-- Added Suit Tab -->
+                <button class="tab-btn" data-category="pets">Pets</button>
+                <button class="tab-btn" data-category="painting">Painting</button>
+                <!-- Add more tabs as needed -->
+            </div>
+            <div class="inventory-grid" id="inventory-grid">
+                <!-- Inventory slots will be added here by JS -->
+            </div>
+            <!-- Pagination Controls -->
+            <div class="inventory-pagination" id="inventory-pagination">
+                <button id="inventory-prev-btn" class="btn btn-grey">< Prev</button>
+                <span id="inventory-page-info">Page 1 / 1</span>
+                <button id="inventory-next-btn" class="btn btn-grey">Next ></button>
+            </div>
+            <!-- Item details area (optional, can be added later) -->
+            <!-- <div id="inventory-item-details"></div> -->
+        </div>
+    </div>
+
+    <!-- Stats Info Modal -->
+    <div id="stats-modal" class="modal-hidden">
+        <div class="modal-content">
+            <span class="close-btn" id="close-stats-btn">&times;</span>
+            <h2>Player Information</h2>
+            <div class="stats-modal-content">
+                <div class="stats-section">
+                    <h4>General</h4>
+                    <p><strong>Username:</strong> <span id="stats-username">N/A</span></p>
+                    <p><strong>Alias:</strong> <span id="stats-alias">N/A</span></p>
+                    <p><strong>Level:</strong> <span id="stats-level">1</span></p>
+                    <p><strong>Experience:</strong> <span id="stats-experience">0</span> / <span id="stats-exp-needed">100</span></p> <!-- Example EXP needed -->
+                    <p><strong>Power:</strong> <span id="stats-power">0</span></p>
+                </div>
+                <div class="stats-section">
+                    <h4>Base Stats</h4>
+                    <p><strong>Influence:</strong> <span id="stats-influence">0</span></p>
+                    <p><strong>Strength:</strong> <span id="stats-strength">0</span></p>
+                    <p><strong>Agility:</strong> <span id="stats-agility">0</span></p>
+                    <p><strong>Vitality:</strong> <span id="stats-vitality">0</span></p>
+                    <p><strong>Hit Rate:</strong> <span id="stats-hitRate">0</span></p>
+                </div>
+                <div class="stats-section">
+                    <h4>Character Stats</h4>
+                    <p><strong>Defence:</strong> <span id="stats-defence">0</span></p>
+                    <p><strong>Evasion Rate (%):</strong> <span id="stats-evasionRate">0</span></p>
+                    <p><strong>Critical Rate (%):</strong> <span id="stats-criticalRate">0</span></p>
+                    <p><strong>Damage:</strong> <span id="stats-damage">0</span></p> <!-- Added Damage Stat -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Modal -->
+    <div id="shop-modal" class="modal modal-hidden">
+        <div class="modal-content shop-modal-content">
+            <span class="close-btn" id="close-shop-btn">&times;</span>
+            <!-- Player Money Display -->
+            <div id="shop-player-money" class="shop-player-money">Your Money: $0</div>
+            <h2 id="shop-name">Shop</h2>
+            <!-- Tabs -->
+            <div class="shop-tabs">
+                <button class="tab-btn active-tab" data-tab="buy">Buy</button>
+                <button class="tab-btn" data-tab="sell">Sell</button>
+            </div>
+            <div class="shop-interface">
+                <!-- Buy Section (Tab Content) -->
+                <div id="shop-buy-content" class="shop-section shop-tab-content active-content">
+                    <h3>Buy Items</h3>
+                    <ul id="shop-buy-list">
+                        <!-- Items available for purchase will be listed here -->
+                        <li>Loading...</li>
+                    </ul>
+                </div>
+                <!-- Sell Section (Tab Content) -->
+                <div id="shop-sell-content" class="shop-section shop-tab-content">
+                    <h3>Sell Items (Your Inventory)</h3>
+                    <ul id="shop-sell-list">
+                        <!-- Player's sellable inventory items will be listed here -->
+                        <li>Loading...</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="shop-message" class="shop-message" style="display: none;"></div> <!-- For buy/sell feedback -->
+            <!-- Tooltip Area -->
+            <div id="item-tooltip" class="item-tooltip" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Battle Modal -->
+    <div id="battle-modal" class="modal-hidden">
+        <div class="modal-content battle-modal-content">
+            <!-- No close button initially, battle must conclude -->
+            <h2>Battle!</h2>
+            <div class="battle-interface">
+                <!-- Player Area -->
+                <div class="battle-participant player-area">
+                    <h4 id="battle-player-name">Player</h4>
+                    <div class="health-bar-container">
+                        <div id="battle-player-health-bar" class="health-bar"></div>
+                    </div>
+                    <p>HP: <span id="battle-player-hp">100</span> / <span id="battle-player-max-hp">100</span></p>
+                    <!-- Player sprite/image could go here -->
+                </div>
+
+                <!-- VS Separator -->
+                <div class="battle-vs">VS</div>
+
+                <!-- Enemy Area -->
+                <div class="battle-participant enemy-area">
+                    <h4 id="battle-enemy-name">Enemy</h4>
+                     <div class="health-bar-container">
+                        <div id="battle-enemy-health-bar" class="health-bar"></div>
+                    </div>
+                    <p>HP: <span id="battle-enemy-hp">???</span> / <span id="battle-enemy-max-hp">???</span></p>
+                     <!-- Enemy sprite/image could go here -->
+                </div>
+            </div>
+
+            <!-- Shootout Visual Placeholder -->
+            <div id="shootout-visual" class="shootout-visual" style="display: none;">💥 BANG! 💥</div>
+
+            <!-- Action Buttons -->
+            <div id="battle-actions" class="battle-actions">
+                <button id="battle-attack-btn" class="btn btn-red">Attack</button>
+                <button id="battle-auto-attack-btn" class="btn btn-blue" data-active="false">Auto Attack</button>
+                <button id="battle-flee-btn" class="btn btn-grey">Flee</button> <!-- Enabled -->
+            </div>
+
+            <!-- Battle Simulation Image -->
+            <div class="battle-image-container">
+                 <img id="battle-simulation-image" src="" alt="Battle Simulation" style="display: none;"> <!-- Initially hidden -->
+            </div>
+
+            <!-- Battle Speed Controls -->
+            <div class="battle-speed-controls">
+                <span>Speed:</span>
+                <button id="battle-speed-1x" class="btn btn-grey battle-speed-btn btn-active" onclick="setBattleSpeed(1)">1x</button>
+                <button id="battle-speed-2x" class="btn btn-grey battle-speed-btn" onclick="setBattleSpeed(2)">2x</button>
+                <button id="battle-speed-4x" class="btn btn-grey battle-speed-btn" onclick="setBattleSpeed(4)">4x</button>
+            </div>
+
+            <!-- Battle Log -->
+            <div id="battle-log" class="battle-log">
+                <p>Battle Log:</p>
+                <!-- Log messages will be added here -->
+            </div>
+
+             <!-- Battle Result Message Area -->
+            <div id="battle-result" class="battle-result" style="display: none;">
+                <p id="battle-result-message"></p>
+                <button id="battle-close-btn" class="btn btn-brown">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="modal modal-hidden">
+        <div class="modal-content leaderboard-modal-content"> <!-- Added specific class -->
+            <span class="close-btn" id="close-leaderboard-btn">&times;</span>
+            <h2>Leaderboard</h2>
+            <div class="leaderboard-tabs">
+                <button id="leaderboard-money-tab" class="tab-btn active-tab">Most Money</button>
+                <button id="leaderboard-power-tab" class="tab-btn">Most Power</button>
+            </div>
+            <div id="leaderboard-money-content" class="leaderboard-content active-content">
+                <ol id="leaderboard-money-list">
+                    <!-- Money leaderboard entries will be populated here -->
+                    <li>Loading...</li>
+                </ol>
+            </div>
+            <div id="leaderboard-power-content" class="leaderboard-content">
+                <ol id="leaderboard-power-list">
+                    <!-- Power leaderboard entries will be populated here -->
+                    <li>Loading...</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Housing Modal -->
+    <div id="housing-modal" class="modal modal-hidden">
+        <div class="modal-content housing-modal-content"> <!-- Added specific class -->
+            <span class="close-btn" id="close-housing-btn">&times;</span>
+            <h2>Housing</h2>
+            <div class="housing-interface">
+                <!-- Preview Area -->
+                <div id="housing-preview" class="housing-preview-area">
+                    <!-- Layered images will go here, controlled by CSS/JS -->
+                    <img id="housing-layer-base" src="" alt="Base Layer" class="housing-layer">
+                    <img id="housing-layer-wall" src="" alt="Wall Decoration Layer" class="housing-layer">
+                    <img id="housing-layer-weapon" src="" alt="Weapon Stash Layer" class="housing-layer">
+                    <img id="housing-layer-furniture" src="" alt="Luxury Furniture Layer" class="housing-layer">
+                    <img id="housing-layer-security" src="" alt="Security System Layer" class="housing-layer">
+                </div>
+                <!-- Slot Selection Buttons/Areas -->
+                <div class="housing-slots">
+                    <button class="housing-slot-btn" data-slot-type="Base">Base</button>
+                    <button class="housing-slot-btn" data-slot-type="WallDecoration">Wall</button>
+                    <button class="housing-slot-btn" data-slot-type="WeaponStash">Weapon</button>
+                    <button class="housing-slot-btn" data-slot-type="LuxuryFurniture">Furniture</button>
+                    <button class="housing-slot-btn" data-slot-type="SecuritySystem">Security</button>
+                </div>
+                <!-- Item Selector (Initially Hidden) -->
+                <div id="housing-item-selector" class="housing-item-selector modal-hidden">
+                    <h3>Select Item</h3>
+                    <div id="housing-selector-grid">
+                        <!-- Items for the selected slot will be populated here -->
+                    </div>
+                    <button id="close-housing-selector-btn" class="btn btn-grey">Cancel</button>
+                </div>
+            </div>
+             <!-- Optional: Add summary section for housing stats/power if needed -->
+            <!-- <div class="housing-summary"> ... </div> -->
+        </div>
+    </div>
+
+    <!-- Custom Item Tooltip Element -->
+    <div id="item-tooltip" class="item-tooltip" style="display: none;"></div>
+
+</body>
+</html>
